@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Om Auto Consultant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0b0e1a; color: #fff; }
+
+        header {
+            background: #11152a;
+            padding: 20px 40px;
+            border-bottom: 2px solid #ff6b35;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header h1 { color: #ff6b35; font-size: 28px; }
+        header p { color: #aaa; }
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border: 1px solid #ff6b35;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        header nav a:hover { background: #ff6b35; color: #fff; }
+
+        #adminContent { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        #adminContent h2 { color: #ff6b35; font-size: 32px; margin-bottom: 30px; }
+
+        .stats { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 40px; }
+        .stat-card { background: #1a1f3a; padding: 30px 40px; border-radius: 16px; border: 1px solid #ff6b3544; flex: 1; min-width: 150px; text-align: center; }
+        .stat-card h3 { font-size: 36px; color: #ff6b35; }
+        .stat-card p { color: #aaa; font-size: 14px; margin-top: 5px; }
+
+        #servicesList { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .service-card { background: #1a1f3a; padding: 20px; border-radius: 12px; border: 1px solid #ff6b3544; }
+        .service-card .brand-badge { display: inline-block; background: rgba(255, 107, 53, 0.15); color: #ff6b35; padding: 2px 12px; border-radius: 12px; font-size: 12px; margin-bottom: 8px; }
+        .service-card .service-image { width: 100%; height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #0b0e1a; }
+        .service-card .service-image img { width: 100%; height: 100%; object-fit: cover; }
+        .service-card h4 { color: #ff6b35; margin: 10px 0 5px; }
+        .service-card .service-info { color: #aaa; font-size: 13px; }
+        .service-card .service-info span { display: inline-block; margin-right: 15px; }
+        .service-card .actions { margin-top: 15px; display: flex; gap: 10px; }
+        .service-card .actions button { padding: 6px 16px; border: none; border-radius: 6px; cursor: pointer; }
+        .service-card .actions .edit-btn { background: #ff6b35; color: #fff; }
+        .service-card .actions .delete-btn { background: #b71c1c; color: #fff; }
+
+        .add-card { background: #1a1f3a; padding: 30px 20px; border-radius: 12px; border: 2px dashed #ff6b3544; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 200px; transition: 0.3s; }
+        .add-card:hover { border-color: #ff6b35; background: #11152a; }
+        .add-card .add-icon { font-size: 50px; }
+        .add-card h4 { color: #aaa; margin-top: 10px; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; z-index: 100; overflow-y: auto; padding: 20px; }
+        .modal.active { display: flex; }
+
+        .modal-content { background: #1a1f3a; padding: 30px; border-radius: 16px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .modal-content h2 { color: #ff6b35; margin-bottom: 20px; }
+        .modal-content label { display: block; color: #aaa; font-size: 14px; margin-top: 15px; margin-bottom: 5px; }
+
+        .modal-content select, .modal-content input, .modal-content textarea { width: 100%; padding: 10px; margin: 5px 0; background: #11152a; border: 1px solid #ff6b3544; color: #fff; border-radius: 8px; font-size: 14px; }
+        .modal-content select option { background: #1a1f3a; }
+
+        .modal-content .photo-upload { border: 2px dashed #ff6b3544; border-radius: 12px; padding: 20px; text-align: center; margin: 10px 0; cursor: pointer; transition: 0.3s; }
+        .modal-content .photo-upload:hover { border-color: #ff6b35; }
+        .modal-content .photo-upload input[type="file"] { display: none; }
+
+        .modal-content .photo-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .modal-content .photo-preview .preview-item { width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid #ff6b3544; position: relative; }
+        .modal-content .photo-preview .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-content .photo-preview .preview-item .remove-photo { position: absolute; top: -5px; right: -5px; background: #b71c1c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; }
+
+        .modal-content .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .modal-content .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-content .btn-row button { padding: 10px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .modal-content .btn-row .save-btn { background: #ff6b35; color: #fff; }
+        .modal-content .btn-row .save-btn:hover { background: #e55a2b; }
+        .modal-content .btn-row .cancel-btn { background: #555; color: #fff; }
+        .modal-content .btn-row .cancel-btn:hover { background: #444; }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; text-align: center; }
+            header nav a { margin: 5px; display: inline-block; }
+            #adminContent { padding: 20px; }
+            .stats { flex-direction: column; }
+            .modal-content { padding: 20px; }
+            .modal-content .form-row { grid-template-columns: 1fr; }
+            #servicesList { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🛠️ Admin Panel</h1>
+        <p>Manage Om Auto Consultant - Tempo Models</p>
+        <nav>
+            <a href="#" onclick="loadDashboard()">📊 Dashboard</a>
+            <a href="#" onclick="loadServices()">🚚 Models</a>
+            <a href="#" onclick="loadContacts()">📞 Contacts</a>
+            <a href="https://om-auto-consultant.vercel.app" target="_blank">👁️ View Website</a>
+        </nav>
+    </header>
+
+    <section id="adminContent">
+        <h2>📊 Dashboard</h2>
+        <div class="stats">
+            <div class="stat-card"><h3 id="totalServices">0</h3><p>Total Models</p></div>
+            <div class="stat-card"><h3 id="totalBrands">0</h3><p>Total Brands</p></div>
+            <div class="stat-card"><h3>1000+</h3><p>Happy Customers</p></div>
+        </div>
+        <div id="servicesList"></div>
+    </section>
+
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">➕ Add / Edit Model Details</h2>
+
+            <label>📛 Select Model</label>
+            <select id="modalModelSelect">
+                <option value="1">Tata Intra</option>
+                <option value="2">Tata Yodha</option>
+                <option value="3">Tata 407</option>
+                <option value="4">Mahindra Jito</option>
+                <option value="5">Mahindra Supro</option>
+                <option value="6">Mahindra Bolero</option>
+                <option value="7">Mahindra Camper</option>
+                <option value="8">Maruti Super Carry</option>
+                <option value="9">Ashok Leyland Dost</option>
+                <option value="10">Tata Ace</option>
+            </select>
+
+            <label>📸 Home Page Slide Image (Logo/Photo)</label>
+            <div class="photo-upload" onclick="document.getElementById('homeImageInput').click()">
+                <p>📤 Click to upload Home Slide Image</p>
+                <input type="file" id="homeImageInput" accept="image/*" />
+            </div>
+            <div class="photo-preview" id="homeImagePreview"></div>
+
+            <label>📛 Model Type</label>
+            <input id="modalType" placeholder="e.g. Mini Truck, Pickup, Small Commercial" />
+
+            <label>🏢 Company</label>
+            <input id="modalCompany" placeholder="e.g. Tata Motors, Mahindra" />
+
+            <label>👤 Owner</label>
+            <input id="modalOwner" placeholder="e.g. Rameshbhai" />
+
+            <label>🛣️ KM Driven</label>
+            <input id="modalKm" placeholder="e.g. 12,000 KM" />
+
+            <label>🛡️ Vimo (Insurance)</label>
+            <input id="modalVimo" placeholder="e.g. 3 Years" />
+
+            <label>💰 Price</label>
+            <input id="modalPrice" placeholder="₹ 7.50 Lakh" />
+
+            <label>📝 Description</label>
+            <textarea id="modalDesc" rows="3" placeholder="Description..."></textarea>
+
+            <label>📸 Main Detail Photo</label>
+            <div class="photo-upload" onclick="document.getElementById('coverInput').click()">
+                <p>📤 Click to upload Main Detail Photo</p>
+                <input type="file" id="coverInput" accept="image/*" />
+            </div>
+            <div class="photo-preview" id="coverPreview"></div>
+
+            <label>📸 More Photos (Gallery)</label>
+            <div class="photo-upload" onclick="document.getElementById('galleryInput').click()">
+                <p>📤 Click to upload More Photos (Select multiple)</p>
+                <input type="file" id="galleryInput" accept="image/*" multiple />
+            </div>
+            <div class="photo-preview" id="galleryPreview"></div>
+
+            <div class="btn-row">
+                <button class="save-btn" onclick="saveService()">💾 Save</button>
+                <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================================
+        // ✅ તમારી API Keys (આ જ રાખો)
+        // ==========================================================
+        const IMG_BB_API = "95e449c1f90b71827892ea64c20c0055";
+        const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
+        const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
+        // ==========================================================
+
+        let editingId = null;
+        let tempHomeImage = null;
+        let tempCover = null;
+        let tempGallery = [];
+
+        // ===== JSONBin પરથી ડેટા લાવો =====
+        async function loadData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSON_SECRET_KEY }
+                });
+                const json = await res.json();
+                return json.record || { models: [], contacts: {} };
+            } catch (e) {
+                console.error("Error loading data:", e);
+                return { models: [], contacts: {} };
+            }
+        }
+
+        // ===== JSONBin પર ડેટા સેવ કરો =====
+        async function saveData(data) {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSON_SECRET_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+                console.log("Data saved to JSONBin!");
+            } catch (e) {
+                console.error("Error saving data:", e);
+            }
+        }
+
+        // ===== ImgBB પર ફોટો અપલોડ કરો =====
+        async function uploadToImgBB(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMG_BB_API}`, {
+                method: 'POST',
+                body: formData
+            });
+            const json = await res.json();
+            if (json.success) {
+                return json.data.url;
+            } else {
+                alert('Image upload failed!');
+                return null;
+            }
+        }
+
+        async function loadDashboard() {
+            const data = await loadData();
+            document.getElementById('totalServices').textContent = data.models ? data.models.length : 0;
+            loadServices();
+        }
+
+        async function loadServices() {
+            const data = await loadData();
+            const list = document.getElementById('servicesList');
+            list.innerHTML = '';
+            
+            if(data.models && data.models.length > 0) {
+                data.models.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'service-card';
+                    div.innerHTML = `
+                        <div class="brand-badge">${m.company || 'Model'}</div>
+                        <div class="service-image"><img src="${m.cover || 'https://picsum.photos/seed/default/300/200'}" alt="${m.name}" /></div>
+                        <h4>${m.name}</h4>
+                        <div class="service-info"><span>💰 ${m.price || 'N/A'}</span><span>👤 ${m.owner || 'N/A'}</span></div>
+                        <div class="actions">
+                            <button class="edit-btn" onclick="editService(${m.id})">✏️ Edit</button>
+                            <button class="delete-btn" onclick="deleteService(${m.id})">🗑️ Delete</button>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+
+            const addDiv = document.createElement('div');
+            addDiv.className = 'add-card';
+            addDiv.innerHTML = `<div class="add-icon">➕</div><h4>Add / Edit Model</h4>`;
+            addDiv.onclick = showAddModal;
+            list.appendChild(addDiv);
+        }
+
+        async function deleteService(id) {
+            if (confirm('Are you sure you want to delete this model data?')) {
+                const data = await loadData();
+                if(data.models) {
+                    data.models = data.models.filter(m => m.id !== id);
+                    await saveData(data);
+                    loadDashboard();
+                    alert('✅ Model data deleted!');
+                }
+            }
+        }
+
+        function showAddModal() {
+            editingId = null;
+            tempHomeImage = null;
+            tempCover = null;
+            tempGallery = [];
+            document.getElementById('modalTitle').textContent = '➕ Add Model Details';
+            document.getElementById('modalModelSelect').value = '1';
+            ['modalType', 'modalCompany', 'modalOwner', 'modalKm', 'modalVimo', 'modalPrice', 'modalDesc'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('homeImagePreview').innerHTML = '';
+            document.getElementById('coverPreview').innerHTML = '';
+            document.getElementById('galleryPreview').innerHTML = '';
+            document.getElementById('serviceModal').classList.add('active');
+        }
+
+        async function editService(id) {
+            const data = await loadData();
+            const m = data.models.find(x => x.id === id);
+            if (!m) return;
+            editingId = id;
+            document.getElementById('modalTitle').textContent = '✏️ Edit Model Details';
+            document.getElementById('modalModelSelect').value = id;
+            document.getElementById('modalType').value = m.type || '';
+            document.getElementById('modalCompany').value = m.company || '';
+            document.getElementById('modalOwner').value = m.owner || '';
+            document.getElementById('modalKm').value = m.km || '';
+            document.getElementById('modalVimo').value = m.vimo || '';
+            document.getElementById('modalPrice').value = m.price || '';
+            document.getElementById('modalDesc').value = m.desc || '';
+            
+            if(m.homeImage) {
+                document.getElementById('homeImagePreview').innerHTML = `<div class="preview-item"><img src="${m.homeImage}" /></div>`;
+                tempHomeImage = m.homeImage;
+            }
+            if(m.cover) {
+                document.getElementById('coverPreview').innerHTML = `<div class="preview-item"><img src="${m.cover}" /></div>`;
+                tempCover = m.cover;
+            }
+            if(m.gallery && m.gallery.length > 0) {
+                tempGallery = [...m.gallery];
+                document.getElementById('galleryPreview').innerHTML = tempGallery.map(img => `
+                    <div class="preview-item"><img src="${img}" /><button class="remove-photo" onclick="removeTempGallery('${img}')">✕</button></div>
+                `).join('');
+            }
+            document.getElementById('serviceModal').classList.add('active');
+        }
+
+        function removeTempGallery(img) {
+            tempGallery = tempGallery.filter(i => i !== img);
+            document.getElementById('galleryPreview').innerHTML = tempGallery.map(img => `
+                <div class="preview-item"><img src="${img}" /><button class="remove-photo" onclick="removeTempGallery('${img}')">✕</button></div>
+            `).join('');
+        }
+
+        async function saveService() {
+            const id = parseInt(document.getElementById('modalModelSelect').value);
+            const type = document.getElementById('modalType').value.trim();
+            const company = document.getElementById('modalCompany').value.trim();
+            const owner = document.getElementById('modalOwner').value.trim();
+            const km = document.getElementById('modalKm').value.trim();
+            const vimo = document.getElementById('modalVimo').value.trim();
+            const price = document.getElementById('modalPrice').value.trim() || '₹ 0.00';
+            const desc = document.getElementById('modalDesc').value.trim() || 'Description...';
+
+            // Upload Home Image if new
+            const homeImgInput = document.getElementById('homeImageInput');
+            if(homeImgInput.files && homeImgInput.files[0]) {
+                tempHomeImage = await uploadToImgBB(homeImgInput.files[0]);
+            }
+
+            // Upload Cover Image if new
+            const coverImgInput = document.getElementById('coverInput');
+            if(coverImgInput.files && coverImgInput.files[0]) {
+                tempCover = await uploadToImgBB(coverImgInput.files[0]);
+            }
+
+            // Upload Gallery Images if new
+            const galleryImgInput = document.getElementById('galleryInput');
+            if(galleryImgInput.files && galleryImgInput.files.length > 0) {
+                for(let i=0; i<galleryImgInput.files.length; i++) {
+                    const url = await uploadToImgBB(galleryImgInput.files[i]);
+                    if(url) tempGallery.push(url);
+                }
+            }
+
+            let data = await loadData();
+            if(!data.models) data.models = [];
+
+            // ✅ એરર ફિક્સ: જો મોડલ ન મળે તો તેને નવું બનાવો
+            let modelIndex = data.models.findIndex(m => m.id === id);
+            if(modelIndex === -1) {
+                const newModel = {
+                    id: id,
+                    name: document.getElementById('modalModelSelect').options[document.getElementById('modalModelSelect').selectedIndex].text,
+                    type: type,
+                    company: company,
+                    owner: owner,
+                    km: km,
+                    vimo: vimo,
+                    price: price,
+                    desc: desc,
+                    homeImage: tempHomeImage || 'https://picsum.photos/seed/default_home/300/300',
+                    cover: tempCover || 'https://picsum.photos/seed/default/400/300',
+                    gallery: tempGallery.length > 0 ? tempGallery : ['https://picsum.photos/seed/default_gallery/300/300']
+                };
+                data.models.push(newModel);
+                await saveData(data);
+                closeModal();
+                loadDashboard();
+                alert('✅ New Model created and saved successfully to Cloud!');
+                return;
+            }
+
+            // જો મોડલ મળી જાય, તો તેને અપડેટ કરો
+            data.models[modelIndex] = {
+                ...data.models[modelIndex],
+                type: type,
+                company: company,
+                owner: owner,
+                km: km,
+                vimo: vimo,
+                price: price,
+                desc: desc,
+                homeImage: tempHomeImage || data.models[modelIndex].homeImage || 'https://picsum.photos/seed/default_home/300/300',
+                cover: tempCover || data.models[modelIndex].cover || 'https://picsum.photos/seed/default/400/300',
+                gallery: tempGallery.length > 0 ? tempGallery : (data.models[modelIndex].gallery || ['https://picsum.photos/seed/default_gallery/300/300'])
+            };
+
+            await saveData(data);
+            closeModal();
+            loadDashboard();
+            alert('✅ Model details saved successfully to Cloud!');
+        }
+
+        async function loadContacts() {
+            const data = await loadData();
+            const c = data.contacts || {};
+            document.getElementById('adminContent').innerHTML = `
+                <h2>📞 Contact Settings</h2>
+                <div style="background:#1a1f3a;padding:30px;border-radius:16px;max-width:600px;">
+                    <p><strong>📛 Name 1:</strong> <input id="editName1" value="${c.name1 || 'Rameshbhai'}" /></p>
+                    <p><strong>📞 Phone 1:</strong> <input id="editPhone1" value="${c.phone1 || '9925380849'}" /></p>
+                    <p><strong>📛 Name 2:</strong> <input id="editName2" value="${c.name2 || 'Jigneshbhai'}" /></p>
+                    <p><strong>📞 Phone 2:</strong> <input id="editPhone2" value="${c.phone2 || '8469716611'}" /></p>
+                    <p><strong>📛 Name 3:</strong> <input id="editName3" value="${c.name3 || 'Girishbhai'}" /></p>
+                    <p><strong>📞 Phone 3:</strong> <input id="editPhone3" value="${c.phone3 || '9879065758'}" /></p>
+                    <p><strong>📍 Location:</strong> <input id="editLocation" value="${c.location || '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'}" /></p>
+                    <button onclick="saveContacts()">💾 Save</button>
+                    <button onclick="loadDashboard()">← Back</button>
+                </div>
+            `;
+            document.querySelectorAll('#adminContent input').forEach(el => {
+                el.style.width = '100%'; el.style.padding = '10px'; el.style.margin = '5px 0';
+                el.style.background = '#11152a'; el.style.border = '1px solid #ff6b3544';
+                el.style.color = '#fff'; el.style.borderRadius = '8px';
+            });
+        }
+
+        async function saveContacts() {
+            const data = await loadData();
+            data.contacts = {
+                name1: document.getElementById('editName1').value,
+                phone1: document.getElementById('editPhone1').value,
+                name2: document.getElementById('editName2').value,
+                phone2: document.getElementById('editPhone2').value,
+                name3: document.getElementById('editName3').value,
+                phone3: document.getElementById('editPhone3').value,
+                location: document.getElementById('editLocation').value
+            };
+            await saveData(data);
+            alert('✅ Contacts saved!');
+            loadDashboard();
+        }
+
+        function closeModal() {
+            document.getElementById('serviceModal').classList.remove('active');
+        }
+
+        document.getElementById('serviceModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ==========================================================
+        // ✅ ફોટો પ્રીવ્યૂ (સિલેક્ટ કર્યા પછી તરત જ દેખાશે)
+        // ==========================================================
+        
+        document.getElementById('homeImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                tempHomeImage = ev.target.result;
+                document.getElementById('homeImagePreview').innerHTML = `<div class="preview-item"><img src="${tempHomeImage}" /></div>`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('coverInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                tempCover = ev.target.result;
+                document.getElementById('coverPreview').innerHTML = `<div class="preview-item"><img src="${tempCover}" /></div>`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('galleryInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            for (let f of files) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    tempGallery.push(ev.target.result);
+                    document.getElementById('galleryPreview').innerHTML += `
+                        <div class="preview-item"><img src="${ev.target.result}" /><button class="remove-photo" onclick="removeTempGallery('${ev.target.result}')">✕</button></div>
+                    `;
+                };
+                reader.readAsDataURL(f);
+            }
+        });
+
+        loadDashboard();
+    </script>
+</body>
+</html>

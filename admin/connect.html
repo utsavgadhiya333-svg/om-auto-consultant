@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Om Auto Connect</title>
+    <style>
+        body { background: #0b0e1a; color: #fff; font-family: Arial; text-align: center; padding: 40px; }
+        .box { max-width: 600px; margin: auto; background: #1a1f3a; padding: 30px; border-radius: 16px; border: 1px solid #ff6b35; }
+        input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; background: #11152a; border: 1px solid #ff6b3544; color: #fff; border-radius: 8px; }
+        .btn { background: #ff6b35; color: #fff; border: none; padding: 12px 30px; border-radius: 30px; cursor: pointer; margin-top: 15px; font-size: 16px; }
+        .btn:hover { background: #e55a2b; }
+        .preview { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+        .preview img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid #ff6b3544; }
+        #result { margin-top: 20px; padding: 15px; background: #11152a; border-radius: 8px; border: 1px solid #4CAF50; display: none; }
+        .loading { color: #ff6b35; display: none; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 style="color:#ff6b35;">🔗 Om Auto Connect</h2>
+        <p style="color:#aaa;">આ ફાઇલ તમારા કમ્પ્યુટર પર ચલાવો. આથી ડેટા સીધો JSONBin માં જશે.</p>
+        
+        <label>📛 Select Model (ID 1-10)</label>
+        <select id="modelId">
+            <option value="1">1 - Tata Intra</option>
+            <option value="2">2 - Tata Yodha</option>
+            <option value="3">3 - Tata 407</option>
+            <option value="4">4 - Mahindra Jito</option>
+            <option value="5">5 - Mahindra Supro</option>
+            <option value="6">6 - Mahindra Bolero</option>
+            <option value="7">7 - Mahindra Camper</option>
+            <option value="8">8 - Maruti Super Carry</option>
+            <option value="9">9 - Ashok Leyland Dost</option>
+            <option value="10">10 - Tata Ace</option>
+        </select>
+
+        <label>📸 Home Image (Logo)</label>
+        <input type="file" id="homeImage" accept="image/*">
+
+        <label>🏢 Company</label>
+        <input type="text" id="company" placeholder="e.g. Tata Motors">
+
+        <label>👤 Owner</label>
+        <input type="text" id="owner" placeholder="e.g. Rameshbhai">
+
+        <label>🛣️ KM Driven</label>
+        <input type="text" id="km" placeholder="e.g. 12,000 KM">
+
+        <label>🛡️ Vimo</label>
+        <input type="text" id="vimo" placeholder="e.g. 3 Years">
+
+        <label>💰 Price</label>
+        <input type="text" id="price" placeholder="₹ 7.50 Lakh">
+
+        <label>📝 Description</label>
+        <textarea id="desc" rows="2" placeholder="Description"></textarea>
+
+        <label>📸 Main Detail Photo</label>
+        <input type="file" id="coverImage" accept="image/*">
+
+        <div class="loading" id="loadingText">⏳ Uploading & Saving... Please wait...</div>
+        <div id="result">✅ Data Saved Successfully to Cloud! Public Site પર જુઓ.</div>
+
+        <button class="btn" onclick="saveData()">💾 Save to Cloud</button>
+    </div>
+
+    <script>
+        const IMG_BB_API = "95e449c1f90b71827892ea64c20c0055";
+        const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
+        const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
+
+        async function uploadImg(file) {
+            if(!file) return null;
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMG_BB_API}`, { method: 'POST', body: formData });
+            const json = await res.json();
+            return json.success ? json.data.url : null;
+        }
+
+        async function saveData() {
+            document.getElementById('loadingText').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+
+            const id = parseInt(document.getElementById('modelId').value);
+            const homeFile = document.getElementById('homeImage').files[0];
+            const coverFile = document.getElementById('coverImage').files[0];
+
+            let homeUrl = null, coverUrl = null;
+            if(homeFile) homeUrl = await uploadImg(homeFile);
+            if(coverFile) coverUrl = await uploadImg(coverFile);
+
+            const data = {
+                id: id,
+                name: document.getElementById('modelId').options[document.getElementById('modelId').selectedIndex].text.split(' - ')[1],
+                company: document.getElementById('company').value || 'Tata Motors',
+                owner: document.getElementById('owner').value || 'Rameshbhai',
+                km: document.getElementById('km').value || '12,000 KM',
+                vimo: document.getElementById('vimo').value || '3 Years',
+                price: document.getElementById('price').value || '₹ 7.50 Lakh',
+                desc: document.getElementById('desc').value || 'Description',
+                homeImage: homeUrl || 'https://picsum.photos/seed/default_home/300/300',
+                cover: coverUrl || 'https://picsum.photos/seed/default/800/400',
+                gallery: ['https://picsum.photos/seed/default_gallery1/300/300']
+            };
+
+            // JSONBin માં હાલનો ડેટા લાવો
+            let res = await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                headers: { 'X-Master-Key': JSON_SECRET_KEY }
+            });
+            let json = await res.json();
+            let record = json.record || { models: [] };
+
+            let existing = record.models.findIndex(m => m.id === id);
+            if(existing === -1) record.models.push(data);
+            else record.models[existing] = data;
+
+            // JSONBin પર સેવ કરો
+            await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSON_SECRET_KEY
+                },
+                body: JSON.stringify(record)
+            });
+
+            document.getElementById('loadingText').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Detail - Om Auto Consultant</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .detail-section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .detail-section .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .detail-section h1 {
+            color: #ff6b35;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        .detail-section p {
+            color: #ccc;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #ff6b35;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #e55a2b;
+        }
+        .detail-card {
+            background: #1a1f3a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #ff6b3544;
+        }
+        .detail-card .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #222;
+        }
+        .detail-card .info-row:last-child {
+            border-bottom: none;
+        }
+        .detail-card .label {
+            color: #888;
+        }
+        .detail-card .value {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">
+            <h1>🚗 Om Auto Consultant</h1>
+            <p>Your Trusted Auto Partner</p>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- ===== DETAIL CONTENT ===== -->
+    <section class="detail-section" id="detailContent">
+        <div class="detail-card">
+            <div class="icon" id="serviceIcon">🔧</div>
+            <h1 id="serviceTitle">Service Name</h1>
+            <p id="serviceDescription">Description here...</p>
+
+            <div style="margin-top:30px;text-align:left;">
+                <div class="info-row">
+                    <span class="label">📞 Phone</span>
+                    <span class="value">+91 98765 43210</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">📧 Email</span>
+                    <span class="value">info@omautoconsultant.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">📍 Location</span>
+                    <span class="value">123, Auto Nagar, City</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">⭐ Rating</span>
+                    <span class="value">★★★★★ (4.9/5)</span>
+                </div>
+            </div>
+
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // ============================================
+        // SERVICE DETAIL DATA
+        // ============================================
+        const services = {
+            1: {
+                icon: '🔧',
+                title: 'Car Repair & Service',
+                desc: 'Expert repair and maintenance for all car models. Quick and reliable service with genuine parts. We offer engine diagnostics, oil change, brake repair, and more.'
+            },
+            2: {
+                icon: '🛡️',
+                title: 'Insurance Consultancy',
+                desc: 'Get the best insurance policies for your vehicle with expert guidance. We compare and recommend the best plans from top insurance companies.'
+            },
+            3: {
+                icon: '🚘',
+                title: 'Car Resale & Purchase',
+                desc: 'Buy and sell used cars with complete transparency and fair pricing. We handle all paperwork, inspections, and provide warranty on selected vehicles.'
+            },
+            4: {
+                icon: '📋',
+                title: 'RTO & Documentation',
+                desc: 'Hassle-free RTO registration, permit, and all legal documentation support. Fast and reliable service with expert guidance on all paperwork.'
+            },
+            5: {
+                icon: '🛠️',
+                title: 'Car Modification',
+                desc: 'Custom modification and tuning for performance and style upgrades. From body kits to engine tuning, we provide professional modification services.'
+            }
+        };
+
+        // Get ID from URL (e.g. ?id=1)
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id') || 1;
+
+        const service = services[id] || services[1];
+
+        document.getElementById('serviceIcon').textContent = service.icon;
+        document.getElementById('serviceTitle').textContent = service.title;
+        document.getElementById('serviceDescription').textContent = service.desc;
+
+        console.log('📄 Service Detail Loaded:', service.title);
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brand Models - Om Auto Consultant</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0b0e1a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* ===== HEADER ===== */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ff6b35; flex-wrap: wrap;
+        }
+        header .logo h1 { font-size: 28px; color: #ff6b35; }
+        header .logo p { font-size: 14px; color: #aaa; }
+        header nav a { color: #fff; text-decoration: none; margin-left: 30px; font-size: 16px; transition: 0.3s; }
+        header nav a:hover { color: #ff6b35; }
+
+        /* ===== BRAND DETAIL SECTION ===== */
+        .section-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-container .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ff6b35; color: #fff; text-decoration: none; border-radius: 25px; transition: 0.3s; }
+        .section-container .back-btn:hover { background: #e55a2b; transform: scale(1.05); }
+
+        .brand-header { text-align: center; padding: 20px 0; margin-bottom: 30px; border-bottom: 2px solid #ff6b3544; }
+        .brand-header h1 { color: #ff6b35; font-size: 40px; margin: 10px 0; }
+
+        /* ===== MODELS GRID (Your Design) ===== */
+        .models-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+
+        .model-card {
+            background: #1a1f3a; border-radius: 16px; overflow: hidden;
+            border: 1px solid #ff6b3544; transition: 0.3s; cursor: pointer;
+        }
+        .model-card:hover { transform: translateY(-5px); border-color: #ff6b35; box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2); }
+
+        .model-card .image-box { width: 100%; height: 220px; overflow: hidden; position: relative; }
+        .model-card .image-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .model-card:hover .image-box img { transform: scale(1.05); }
+
+        /* Price badge on Image */
+        .model-card .price-badge {
+            position: absolute; bottom: 12px; right: 12px;
+            background: #ff6b35; color: #fff; padding: 6px 14px;
+            border-radius: 20px; font-size: 14px; font-weight: bold;
+        }
+
+        .model-card .info-box { padding: 20px; }
+        .model-card .info-box h3 { color: #ff6b35; font-size: 20px; margin-bottom: 5px; }
+        .model-card .info-box .type { color: #888; font-size: 14px; margin-bottom: 8px; }
+        .model-card .info-box .desc { color: #aaa; font-size: 14px; line-height: 1.5; }
+
+        .model-card .info-box .view-btn {
+            display: inline-block; margin-top: 15px; padding: 10px 25px;
+            background: #ff6b35; color: #fff; text-decoration: none;
+            border-radius: 25px; font-weight: 600; transition: 0.3s; border: none;
+        }
+        .model-card .info-box .view-btn:hover { background: #e55a2b; transform: scale(1.05); }
+
+        footer { text-align: center; padding: 20px; background: #0b0e1a; color: #666; border-top: 1px solid #1a1f3a; margin-top: auto; }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; padding: 15px; text-align: center; }
+            .models-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><h1>🚗 Om Auto Consultant</h1><p>Your Trusted Tempo Partner</p></div>
+        <nav><a href="index.html">Home</a></nav>
+    </header>
+
+    <section class="section-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <div class="brand-header">
+            <h1 id="brandTitle">🚚 Models</h1>
+        </div>
+
+        <div class="models-grid" id="modelsGrid"></div>
+    </section>
+
+    <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
+
+    <script>
+        // ===== 10 VARIANTS FOR TATA ACE =====
+        // અહીં 10 અલગ અલગ ટેમ્પોના ફોટા, નામ અને કિંમત છે.
+        const variantsData = [
+            { id: 101, brand: 'Tata', name: 'Tata Ace - V1', type: 'Small Commercial', price: '₹ 4.00 Lakh', desc: 'Standard Ace V1.', cover: 'https://picsum.photos/seed/ace_v1/400/300' },
+            { id: 102, brand: 'Tata', name: 'Tata Ace - V2', type: 'Small Commercial', price: '₹ 4.20 Lakh', desc: 'Standard Ace V2.', cover: 'https://picsum.photos/seed/ace_v2/400/300' },
+            { id: 103, brand: 'Tata', name: 'Tata Ace - V3', type: 'Small Commercial', price: '₹ 4.40 Lakh', desc: 'Standard Ace V3.', cover: 'https://picsum.photos/seed/ace_v3/400/300' },
+            { id: 104, brand: 'Tata', name: 'Tata Ace - V4', type: 'Small Commercial', price: '₹ 4.60 Lakh', desc: 'Standard Ace V4.', cover: 'https://picsum.photos/seed/ace_v4/400/300' },
+            { id: 105, brand: 'Tata', name: 'Tata Ace - V5', type: 'Small Commercial', price: '₹ 4.80 Lakh', desc: 'Standard Ace V5.', cover: 'https://picsum.photos/seed/ace_v5/400/300' },
+            { id: 106, brand: 'Tata', name: 'Tata Ace - V6', type: 'Small Commercial', price: '₹ 5.00 Lakh', desc: 'Standard Ace V6.', cover: 'https://picsum.photos/seed/ace_v6/400/300' },
+            { id: 107, brand: 'Tata', name: 'Tata Ace - V7', type: 'Small Commercial', price: '₹ 5.20 Lakh', desc: 'Standard Ace V7.', cover: 'https://picsum.photos/seed/ace_v7/400/300' },
+            { id: 108, brand: 'Tata', name: 'Tata Ace - V8', type: 'Small Commercial', price: '₹ 5.40 Lakh', desc: 'Standard Ace V8.', cover: 'https://picsum.photos/seed/ace_v8/400/300' },
+            { id: 109, brand: 'Tata', name: 'Tata Ace - V9', type: 'Small Commercial', price: '₹ 5.60 Lakh', desc: 'Standard Ace V9.', cover: 'https://picsum.photos/seed/ace_v9/400/300' },
+            { id: 110, brand: 'Tata', name: 'Tata Ace - V10', type: 'Small Commercial', price: '₹ 5.80 Lakh', desc: 'Standard Ace V10.', cover: 'https://picsum.photos/seed/ace_v10/400/300' }
+        ];
+
+        // ===== URL માંથી બ્રાન્ડ લો =====
+        const urlParams = new URLSearchParams(window.location.search);
+        const brandName = urlParams.get('brand');
+
+        if(brandName) {
+            document.getElementById('brandTitle').textContent = `🚚 ${brandName} Models`;
+        }
+
+        // ===== બ્રાન્ડ પ્રમાણે ફિલ્ટર કરો (અહીં ફક્ત 'Tata' માટે ફિલ્ટર થશે) =====
+        let filteredModels = variantsData;
+        if(brandName) {
+            filteredModels = variantsData.filter(m => m.brand.toLowerCase() === brandName.toLowerCase());
+        }
+
+        // ===== ગ્રીડમાં બતાવો =====
+        const grid = document.getElementById('modelsGrid');
+
+        if(filteredModels.length === 0) {
+            grid.innerHTML = `<p style="text-align:center;color:#888;">No models available for this brand.</p>`;
+        } else {
+            grid.innerHTML = filteredModels.map(m => `
+                <div class="model-card" onclick="window.location.href='model-detail.html?id=${m.id}'">
+                    <div class="image-box">
+                        <img src="${m.cover}" alt="${m.name}" />
+                        <div class="price-badge">${m.price}</div>
+                    </div>
+                    <div class="info-box">
+                        <h3>${m.name}</h3>
+                        <div class="type">${m.type}</div>
+                        <div class="desc">${m.desc}</div>
+                        <button class="view-btn">View Details →</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

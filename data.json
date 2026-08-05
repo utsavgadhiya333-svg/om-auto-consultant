@@ -1,0 +1,38 @@
+{
+    "businessName": "Om Auto Consultant",
+    "tagline": "Your Trusted Auto Partner",
+    "phone": "+91 98765 43210",
+    "email": "info@omautoconsultant.com",
+    "address": "123, Auto Nagar, City, India",
+    "services": [
+        {
+            "id": 1,
+            "icon": "🔧",
+            "title": "Car Repair & Service",
+            "description": "Expert repair and maintenance for all car models."
+        },
+        {
+            "id": 2,
+            "icon": "🛡️",
+            "title": "Insurance Consultancy",
+            "description": "Best insurance policies with expert guidance."
+        },
+        {
+            "id": 3,
+            "icon": "🚘",
+            "title": "Car Resale & Purchase",
+            "description": "Buy and sell used cars with fair pricing."
+        },
+        {
+            "id": 4,
+            "icon": "📋",
+            "title": "RTO & Documentation",
+            "description": "Hassle-free RTO registration and legal support."
+        }
+    ],
+    "social": {
+        "facebook": "https://facebook.com/omauto",
+        "instagram": "https://instagram.com/omauto",
+        "twitter": "https://twitter.com/omauto"
+    }
+}

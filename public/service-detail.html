@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Detail - Om Auto Consultant</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* ===== DETAIL PAGE ===== */
+        .detail-section {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .detail-section .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 24px;
+            background: #ff6b35;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: 0.3s;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .detail-section .back-btn:hover {
+            background: #e55a2b;
+            transform: scale(1.05);
+        }
+
+        /* ===== SERVICE INFO ===== */
+        .service-info {
+            background: #1a1f3a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #ff6b3544;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .service-info .icon {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        .service-info h1 {
+            color: #ff6b35;
+            font-size: 36px;
+            margin: 10px 0 20px 0;
+        }
+
+        .service-info .description {
+            color: #ccc;
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto 25px auto;
+        }
+
+        .service-info .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ff6b3544;
+        }
+
+        .service-info .details-grid .detail-item {
+            background: #0b0e1a;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .service-info .details-grid .detail-item .label {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .service-info .details-grid .detail-item .value {
+            color: #ff6b35;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* ===== COVER IMAGE ===== */
+        .cover-image-section {
+            margin: 30px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #ff6b3544;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .cover-image-section:hover {
+            border-color: #ff6b35;
+            transform: scale(1.01);
+        }
+
+        .cover-image-section img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .cover-image-section .cover-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: #fff;
+            text-align: center;
+        }
+
+        .cover-image-section .cover-overlay .car-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .cover-image-section .cover-overlay .click-hint {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* ===== GALLERY ===== */
+        .gallery-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .gallery-section.show {
+            display: block;
+        }
+
+        .gallery-section .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .gallery-section .gallery-header h3 {
+            color: #ff6b35;
+            font-size: 24px;
+        }
+
+        .gallery-section .gallery-header .see-more-btn {
+            padding: 10px 28px;
+            background: #ff6b35;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .gallery-section .gallery-header .see-more-btn:hover {
+            background: #e55a2b;
+            transform: scale(1.05);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-grid .gallery-item {
+            background: #1a1f3a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ff6b3544;
+            cursor: pointer;
+            transition: 0.3s;
+            aspect-ratio: 1 / 1;
+        }
+
+        .gallery-grid .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: #ff6b35;
+        }
+
+        .gallery-grid .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ===== SHOW GALLERY BUTTON ===== */
+        .show-gallery-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 14px 40px;
+            background: #ff6b35;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .show-gallery-btn:hover {
+            background: #e55a2b;
+            transform: scale(1.02);
+        }
+
+        .show-gallery-btn .arrow {
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .show-gallery-btn .arrow.down {
+            transform: rotate(180deg);
+        }
+
+        /* ===== FULL GALLERY MODAL ===== */
+        .full-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        .full-gallery-modal.active {
+            display: block;
+        }
+
+        .full-gallery-modal .close-full {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .full-gallery-modal .close-full:hover {
+            color: #ff6b35;
+            transform: rotate(90deg);
+        }
+
+        .full-gallery-modal .full-gallery-title {
+            color: #ff6b35;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .full-gallery-modal .full-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .full-gallery-modal .full-gallery-grid .full-item {
+            background: #1a1f3a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ff6b3544;
+            cursor: pointer;
+            transition: 0.3s;
+            aspect-ratio: 1 / 1;
+        }
+
+        .full-gallery-modal .full-gallery-grid .full-item:hover {
+            transform: scale(1.05);
+            border-color: #ff6b35;
+        }
+
+        .full-gallery-modal .full-gallery-grid .full-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .full-gallery-modal .full-gallery-count {
+            color: #888;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 12px;
+            object-fit: contain;
+        }
+
+        .lightbox .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .lightbox .close-lightbox:hover {
+            color: #ff6b35;
+        }
+
+        .lightbox .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 107, 53, 0.7);
+            color: #fff;
+            border: none;
+            font-size: 30px;
+            padding: 15px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .lightbox .lightbox-nav:hover {
+            background: #ff6b35;
+        }
+
+        .lightbox .lightbox-nav.prev {
+            left: 20px;
+        }
+
+        .lightbox .lightbox-nav.next {
+            right: 20px;
+        }
+
+        .lightbox .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .service-info {
+                padding: 25px;
+            }
+            .service-info h1 {
+                font-size: 26px;
+            }
+            .service-info .description {
+                font-size: 16px;
+            }
+            .cover-image-section img {
+                height: 220px;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .full-gallery-modal .full-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .lightbox img {
+                max-width: 95%;
+                max-height: 70%;
+            }
+            .lightbox .lightbox-nav {
+                font-size: 20px;
+                padding: 10px 14px;
+            }
+            .service-info .details-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .cover-image-section .cover-overlay .car-name {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-info .details-grid {
+                grid-template-columns: 1fr;
+            }
+            .show-gallery-btn {
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="logo">
+            <h1>🚗 Om Auto Consultant</h1>
+            <p>Your Trusted Auto Partner</p>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="index.html#services">Services</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- ===== DETAIL SECTION ===== -->
+    <section class="detail-section" id="detailContent">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+
+        <!-- Service Info -->
+        <div class="service-info">
+            <div class="icon" id="serviceIcon">🔧</div>
+            <h1 id="serviceTitle">Service Name</h1>
+            <p class="description" id="serviceDescription">Description here...</p>
+
+            <!-- Details Grid -->
+            <div class="details-grid" id="detailsGrid">
+                <div class="detail-item">
+                    <div class="label">📞 Phone</div>
+                    <div class="value">+91 98765 43210</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">📧 Email</div>
+                    <div class="value">info@omauto.com</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">⭐ Rating</div>
+                    <div class="value">4.9/5 ⭐</div>
+                </div>
+                <div class="detail-item">
+                    <div class="label">👥 Clients</div>
+                    <div class="value">500+ Happy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== COVER IMAGE (Click to open Gallery) ===== -->
+        <div class="cover-image-section" onclick="openFullGallery()" id="coverSection">
+            <img id="coverImage" src="" alt="Cover" />
+            <div class="cover-overlay">
+                <div class="car-name" id="carName">🚗 Click to See More</div>
+                <div class="click-hint">📸 Tap to view all photos</div>
+            </div>
+        </div>
+
+        <!-- ===== SEE MORE BUTTON (Instead of Learn More) ===== -->
+        <button class="show-gallery-btn" onclick="openFullGallery()">
+            🖼️ See More Photos <span class="arrow" id="arrowIcon">→</span>
+        </button>
+
+        <!-- ===== GALLERY SECTION (Hidden, shows when "See More" clicked) ===== -->
+        <div class="gallery-section" id="gallerySection">
+            <div class="gallery-header">
+                <h3>📸 Project Gallery</h3>
+                <button class="see-more-btn" onclick="openFullGallery()">🖼️ See All</button>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Images will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FULL GALLERY MODAL ===== -->
+    <div class="full-gallery-modal" id="fullGalleryModal">
+        <span class="close-full" onclick="closeFullGallery()">✕</span>
+        <div class="full-gallery-title" id="fullGalleryTitle">📸 All Photos</div>
+        <div class="full-gallery-grid" id="fullGalleryGrid">
+            <!-- All images will be loaded here -->
+        </div>
+        <div class="full-gallery-count" id="fullGalleryCount">0 Photos</div>
+    </div>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div class="lightbox" id="lightbox">
+        <span class="close-lightbox" onclick="closeLightbox()">✕</span>
+        <button class="lightbox-nav prev" onclick="prevImage()">❮</button>
+        <img id="lightboxImage" src="" alt="Gallery Image" />
+        <button class="lightbox-nav next" onclick="nextImage()">❯</button>
+        <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // ============================================
+        // SERVICE DATA
+        // ============================================
+        const services = {
+            1: {
+                icon: '🔧',
+                title: 'Car Repair & Service',
+                desc: 'Expert repair and maintenance for all car models. Quick and reliable service with genuine parts. We offer engine diagnostics, oil change, brake repair, suspension, and complete vehicle inspection. All work is done by certified professionals.',
+                cover: 'https://picsum.photos/seed/repair_cover/800/400',
+                carName: '🏎️ Car Repair - Luxury Sedan',
+                gallery: [
+                    'https://picsum.photos/seed/repair1/300/300',
+                    'https://picsum.photos/seed/repair2/300/300',
+                    'https://picsum.photos/seed/repair3/300/300',
+                    'https://picsum.photos/seed/repair4/300/300',
+                    'https://picsum.photos/seed/repair5/300/300'
+                ]
+            },
+            2: {
+                icon: '🛡️',
+                title: 'Insurance Consultancy',
+                desc: 'Get the best insurance policies for your vehicle with expert guidance. We compare and recommend the best plans from top insurance companies. Zero paperwork hassle. Save up to 40% on premiums.',
+                cover: 'https://picsum.photos/seed/insurance_cover/800/400',
+                carName: '🏎️ Insurance - Sports Car',
+                gallery: [
+                    'https://picsum.photos/seed/insurance1/300/300',
+                    'https://picsum.photos/seed/insurance2/300/300',
+                    'https://picsum.photos/seed/insurance3/300/300',
+                    'https://picsum.photos/seed/insurance4/300/300',
+                    'https://picsum.photos/seed/insurance5/300/300',
+                    'https://picsum.photos/seed/insurance6/300/300',
+                    'https://picsum.photos/seed/insurance7/300/300',
+                    'https://picsum.photos/seed/insurance8/300/300'
+                ]
+            },
+            3: {
+                icon: '🚘',
+                title: 'Car Resale & Purchase',
+                desc: 'Buy and sell used cars with complete transparency and fair pricing. We handle all paperwork, inspections, and provide warranty on selected vehicles. Trusted by 500+ customers. Get the best deals in town.',
+                cover: 'https://picsum.photos/seed/resale_cover/800/400',
+                carName: '🏎️ Resale - SUV Model',
+                gallery: [
+                    'https://picsum.photos/seed/resale1/300/300',
+                    'https://picsum.photos/seed/resale2/300/300',
+                    'https://picsum.photos/seed/resale3/300/300',
+                    'https://picsum.photos/seed/resale4/300/300',
+                    'https://picsum.photos/seed/resale5/300/300'
+                ]
+            },
+            4: {
+                icon: '📋',
+                title: 'RTO & Documentation',
+                desc: 'Hassle-free RTO registration, permit, and all legal documentation support. Fast and reliable service with expert guidance on all paperwork. We handle everything for you with transparency and speed.',
+                cover: 'https://picsum.photos/seed/rto_cover/800/400',
+                carName: '🏎️ RTO - Classic Car',
+                gallery: [
+                    'https://picsum.photos/seed/rto1/300/300',
+                    'https://picsum.photos/seed/rto2/300/300',
+                    'https://picsum.photos/seed/rto3/300/300',
+                    'https://picsum.photos/seed/rto4/300/300',
+                    'https://picsum.photos/seed/rto5/300/300',
+                    'https://picsum.photos/seed/rto6/300/300'
+                ]
+            },
+            5: {
+                icon: '🛠️',
+                title: 'Car Modification',
+                desc: 'Custom modification and tuning for performance and style upgrades. From body kits to engine tuning, we provide professional modification services. 100% satisfaction guaranteed. Over 100+ successful builds.',
+                cover: 'https://picsum.photos/seed/mod_cover/800/400',
+                carName: '🏎️ Modification - Tuned Car',
+                gallery: [
+                    'https://picsum.photos/seed/mod1/300/300',
+                    'https://picsum.photos/seed/mod2/300/300',
+                    'https://picsum.photos/seed/mod3/300/300',
+                    'https://picsum.photos/seed/mod4/300/300',
+                    'https://picsum.photos/seed/mod5/300/300',
+                    'https://picsum.photos/seed/mod6/300/300'
+                ]
+            }
+        };
+
+        // Get ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id') || 1;
+        const service = services[id] || services[1];
+
+        // ===== LOAD DATA =====
+        document.getElementById('serviceIcon').textContent = service.icon;
+        document.getElementById('serviceTitle').textContent = service.title;
+        document.getElementById('serviceDescription').textContent = service.desc;
+        document.getElementById('coverImage').src = service.cover;
+        document.getElementById('carName').textContent = service.carName;
+
+        // ===== LOAD GALLERY =====
+        const galleryGrid = document.getElementById('galleryGrid');
+        const displayImages = service.gallery.slice(0, 4);
+        galleryGrid.innerHTML = displayImages.map((img, index) => `
+            <div class="gallery-item" onclick="openLightbox(${index})">
+                <img src="${img}" alt="Gallery ${index + 1}" />
+            </div>
+        `).join('');
+
+        // ===== FULL GALLERY =====
+        function openFullGallery() {
+            const modal = document.getElementById('fullGalleryModal');
+            const grid = document.getElementById('fullGalleryGrid');
+            const count = document.getElementById('fullGalleryCount');
+
+            grid.innerHTML = service.gallery.map((img, index) => `
+                <div class="full-item" onclick="closeFullGallery(); openLightbox(${index})">
+                    <img src="${img}" alt="Photo ${index + 1}" />
+                </div>
+            `).join('');
+
+            count.textContent = `${service.gallery.length} Photos`;
+            document.getElementById('fullGalleryTitle').textContent = `📸 ${service.title} - All Photos`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullGallery() {
+            document.getElementById('fullGalleryModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ===== LIGHTBOX =====
+        let currentImageIndex = 0;
+
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightboxImage');
+            const counter = document.getElementById('lightboxCounter');
+            img.src = service.gallery[index];
+            counter.textContent = `${index + 1} / ${service.gallery.length}`;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % service.gallery.length;
+            const img = document.getElementById('lightboxImage');
+            const counter = document.getElementById('lightboxCounter');
+            img.src = service.gallery[currentImageIndex];
+            counter.textContent = `${currentImageIndex + 1} / ${service.gallery.length}`;
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + service.gallery.length) % service.gallery.length;
+            const img = document.getElementById('lightboxImage');
+            const counter = document.getElementById('lightboxCounter');
+            img.src = service.gallery[currentImageIndex];
+            counter.textContent = `${currentImageIndex + 1} / ${service.gallery.length}`;
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeFullGallery();
+            }
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+
+        // ===== CLOSE FULL GALLERY ON BACKGROUND CLICK =====
+        document.getElementById('fullGalleryModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeFullGallery();
+        });
+
+        console.log('📄 Service Detail Loaded:', service.title);
+        console.log('📸 Total Images:', service.gallery.length);
+    </script>
+</body>
+</html>
