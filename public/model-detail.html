@@ -483,18 +483,16 @@
     </div>
 
     <script>
-        const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
-        const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
-
+        // ==========================================================
+        // 📁 `models.json` માંથી ડેટા લાવો
+        // ==========================================================
         async function loadData() {
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
-                    headers: { 'X-Master-Key': JSON_SECRET_KEY }
-                });
-                const json = await res.json();
-                return json.record || { models: [] };
+                const res = await fetch('/models.json');
+                const data = await res.json();
+                return data.models || [];
             } catch (e) {
-                return { models: [] };
+                return [];
             }
         }
 
