@@ -500,12 +500,17 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const id = parseInt(urlParams.get('id')) || 1;
+        const variantName = urlParams.get('variant');
         
         async function renderDetail() {
             const data = await loadData();
-            const models = data.models || [];
+            const allModels = data.models || [];
             
-            let model = models.find(m => m.id === id);
+            let model = allModels.find(m => m.id === id);
+
+            if(variantName && model && model.gallery) {
+                model.name = variantName;
+            }
 
             if(!model) {
                 model = {

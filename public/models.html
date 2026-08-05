@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Variants - Om Auto Consultant</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0b0e1a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ff6b35; flex-wrap: wrap;
+        }
+        header .logo h1 { font-size: 28px; color: #ff6b35; }
+        header .logo p { font-size: 14px; color: #aaa; }
+        header nav a { color: #fff; text-decoration: none; margin-left: 30px; font-size: 16px; transition: 0.3s; }
+        header nav a:hover { color: #ff6b35; }
+
+        .section-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-container .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ff6b35; color: #fff; text-decoration: none; border-radius: 25px; transition: 0.3s; }
+        .section-container .back-btn:hover { background: #e55a2b; transform: scale(1.05); }
+        .section-container h2 { font-size: 32px; color: #ff6b35; text-align: center; margin-bottom: 20px; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+
+        .card { 
+            background: #1a1f3a; border-radius: 16px; overflow: hidden; 
+            border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; 
+        }
+        .card:hover { transform: translateY(-5px); border-color: #ff6b35; box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2); }
+        .card .img-box { width: 100%; height: 200px; overflow: hidden; background: #0b0e1a; }
+        .card .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .card:hover .img-box img { transform: scale(1.05); }
+        .card .title { text-align: center; padding: 15px; color: #ff6b35; font-size: 20px; font-weight: bold; border-top: 1px solid #ff6b3544; }
+
+        footer { text-align: center; padding: 20px; background: #0b0e1a; color: #666; border-top: 1px solid #1a1f3a; margin-top: auto; }
+        @media (max-width: 768px) { header { flex-direction: column; } .grid-container { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><h1>🚗 Om Auto Consultant</h1><p>Your Trusted Tempo Partner</p></div>
+        <nav><a href="index.html">Home</a><a href="#contact">Contact</a></nav>
+    </header>
+
+    <section class="section-container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        <h2 id="pageTitle">🚚 Variants</h2>
+        <div class="grid-container" id="variantsGrid"></div>
+    </section>
+
+    <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
+
+    <script>
+        const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
+        const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const mainId = parseInt(urlParams.get('id'));
+
+        async function loadData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSON_SECRET_KEY }
+                });
+                const json = await res.json();
+                return json.record || { models: [] };
+            } catch (e) {
+                return { models: [] };
+            }
+        }
+
+        async function renderVariants() {
+            const data = await loadData();
+            let allModels = data.models || [];
+
+            if(mainId) {
+                allModels = allModels.filter(m => m.id === mainId);
+            }
+
+            if(allModels.length === 0) {
+                allModels = [
+                    { id: 1, name: 'Tata Intra - Model 1', cover: 'https://picsum.photos/seed/intra1/400/300' },
+                    { id: 1, name: 'Tata Intra - Model 2', cover: 'https://picsum.photos/seed/intra2/400/300' },
+                    { id: 1, name: 'Tata Intra - Model 3', cover: 'https://picsum.photos/seed/intra3/400/300' },
+                    { id: 1, name: 'Tata Intra - Model 4', cover: 'https://picsum.photos/seed/intra4/400/300' }
+                ];
+            }
+
+            document.getElementById('pageTitle').textContent = `🚚 ${allModels[0]?.name || 'Models'}`;
+
+            const grid = document.getElementById('variantsGrid');
+            grid.innerHTML = allModels.map(m => `
+                <div class="card" onclick="window.location.href='model-detail.html?id=${m.id}&variant=${encodeURIComponent(m.name)}'">
+                    <div class="img-box"><img src="${m.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${m.name}" /></div>
+                    <div class="title">${m.name}</div>
+                </div>
+            `).join('');
+        }
+
+        renderVariants();
+    </script>
+</body>
+</html>

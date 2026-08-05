@@ -101,23 +101,48 @@
         <h1>🛠️ Admin Panel</h1>
         <p>Manage Om Auto Consultant - Tempo Models</p>
         <nav>
-            <a href="#" onclick="loadDashboard()">📊 Dashboard</a>
-            <a href="#" onclick="loadServices()">🚚 Models</a>
-            <a href="#" onclick="loadContacts()">📞 Contacts</a>
+            <a href="#dashboard">📊 Dashboard</a>
+            <a href="#models">🚚 Models</a>
+            <a href="#contacts">📞 Contacts</a>
+            <a href="#logo">🎨 Logo Settings</a>
             <a href="https://om-auto-consultant.vercel.app" target="_blank">👁️ View Website</a>
         </nav>
     </header>
 
     <section id="adminContent">
-        <h2>📊 Dashboard</h2>
-        <div class="stats">
-            <div class="stat-card"><h3 id="totalServices">0</h3><p>Total Models</p></div>
-            <div class="stat-card"><h3 id="totalBrands">0</h3><p>Total Brands</p></div>
-            <div class="stat-card"><h3>1000+</h3><p>Happy Customers</p></div>
-        </div>
-        <div id="servicesList"></div>
+        
+        <!-- ==================== DASHBOARD SECTION ==================== -->
+        <section id="dashboard">
+            <h2>📊 Dashboard</h2>
+            <div class="stats">
+                <div class="stat-card"><h3 id="totalServices">0</h3><p>Total Models</p></div>
+                <div class="stat-card"><h3 id="totalBrands">0</h3><p>Total Brands</p></div>
+                <div class="stat-card"><h3>1000+</h3><p>Happy Customers</p></div>
+            </div>
+            <div id="servicesList"></div>
+        </section>
+
+        <!-- ==================== MODELS SECTION ==================== -->
+        <section id="models" style="display:none;">
+            <h2>🚚 Manage Models</h2>
+            <div id="modelsList"></div>
+        </section>
+
+        <!-- ==================== CONTACTS SECTION ==================== -->
+        <section id="contacts" style="display:none;">
+            <h2>📞 Contact Settings</h2>
+            <div id="contactsForm"></div>
+        </section>
+
+        <!-- ==================== LOGO SECTION ==================== -->
+        <section id="logo" style="display:none;">
+            <h2>🎨 Logo / Home Slide Settings</h2>
+            <div id="logoForm"></div>
+        </section>
+
     </section>
 
+    <!-- ==================== MODAL (Add/Edit Model) ==================== -->
     <div class="modal" id="serviceModal">
         <div class="modal-content">
             <h2 id="modalTitle">➕ Add / Edit Model Details</h2>
@@ -135,13 +160,6 @@
                 <option value="9">Ashok Leyland Dost</option>
                 <option value="10">Tata Ace</option>
             </select>
-
-            <label>📸 Home Page Slide Image (Logo/Photo)</label>
-            <div class="photo-upload" onclick="document.getElementById('homeImageInput').click()">
-                <p>📤 Click to upload Home Slide Image</p>
-                <input type="file" id="homeImageInput" accept="image/*" />
-            </div>
-            <div class="photo-preview" id="homeImagePreview"></div>
 
             <label>📛 Model Type</label>
             <input id="modalType" placeholder="e.g. Mini Truck, Pickup, Small Commercial" />
@@ -187,33 +205,52 @@
 
     <script>
         // ==========================================================
-        // ✅ તમારી API Keys (આ જ રાખો)
+        // ✅ તમારા JSONBin Keys
         // ==========================================================
-        const IMG_BB_API = "95e449c1f90b71827892ea64c20c0055";
         const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
         const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
+        const IMG_BB_API = "95e449c1f90b71827892ea64c20c0055";
         // ==========================================================
 
         let editingId = null;
-        let tempHomeImage = null;
         let tempCover = null;
         let tempGallery = [];
 
-        // ===== JSONBin પરથી ડેટા લાવો =====
+        // ==================== NAVIGATION LOGIC ====================
+        function showSection(sectionId) {
+            document.querySelectorAll('#adminContent > section').forEach(el => {
+                el.style.display = 'none';
+            });
+            const target = document.getElementById(sectionId);
+            if(target) target.style.display = 'block';
+        }
+
+        document.querySelectorAll('header nav a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                showSection(targetId);
+                if(targetId === 'dashboard') loadDashboard();
+                else if(targetId === 'models') loadModels();
+                else if(targetId === 'contacts') loadContacts();
+                else if(targetId === 'logo') loadLogo();
+            });
+        });
+
+        // ==================== DATA FUNCTIONS ====================
         async function loadData() {
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
                     headers: { 'X-Master-Key': JSON_SECRET_KEY }
                 });
                 const json = await res.json();
-                return json.record || { models: [], contacts: {} };
+                return json.record || { models: [], contacts: {}, logo: {} };
             } catch (e) {
                 console.error("Error loading data:", e);
-                return { models: [], contacts: {} };
+                return { models: [], contacts: {}, logo: {} };
             }
         }
 
-        // ===== JSONBin પર ડેટા સેવ કરો =====
         async function saveData(data) {
             try {
                 await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
@@ -230,7 +267,6 @@
             }
         }
 
-        // ===== ImgBB પર ફોટો અપલોડ કરો =====
         async function uploadToImgBB(file) {
             const formData = new FormData();
             formData.append('image', file);
@@ -247,13 +283,15 @@
             }
         }
 
+        // ==================== DASHBOARD ====================
         async function loadDashboard() {
+            showSection('dashboard');
             const data = await loadData();
             document.getElementById('totalServices').textContent = data.models ? data.models.length : 0;
-            loadServices();
+            loadServicesList();
         }
 
-        async function loadServices() {
+        async function loadServicesList() {
             const data = await loadData();
             const list = document.getElementById('servicesList');
             list.innerHTML = '';
@@ -295,15 +333,143 @@
             }
         }
 
+        // ==================== MODELS ====================
+        async function loadModels() {
+            showSection('models');
+            document.getElementById('modelsList').innerHTML = `
+                <p style="color:#aaa;">Here you can manage all models.</p>
+                <button onclick="showAddModal()" style="padding:10px 30px;background:#ff6b35;color:#fff;border:none;border-radius:8px;cursor:pointer;">➕ Add New Model</button>
+                <div id="modelsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;margin-top:20px;"></div>
+            `;
+            const data = await loadData();
+            const grid = document.getElementById('modelsGrid');
+            if(data.models && data.models.length > 0) {
+                grid.innerHTML = data.models.map(m => `
+                    <div style="background:#1a1f3a;padding:15px;border-radius:8px;border:1px solid #ff6b3544;">
+                        <img src="${m.cover || 'https://picsum.photos/seed/default/300/200'}" style="width:100%;height:120px;object-fit:cover;border-radius:6px;">
+                        <h4 style="color:#ff6b35;margin:10px 0 5px;">${m.name}</h4>
+                        <p style="color:#aaa;font-size:13px;">${m.company || ''} - ${m.price || ''}</p>
+                        <div style="margin-top:10px;display:flex;gap:10px;">
+                            <button onclick="editService(${m.id})" style="background:#ff6b35;color:#fff;border:none;padding:5px 15px;border-radius:6px;cursor:pointer;">Edit</button>
+                            <button onclick="deleteService(${m.id})" style="background:#b71c1c;color:#fff;border:none;padding:5px 15px;border-radius:6px;cursor:pointer;">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ==================== CONTACTS ====================
+        async function loadContacts() {
+            showSection('contacts');
+            const data = await loadData();
+            const c = data.contacts || {};
+            document.getElementById('contactsForm').innerHTML = `
+                <div style="background:#1a1f3a;padding:30px;border-radius:16px;max-width:600px;">
+                    <p><strong>📛 Name 1:</strong> <input id="editName1" value="${c.name1 || 'Rameshbhai'}" /></p>
+                    <p><strong>📞 Phone 1:</strong> <input id="editPhone1" value="${c.phone1 || '9925380849'}" /></p>
+                    <p><strong>📛 Name 2:</strong> <input id="editName2" value="${c.name2 || 'Jigneshbhai'}" /></p>
+                    <p><strong>📞 Phone 2:</strong> <input id="editPhone2" value="${c.phone2 || '8469716611'}" /></p>
+                    <p><strong>📛 Name 3:</strong> <input id="editName3" value="${c.name3 || 'Girishbhai'}" /></p>
+                    <p><strong>📞 Phone 3:</strong> <input id="editPhone3" value="${c.phone3 || '9879065758'}" /></p>
+                    <p><strong>📍 Location:</strong> <input id="editLocation" value="${c.location || '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'}" /></p>
+                    <button onclick="saveContacts()" style="padding:10px 30px;background:#ff6b35;color:#fff;border:none;border-radius:8px;cursor:pointer;">💾 Save</button>
+                    <button onclick="loadDashboard()" style="padding:10px 30px;background:#555;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:10px;">← Back to Dashboard</button>
+                </div>
+            `;
+            document.querySelectorAll('#contactsForm input').forEach(el => {
+                el.style.width = '100%'; el.style.padding = '10px'; el.style.margin = '5px 0';
+                el.style.background = '#11152a'; el.style.border = '1px solid #ff6b3544';
+                el.style.color = '#fff'; el.style.borderRadius = '8px';
+            });
+        }
+
+        async function saveContacts() {
+            const data = await loadData();
+            data.contacts = {
+                name1: document.getElementById('editName1').value,
+                phone1: document.getElementById('editPhone1').value,
+                name2: document.getElementById('editName2').value,
+                phone2: document.getElementById('editPhone2').value,
+                name3: document.getElementById('editName3').value,
+                phone3: document.getElementById('editPhone3').value,
+                location: document.getElementById('editLocation').value
+            };
+            await saveData(data);
+            alert('✅ Contacts saved!');
+            loadDashboard();
+        }
+
+        // ==================== LOGO ====================
+        async function loadLogo() {
+            showSection('logo');
+            const data = await loadData();
+            const logo = data.logo || {};
+            document.getElementById('logoForm').innerHTML = `
+                <div style="background:#1a1f3a;padding:30px;border-radius:16px;max-width:600px;">
+                    <label><strong>📛 Select Model to Change Logo:</strong></label>
+                    <select id="logoModelSelect">
+                        <option value="1">Tata Intra</option>
+                        <option value="2">Tata Yodha</option>
+                        <option value="3">Tata 407</option>
+                        <option value="4">Mahindra Jito</option>
+                        <option value="5">Mahindra Supro</option>
+                        <option value="6">Mahindra Bolero</option>
+                        <option value="7">Mahindra Camper</option>
+                        <option value="8">Maruti Super Carry</option>
+                        <option value="9">Ashok Leyland Dost</option>
+                        <option value="10">Tata Ace</option>
+                    </select>
+                    <p style="margin-top:15px;"><strong>Current Logo:</strong></p>
+                    <div style="margin-bottom:15px;">
+                        <img id="currentLogoImg" src="${logo['1'] || 'https://picsum.photos/seed/default_home/300/300'}" style="max-width:200px;border-radius:8px;border:1px solid #ff6b3544;" />
+                    </div>
+                    <label><strong>Upload New Logo:</strong></label>
+                    <div class="photo-upload" onclick="document.getElementById('logoInput').click()">
+                        <p>📤 Click to upload New Logo</p>
+                        <input type="file" id="logoInput" accept="image/*" />
+                    </div>
+                    <div class="photo-preview" id="logoPreview"></div>
+                    <button onclick="saveLogo()" style="padding:10px 30px;background:#ff6b35;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:10px;">💾 Save Logo</button>
+                    <button onclick="loadDashboard()" style="padding:10px 30px;background:#555;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:10px;margin-left:10px;">← Back</button>
+                </div>
+            `;
+            document.getElementById('logoModelSelect')?.addEventListener('change', function(e) {
+                const id = this.value;
+                const data = JSON.parse(localStorage.getItem('omAutoData') || '{}');
+                const logo = data.logo || {};
+                const imgUrl = logo[id] || 'https://picsum.photos/seed/default_home/300/300';
+                document.getElementById('currentLogoImg').src = imgUrl;
+            });
+        }
+
+        async function saveLogo() {
+            const modelId = document.getElementById('logoModelSelect').value;
+            const fileInput = document.getElementById('logoInput');
+            let logoUrl = null;
+            if(fileInput.files && fileInput.files[0]) {
+                const url = await uploadToImgBB(fileInput.files[0]);
+                if(url) logoUrl = url;
+            }
+            if(!logoUrl) {
+                alert('Please select an image first!');
+                return;
+            }
+            let data = await loadData();
+            if(!data.logo) data.logo = {};
+            data.logo[modelId] = logoUrl;
+            await saveData(data);
+            alert('✅ Logo saved successfully!');
+            loadDashboard();
+        }
+
+        // ==================== MODAL FUNCTIONS ====================
         function showAddModal() {
             editingId = null;
-            tempHomeImage = null;
             tempCover = null;
             tempGallery = [];
             document.getElementById('modalTitle').textContent = '➕ Add Model Details';
             document.getElementById('modalModelSelect').value = '1';
             ['modalType', 'modalCompany', 'modalOwner', 'modalKm', 'modalVimo', 'modalPrice', 'modalDesc'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('homeImagePreview').innerHTML = '';
             document.getElementById('coverPreview').innerHTML = '';
             document.getElementById('galleryPreview').innerHTML = '';
             document.getElementById('serviceModal').classList.add('active');
@@ -323,11 +489,6 @@
             document.getElementById('modalVimo').value = m.vimo || '';
             document.getElementById('modalPrice').value = m.price || '';
             document.getElementById('modalDesc').value = m.desc || '';
-            
-            if(m.homeImage) {
-                document.getElementById('homeImagePreview').innerHTML = `<div class="preview-item"><img src="${m.homeImage}" /></div>`;
-                tempHomeImage = m.homeImage;
-            }
             if(m.cover) {
                 document.getElementById('coverPreview').innerHTML = `<div class="preview-item"><img src="${m.cover}" /></div>`;
                 tempCover = m.cover;
@@ -358,19 +519,11 @@
             const price = document.getElementById('modalPrice').value.trim() || '₹ 0.00';
             const desc = document.getElementById('modalDesc').value.trim() || 'Description...';
 
-            // Upload Home Image if new
-            const homeImgInput = document.getElementById('homeImageInput');
-            if(homeImgInput.files && homeImgInput.files[0]) {
-                tempHomeImage = await uploadToImgBB(homeImgInput.files[0]);
-            }
-
-            // Upload Cover Image if new
             const coverImgInput = document.getElementById('coverInput');
             if(coverImgInput.files && coverImgInput.files[0]) {
                 tempCover = await uploadToImgBB(coverImgInput.files[0]);
             }
 
-            // Upload Gallery Images if new
             const galleryImgInput = document.getElementById('galleryInput');
             if(galleryImgInput.files && galleryImgInput.files.length > 0) {
                 for(let i=0; i<galleryImgInput.files.length; i++) {
@@ -382,7 +535,6 @@
             let data = await loadData();
             if(!data.models) data.models = [];
 
-            // ✅ એરર ફિક્સ: જો મોડલ ન મળે તો તેને નવું બનાવો
             let modelIndex = data.models.findIndex(m => m.id === id);
             if(modelIndex === -1) {
                 const newModel = {
@@ -395,7 +547,6 @@
                     vimo: vimo,
                     price: price,
                     desc: desc,
-                    homeImage: tempHomeImage || 'https://picsum.photos/seed/default_home/300/300',
                     cover: tempCover || 'https://picsum.photos/seed/default/400/300',
                     gallery: tempGallery.length > 0 ? tempGallery : ['https://picsum.photos/seed/default_gallery/300/300']
                 };
@@ -407,7 +558,6 @@
                 return;
             }
 
-            // જો મોડલ મળી જાય, તો તેને અપડેટ કરો
             data.models[modelIndex] = {
                 ...data.models[modelIndex],
                 type: type,
@@ -417,7 +567,6 @@
                 vimo: vimo,
                 price: price,
                 desc: desc,
-                homeImage: tempHomeImage || data.models[modelIndex].homeImage || 'https://picsum.photos/seed/default_home/300/300',
                 cover: tempCover || data.models[modelIndex].cover || 'https://picsum.photos/seed/default/400/300',
                 gallery: tempGallery.length > 0 ? tempGallery : (data.models[modelIndex].gallery || ['https://picsum.photos/seed/default_gallery/300/300'])
             };
@@ -428,67 +577,12 @@
             alert('✅ Model details saved successfully to Cloud!');
         }
 
-        async function loadContacts() {
-            const data = await loadData();
-            const c = data.contacts || {};
-            document.getElementById('adminContent').innerHTML = `
-                <h2>📞 Contact Settings</h2>
-                <div style="background:#1a1f3a;padding:30px;border-radius:16px;max-width:600px;">
-                    <p><strong>📛 Name 1:</strong> <input id="editName1" value="${c.name1 || 'Rameshbhai'}" /></p>
-                    <p><strong>📞 Phone 1:</strong> <input id="editPhone1" value="${c.phone1 || '9925380849'}" /></p>
-                    <p><strong>📛 Name 2:</strong> <input id="editName2" value="${c.name2 || 'Jigneshbhai'}" /></p>
-                    <p><strong>📞 Phone 2:</strong> <input id="editPhone2" value="${c.phone2 || '8469716611'}" /></p>
-                    <p><strong>📛 Name 3:</strong> <input id="editName3" value="${c.name3 || 'Girishbhai'}" /></p>
-                    <p><strong>📞 Phone 3:</strong> <input id="editPhone3" value="${c.phone3 || '9879065758'}" /></p>
-                    <p><strong>📍 Location:</strong> <input id="editLocation" value="${c.location || '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'}" /></p>
-                    <button onclick="saveContacts()">💾 Save</button>
-                    <button onclick="loadDashboard()">← Back</button>
-                </div>
-            `;
-            document.querySelectorAll('#adminContent input').forEach(el => {
-                el.style.width = '100%'; el.style.padding = '10px'; el.style.margin = '5px 0';
-                el.style.background = '#11152a'; el.style.border = '1px solid #ff6b3544';
-                el.style.color = '#fff'; el.style.borderRadius = '8px';
-            });
-        }
-
-        async function saveContacts() {
-            const data = await loadData();
-            data.contacts = {
-                name1: document.getElementById('editName1').value,
-                phone1: document.getElementById('editPhone1').value,
-                name2: document.getElementById('editName2').value,
-                phone2: document.getElementById('editPhone2').value,
-                name3: document.getElementById('editName3').value,
-                phone3: document.getElementById('editPhone3').value,
-                location: document.getElementById('editLocation').value
-            };
-            await saveData(data);
-            alert('✅ Contacts saved!');
-            loadDashboard();
-        }
-
         function closeModal() {
             document.getElementById('serviceModal').classList.remove('active');
         }
 
         document.getElementById('serviceModal').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
-        });
-
-        // ==========================================================
-        // ✅ ફોટો પ્રીવ્યૂ (સિલેક્ટ કર્યા પછી તરત જ દેખાશે)
-        // ==========================================================
-        
-        document.getElementById('homeImageInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = ev => {
-                tempHomeImage = ev.target.result;
-                document.getElementById('homeImagePreview').innerHTML = `<div class="preview-item"><img src="${tempHomeImage}" /></div>`;
-            };
-            reader.readAsDataURL(file);
         });
 
         document.getElementById('coverInput').addEventListener('change', function(e) {

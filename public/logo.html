@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Om Auto Consultant - Logo Settings</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .logo-section {
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .logo-section h2 { color: #ff6b35; font-size: 36px; margin-bottom: 30px; }
+        .logo-box { background: #1a1f3a; padding: 30px; border-radius: 20px; border: 1px solid #ff6b3544; }
+        .logo-box label { display: block; color: #aaa; font-size: 14px; margin-top: 15px; margin-bottom: 5px; }
+        .logo-box select, .logo-box input { width: 100%; padding: 10px; background: #11152a; border: 1px solid #ff6b3544; color: #fff; border-radius: 8px; margin: 5px 0; }
+        .logo-box .preview { margin: 15px 0; }
+        .logo-box .preview img { max-width: 200px; border-radius: 10px; border: 1px solid #ff6b3544; }
+        .logo-box button { padding: 10px 30px; background: #ff6b35; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .logo-box button:hover { background: #e55a2b; transform: scale(1.05); }
+        .back-btn { display: inline-block; margin-top: 20px; padding: 10px 24px; background: #555; color: #fff; text-decoration: none; border-radius: 25px; transition: 0.3s; }
+        .back-btn:hover { background: #444; }
+        #status { margin-top: 15px; padding: 10px; border-radius: 8px; display: none; }
+        .success { background: #1b5e20; border: 1px solid #4CAF50; color: #fff; }
+        .error { background: #b71c1c; border: 1px solid #f44336; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><h1>🚗 Om Auto Consultant</h1><p>Your Trusted Tempo Partner</p></div>
+        <nav><a href="index.html">Home</a></nav>
+    </header>
+
+    <section class="logo-section">
+        <h2>🎨 Logo / Home Slide Settings</h2>
+        <div class="logo-box">
+            <label>📛 Select Model to Change Logo</label>
+            <select id="logoModelSelect">
+                <option value="1">Tata Intra</option>
+                <option value="2">Tata Yodha</option>
+                <option value="3">Tata 407</option>
+                <option value="4">Mahindra Jito</option>
+                <option value="5">Mahindra Supro</option>
+                <option value="6">Mahindra Bolero</option>
+                <option value="7">Mahindra Camper</option>
+                <option value="8">Maruti Super Carry</option>
+                <option value="9">Ashok Leyland Dost</option>
+                <option value="10">Tata Ace</option>
+            </select>
+
+            <div class="preview" id="currentLogoDisplay">
+                <img id="currentLogoImg" src="https://picsum.photos/seed/default_home/300/300" alt="Current Logo" />
+            </div>
+
+            <label>📤 Upload New Logo (Image)</label>
+            <input type="file" id="logoInput" accept="image/*" />
+
+            <div style="margin-top:15px;">
+                <button onclick="saveLogo()">💾 Save Logo</button>
+            </div>
+
+            <div id="status"></div>
+        </div>
+        <a href="index.html" class="back-btn">← Back to Home</a>
+    </section>
+
+    <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
+
+    <script>
+        // ===== તમારા JSONBin Keys (આ જ રાખો) =====
+        const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
+        const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
+        const IMG_BB_API = "95e449c1f90b71827892ea64c20c0055";
+        // ==========================================================
+
+        async function loadData() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                    headers: { 'X-Master-Key': JSON_SECRET_KEY }
+                });
+                const json = await res.json();
+                return json.record || { logo: {} };
+            } catch (e) {
+                return { logo: {} };
+            }
+        }
+
+        async function saveData(data) {
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${JSON_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSON_SECRET_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function uploadToImgBB(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMG_BB_API}`, {
+                method: 'POST',
+                body: formData
+            });
+            const json = await res.json();
+            return json.success ? json.data.url : null;
+        }
+
+        async function loadCurrentLogo() {
+            const data = await loadData();
+            const logo = data.logo || {};
+            const selectedId = document.getElementById('logoModelSelect').value;
+            const imgUrl = logo[selectedId] || 'https://picsum.photos/seed/default_home/300/300';
+            document.getElementById('currentLogoImg').src = imgUrl;
+        }
+
+        document.getElementById('logoModelSelect').addEventListener('change', loadCurrentLogo);
+
+        async function saveLogo() {
+            const statusEl = document.getElementById('status');
+            const modelId = document.getElementById('logoModelSelect').value;
+            const fileInput = document.getElementById('logoInput');
+            let logoUrl = null;
+
+            if(fileInput.files && fileInput.files[0]) {
+                const url = await uploadToImgBB(fileInput.files[0]);
+                if(url) logoUrl = url;
+            }
+
+            if(!logoUrl) {
+                statusEl.style.display = 'block';
+                statusEl.className = 'error';
+                statusEl.innerText = '❌ Please select an image first!';
+                return;
+            }
+
+            let data = await loadData();
+            if(!data.logo) data.logo = {};
+            data.logo[modelId] = logoUrl;
+            await saveData(data);
+
+            statusEl.style.display = 'block';
+            statusEl.className = 'success';
+            statusEl.innerText = '✅ Logo saved successfully!';
+            loadCurrentLogo();
+        }
+
+        loadCurrentLogo();
+    </script>
+</body>
+</html>

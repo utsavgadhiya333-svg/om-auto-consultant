@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Om Auto Consultant - Models</title>
+    <title>Om Auto Consultant</title>
     <link rel="stylesheet" href="style.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -23,18 +23,6 @@
             padding: 50px 20px; background: radial-gradient(ellipse at center, #11152a 0%, #0b0e1a 100%);
             position: relative; overflow: hidden;
         }
-        .carousel-section::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-image:
-                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(2px 2px at 50px 160px, #ddd, transparent),
-                radial-gradient(2px 2px at 90px 40px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 130px 80px, #fff, transparent),
-                radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.7), transparent);
-            background-size: 200px 200px; opacity: 0.3; pointer-events: none; z-index: 0;
-        }
         .carousel-section h2 { font-size: 42px; color: #ff6b35; margin-bottom: 40px; z-index: 1; text-shadow: 0 0 30px rgba(255, 107, 53, 0.3); letter-spacing: 2px; }
         .carousel-container { position: relative; max-width: 1000px; width: 100%; overflow: hidden; border-radius: 20px; z-index: 1; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
         .carousel-slider { display: flex; transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
@@ -45,11 +33,6 @@
             text-align: center; transition: 0.4s; min-height: 350px; display: flex; flex-direction: column;
             justify-content: center; align-items: center; position: relative; overflow: hidden;
         }
-        .slide .card::after {
-            content: '';
-            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.05), transparent 70%); pointer-events: none;
-        }
         .slide .card:hover { border-color: #ff6b35; transform: translateY(-5px); box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15); }
         .slide .card .brand-image { width: 150px; height: 150px; object-fit: contain; margin-bottom: 20px; border-radius: 12px; background: #0b0e1a; padding: 10px; }
         .slide .card .brand-name { font-size: 36px; font-weight: 700; color: #ff6b35; margin-bottom: 8px; letter-spacing: 1px; }
@@ -57,11 +40,7 @@
         .slide .card .see-more-link { display: inline-block; margin-top: 20px; padding: 12px 30px; background: #ff6b35; color: #fff; text-decoration: none; border-radius: 30px; font-weight: 600; font-size: 16px; transition: 0.3s; border: none; cursor: pointer; position: relative; z-index: 1; }
         .slide .card .see-more-link:hover { background: #e55a2b; transform: scale(1.05); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); }
 
-        .prev-btn, .next-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 107, 53, 0.8);
-            color: #fff; border: none; font-size: 32px; padding: 16px 22px; border-radius: 50%; cursor: pointer;
-            z-index: 10; transition: 0.3s; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        .prev-btn, .next-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 107, 53, 0.8); color: #fff; border: none; font-size: 32px; padding: 16px 22px; border-radius: 50%; cursor: pointer; z-index: 10; transition: 0.3s; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .prev-btn:hover, .next-btn:hover { background: #ff6b35; transform: translateY(-50%) scale(1.1); }
         .prev-btn { left: 15px; } .next-btn { right: 15px; }
 
@@ -96,7 +75,13 @@
 
     <header>
         <div class="logo"><h1>🚗 Om Auto Consultant</h1><p>Your Trusted Tempo Partner</p></div>
-        <nav><a href="index.html">Home</a><a href="#models">Models</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="models.html">Models</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a href="logo.html">Logo</a>
+        </nav>
     </header>
 
     <section class="carousel-section" id="models">
@@ -129,12 +114,8 @@
     <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
 
     <script>
-        // ==========================================================
-        // ✅ JSONBin કનેક્શન માટે Keys
-        // ==========================================================
         const JSON_BIN_ID = "6a720f91da38895dfeb922d8";
         const JSON_SECRET_KEY = "$2a$10$wKDKnY.CLF875VBBREUGmOysCWGdjkDgpb0Hx5RLv1xU12UwwGwx0";
-        // ==========================================================
 
         const staticModels = [
             { id: 1, name: 'Tata Intra' },
@@ -184,7 +165,7 @@
                         <img class="brand-image" src="${b.homeImage || 'https://picsum.photos/seed/default_home/300/300'}" alt="${b.name}" />
                         <div class="brand-name">${b.name}</div>
                         <div class="brand-desc">${b.desc || 'Description...'}</div>
-                        <a href="/models.html?id=${b.id}" class="see-more-link">🔍 View Models →</a>
+                        <a href="models.html?id=${b.id}" class="see-more-link">🔍 View Models →</a>
                     </div>
                 </div>
             `).join('');
