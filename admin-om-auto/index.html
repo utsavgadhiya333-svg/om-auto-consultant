@@ -7,9 +7,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0b0e1a; color: #fff; }
-
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        body {
+            background: #0b0e1a;
+            color: #fff;
+        }
         header {
             background: #11152a;
             padding: 20px 40px;
@@ -19,76 +26,325 @@
             align-items: center;
             flex-wrap: wrap;
         }
-        header h1 { color: #ff6b35; font-size: 28px; }
-        header p { color: #aaa; }
-        header nav a {
-            color: #fff; text-decoration: none; padding: 8px 16px;
-            border: 1px solid #ff6b35; border-radius: 8px; transition: 0.3s; cursor: pointer; font-size: 14px; display: inline-block;
+        header h1 {
+            color: #ff6b35;
+            font-size: 28px;
         }
-        header nav a:hover { background: #ff6b35; color: #fff; }
-
-        #adminContent { padding: 40px; max-width: 1200px; margin: 0 auto; }
-        #adminContent h2 { color: #ff6b35; font-size: 32px; margin-bottom: 30px; }
-
-        .stats { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 40px; }
-        .stat-card { background: #1a1f3a; padding: 30px 40px; border-radius: 16px; border: 1px solid #ff6b3544; flex: 1; min-width: 150px; text-align: center; }
-        .stat-card h3 { font-size: 36px; color: #ff6b35; }
-        .stat-card p { color: #aaa; font-size: 14px; margin-top: 5px; }
-
-        #servicesList { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .service-card { background: #1a1f3a; padding: 20px; border-radius: 12px; border: 1px solid #ff6b3544; }
-        .service-card .brand-badge { display: inline-block; background: rgba(255, 107, 53, 0.15); color: #ff6b35; padding: 2px 12px; border-radius: 12px; font-size: 12px; margin-bottom: 8px; }
-        .service-card .service-image { width: 100%; height: 150px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: #0b0e1a; }
-        .service-card .service-image img { width: 100%; height: 100%; object-fit: cover; }
-        .service-card h4 { color: #ff6b35; margin: 10px 0 5px; }
-        .service-card .service-info { color: #aaa; font-size: 13px; }
-        .service-card .service-info span { display: inline-block; margin-right: 15px; }
-        .service-card .actions { margin-top: 15px; display: flex; gap: 10px; }
-        .service-card .actions button { padding: 6px 16px; border: none; border-radius: 6px; cursor: pointer; }
-        .service-card .actions .edit-btn { background: #ff6b35; color: #fff; }
-        .service-card .actions .delete-btn { background: #b71c1c; color: #fff; }
-
-        .add-card { background: #1a1f3a; padding: 30px 20px; border-radius: 12px; border: 2px dashed #ff6b3544; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 200px; transition: 0.3s; }
-        .add-card:hover { border-color: #ff6b35; background: #11152a; }
-        .add-card .add-icon { font-size: 50px; }
-        .add-card h4 { color: #aaa; margin-top: 10px; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; z-index: 100; overflow-y: auto; padding: 20px; }
-        .modal.active { display: flex; }
-
-        .modal-content { background: #1a1f3a; padding: 30px; border-radius: 16px; max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto; }
-        .modal-content h2 { color: #ff6b35; margin-bottom: 20px; border-bottom: 1px solid #ff6b3544; padding-bottom: 10px; }
-        .modal-content label { display: block; color: #aaa; font-size: 14px; margin-top: 15px; margin-bottom: 5px; font-weight: 600; }
-        .modal-content select, .modal-content input, .modal-content textarea { width: 100%; padding: 10px; margin: 5px 0; background: #11152a; border: 1px solid #ff6b3544; color: #fff; border-radius: 8px; font-size: 14px; }
-        .modal-content select:focus, .modal-content input:focus, .modal-content textarea:focus { outline: none; border-color: #ff6b35; }
-        .modal-content select option { background: #1a1f3a; }
-
-        .modal-content .photo-upload { border: 2px dashed #ff6b3544; border-radius: 12px; padding: 20px; text-align: center; margin: 10px 0; cursor: pointer; transition: 0.3s; }
-        .modal-content .photo-upload:hover { border-color: #ff6b35; background: #11152a; }
-        .modal-content .photo-upload p { color: #888; }
-        .modal-content .photo-upload input[type="file"] { display: none; }
-
-        .modal-content .photo-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .modal-content .photo-preview .preview-item { width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 2px solid #ff6b3544; position: relative; }
-        .modal-content .photo-preview .preview-item img { width: 100%; height: 100%; object-fit: cover; }
-        .modal-content .photo-preview .preview-item .remove-photo { position: absolute; top: -6px; right: -6px; background: #b71c1c; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .modal-content .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .modal-content .btn-row { display: flex; gap: 10px; margin-top: 25px; border-top: 1px solid #ff6b3544; padding-top: 20px; }
-        .modal-content .btn-row button { padding: 10px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .modal-content .btn-row .save-btn { background: #ff6b35; color: #fff; }
-        .modal-content .btn-row .save-btn:hover { background: #e55a2b; transform: scale(1.02); }
-        .modal-content .btn-row .cancel-btn { background: #555; color: #fff; }
-        .modal-content .btn-row .cancel-btn:hover { background: #444; }
-
+        header p {
+            color: #aaa;
+        }
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ff6b35;
+            border-radius: 8px;
+            transition: 0.3s;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
+        }
+        header nav a:hover {
+            background: #ff6b35;
+            color: #fff;
+        }
+        #adminContent {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        #adminContent h2 {
+            color: #ff6b35;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        .stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .stat-card {
+            background: #1a1f3a;
+            padding: 30px 40px;
+            border-radius: 16px;
+            border: 1px solid #ff6b3544;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 36px;
+            color: #ff6b35;
+        }
+        .stat-card p {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        #servicesList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .service-card {
+            background: #1a1f3a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ff6b3544;
+        }
+        .service-card .brand-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.15);
+            color: #ff6b35;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        .service-card .service-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            background: #0b0e1a;
+        }
+        .service-card .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .service-card h4 {
+            color: #ff6b35;
+            margin: 10px 0 5px;
+        }
+        .service-card .service-info {
+            color: #aaa;
+            font-size: 13px;
+        }
+        .service-card .service-info span {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .service-card .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .service-card .actions button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .service-card .actions .edit-btn {
+            background: #ff6b35;
+            color: #fff;
+        }
+        .service-card .actions .delete-btn {
+            background: #b71c1c;
+            color: #fff;
+        }
+        .add-card {
+            background: #1a1f3a;
+            padding: 30px 20px;
+            border-radius: 12px;
+            border: 2px dashed #ff6b3544;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            min-height: 200px;
+            transition: 0.3s;
+        }
+        .add-card:hover {
+            border-color: #ff6b35;
+            background: #11152a;
+        }
+        .add-card .add-icon {
+            font-size: 50px;
+        }
+        .add-card h4 {
+            color: #aaa;
+            margin-top: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #1a1f3a;
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 750px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-content h2 {
+            color: #ff6b35;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ff6b3544;
+            padding-bottom: 10px;
+        }
+        .modal-content label {
+            display: block;
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .modal-content select,
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background: #11152a;
+            border: 1px solid #ff6b3544;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .modal-content select:focus,
+        .modal-content input:focus,
+        .modal-content textarea:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+        .modal-content select option {
+            background: #1a1f3a;
+        }
+        .modal-content .photo-upload {
+            border: 2px dashed #ff6b3544;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .modal-content .photo-upload:hover {
+            border-color: #ff6b35;
+            background: #11152a;
+        }
+        .modal-content .photo-upload p {
+            color: #888;
+        }
+        .modal-content .photo-upload input[type="file"] {
+            display: none;
+        }
+        .modal-content .photo-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .modal-content .photo-preview .preview-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #ff6b3544;
+            position: relative;
+        }
+        .modal-content .photo-preview .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .modal-content .photo-preview .preview-item .remove-photo {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #b71c1c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .modal-content .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            border-top: 1px solid #ff6b3544;
+            padding-top: 20px;
+        }
+        .modal-content .btn-row button {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .modal-content .btn-row .save-btn {
+            background: #ff6b35;
+            color: #fff;
+        }
+        .modal-content .btn-row .save-btn:hover {
+            background: #e55a2b;
+            transform: scale(1.02);
+        }
+        .modal-content .btn-row .cancel-btn {
+            background: #555;
+            color: #fff;
+        }
+        .modal-content .btn-row .cancel-btn:hover {
+            background: #444;
+        }
         @media (max-width: 768px) {
-            header { flex-direction: column; text-align: center; }
-            header nav a { margin: 5px; display: inline-block; }
-            #adminContent { padding: 20px; }
-            .stats { flex-direction: column; }
-            .modal-content { padding: 20px; }
-            .modal-content .form-row { grid-template-columns: 1fr; }
-            #servicesList { grid-template-columns: 1fr; }
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            header nav a {
+                margin: 5px;
+                display: inline-block;
+            }
+            #adminContent {
+                padding: 20px;
+            }
+            .stats {
+                flex-direction: column;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-content .form-row {
+                grid-template-columns: 1fr;
+            }
+            #servicesList {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -229,8 +485,7 @@
                     body: formData
                 });
                 const json = await res.json();
-                if (json.success) { return json.data.url; }
-                else { alert('ImgBB Error: ' + (json.error || 'Unknown error')); return null; }
+                if (json.success) { return json.data.url; } else { alert('ImgBB Error: ' + (json.error || 'Unknown error')); return null; }
             } catch (e) { alert('Upload Error: ' + e.message); return null; }
         }
 
@@ -391,9 +646,12 @@
             showSection('contacts');
             const c = await getContacts();
             const defaultC = {
-                name1: 'Rameshbhai', phone1: '9925380849',
-                name2: 'Jigneshbhai', phone2: '8469716611',
-                name3: 'Girishbhai', phone3: '9879065758',
+                name1: 'Rameshbhai',
+                phone1: '9925380849',
+                name2: 'Jigneshbhai',
+                phone2: '8469716611',
+                name3: 'Girishbhai',
+                phone3: '9879065758',
                 location: '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'
             };
             const data = c || defaultC;
@@ -512,11 +770,14 @@
         let tempGallery = [];
 
         function openAddModal() {
-            editingId = null; tempCover = null; tempGallery = [];
+            editingId = null;
+            tempCover = null;
+            tempGallery = [];
             document.getElementById('modalTitle').textContent = '➕ Add New Variant';
             document.getElementById('modalMainModelSelect').value = '1';
             document.getElementById('modalVariantName').value = '';
-            ['modalType', 'modalCompany', 'modalOwner', 'modalKm', 'modalVimo', 'modalPrice', 'modalDesc'].forEach(id => document.getElementById(id).value = '');
+            ['modalType', 'modalCompany', 'modalOwner', 'modalKm', 'modalVimo', 'modalPrice', 'modalDesc'].forEach(id => document
+                .getElementById(id).value = '');
             document.getElementById('coverPreview').innerHTML = '';
             document.getElementById('galleryPreview').innerHTML = '';
             document.getElementById('serviceModal').classList.add('active');
@@ -529,7 +790,7 @@
 
             editingId = id;
             document.getElementById('modalTitle').textContent = '✏️ Edit Variant';
-            
+
             let mainModelId = '1';
             const STATIC_MODELS = [
                 { id: 1, name: 'Tata Intra' }, { id: 2, name: 'Tata Yodha' }, { id: 3, name: 'Tata 407' },
@@ -551,14 +812,20 @@
             document.getElementById('modalPrice').value = v.price || '';
             document.getElementById('modalDesc').value = v.description || '';
 
-            if (v && v.cover) { tempCover = v.cover; document.getElementById('coverPreview').innerHTML = `<div class="preview-item"><img src="${v.cover}" /></div>`; }
-            if (v && v.gallery) { tempGallery = [...v.gallery]; document.getElementById('galleryPreview').innerHTML = tempGallery.map(img => `<div class="preview-item"><img src="${img}" /><button class="remove-photo" onclick="removeTempGallery('${img}')">✕</button></div>`).join(''); }
+            if (v && v.cover) { tempCover = v.cover;
+                document.getElementById('coverPreview').innerHTML = `<div class="preview-item"><img src="${v.cover}" /></div>`; }
+            if (v && v.gallery) { tempGallery = [...v.gallery];
+                document.getElementById('galleryPreview').innerHTML = tempGallery.map(img =>
+                    `<div class="preview-item"><img src="${img}" /><button class="remove-photo" onclick="removeTempGallery('${img}')">✕</button></div>`
+                    ).join(''); }
 
             document.getElementById('serviceModal').classList.add('active');
         }
 
         function removeTempGallery(img) { tempGallery = tempGallery.filter(i => i !== img);
-            document.getElementById('galleryPreview').innerHTML = tempGallery.map(img => `<div class="preview-item"><img src="${img}" /><button class="remove-photo" onclick="removeTempGallery('${img}')">✕</button></div>`).join(''); }
+            document.getElementById('galleryPreview').innerHTML = tempGallery.map(img =>
+                `<div class="preview-item"><img src="${img}" /><button class="remove-photo" onclick="removeTempGallery('${img}')">✕</button></div>`
+                ).join(''); }
 
         async function saveService() {
             try {
@@ -616,7 +883,9 @@
                     result = await insertVariant(variantData);
                 }
 
-                if (result) { closeModal(); loadDashboard(); alert('✅ Model saved successfully!'); }
+                if (result) { closeModal();
+                    loadDashboard();
+                    alert('✅ Model saved successfully!'); }
             } catch (e) { alert('❌ Error: ' + e.message); }
         }
 
