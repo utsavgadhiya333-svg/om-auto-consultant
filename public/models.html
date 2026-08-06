@@ -68,6 +68,22 @@
         }
 
         // =============================================================
+        // ✅ STATIC MAIN MODEL NAMES (FOR HEADER DISPLAY)
+        // =============================================================
+        const STATIC_MODELS = [
+            { id: 1, name: 'Tata Intra' },
+            { id: 2, name: 'Tata Yodha' },
+            { id: 3, name: 'Tata 407' },
+            { id: 4, name: 'Mahindra Jito' },
+            { id: 5, name: 'Mahindra Supro' },
+            { id: 6, name: 'Mahindra Bolero' },
+            { id: 7, name: 'Mahindra Camper' },
+            { id: 8, name: 'Maruti Super Carry' },
+            { id: 9, name: 'Ashok Leyland Dost' },
+            { id: 10, name: 'Tata Ace' }
+        ];
+
+        // =============================================================
         // ✅ RENDER VARIANTS
         // =============================================================
         const urlParams = new URLSearchParams(window.location.search);
@@ -76,21 +92,17 @@
         async function renderVariants() {
             const allModels = await getModels();
             
-            // ફક્ત તે મોડલના વેરિઅન્ટ્સ (ID મુજબ) બતાવો. 
-            // અહીં ધારીએ છીએ કે Admin પેનલમાં ઉમેરેલા મોડલ્સની ID આપોઆપ જનરેટ થાય છે.
-            let filtered = allModels;
-            if (mainId) {
-                // ID મુજબ ફિલ્ટર કરો
-                filtered = allModels.filter(m => m.id === mainId);
-            }
+            // ફક્ત તે મોડલના વેરિઅન્ટ્સ (ID મુજબ) બતાવો
+            let filtered = allModels.filter(m => m.id === mainId);
+
+            // જો કોઈ વેરિઅન્ટ ન મળે, તો તે મુખ્ય મોડલનું નામ ટાઇટલમાં બતાવો
+            const mainModel = STATIC_MODELS.find(m => m.id === mainId);
+            document.getElementById('pageTitle').textContent = mainModel ? `🚚 ${mainModel.name}` : '🚚 Variants';
 
             if (filtered.length === 0) {
-                document.getElementById('pageTitle').textContent = '🚚 No Variants Found';
                 document.getElementById('variantsGrid').innerHTML = `<p style="color:#888;text-align:center;">No variants available for this model.</p>`;
                 return;
             }
-
-            document.getElementById('pageTitle').textContent = `🚚 ${filtered[0].name}`;
 
             const grid = document.getElementById('variantsGrid');
             grid.innerHTML = filtered.map(m => `
