@@ -120,16 +120,10 @@
     </div>
 
     <script>
-        // =============================================================
-        // ✅ SUPABASE CONFIGURATION
-        // =============================================================
         const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =============================================================
-        // ✅ GET MODEL DETAILS FROM SUPABASE
-        // =============================================================
         async function getModelById(id) {
             try {
                 const { data, error } = await sb.from('models').select('*').eq('id', id).single();
