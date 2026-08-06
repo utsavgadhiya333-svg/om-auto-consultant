@@ -38,7 +38,6 @@
         .slide .card:hover { border-color: #ff6b35; transform: translateY(-5px); box-shadow: 0 20px 60px rgba(255, 107, 53, 0.15); }
         .slide .card .brand-image { width: 150px; height: 150px; object-fit: contain; margin-bottom: 20px; border-radius: 12px; background: #0b0e1a; padding: 10px; }
         .slide .card .brand-name { font-size: 36px; font-weight: 700; color: #ff6b35; margin-bottom: 8px; letter-spacing: 1px; }
-        .slide .card .brand-desc { font-size: 16px; color: #aaa; max-width: 500px; line-height: 1.8; margin-top: 10px; }
         .slide .card .see-more-link { display: inline-block; margin-top: 20px; padding: 12px 30px; background: #ff6b35; color: #fff; text-decoration: none; border-radius: 30px; font-weight: 600; font-size: 16px; transition: 0.3s; border: none; cursor: pointer; position: relative; z-index: 1; }
         .slide .card .see-more-link:hover { background: #e55a2b; transform: scale(1.05); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); }
 
@@ -102,8 +101,13 @@
 
     <section class="contact-section" id="contact">
         <h2>Contact Us</h2>
-        <div class="contact-info" id="contactInfo">
-            <!-- ✅ Contacts will be dynamically loaded from Supabase here -->
+        <div class="contact-info">
+            <p>📞 <strong style="color:#fff;">Rameshbhai - 9925380849</strong></p>
+            <p>📞 <strong style="color:#fff;">Jigneshbhai - 8469716611</strong></p>
+            <p>📞 <strong style="color:#fff;">Girishbhai - 9879065758</strong></p>
+            <p>📍 <a href="https://www.google.com/maps/place/Om+Auto+Consultant/@21.158824,72.797858,17z/data=!3m1!4b1!4m6!3m5!1s0x3be04e1bc48016f9:0x2bb73f1918d9f7c0!8m2!3d21.158824!4d72.797858!16s%2Fg%2F11t7nq8p5d" target="_blank">
+                6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013
+            </a></p>
         </div>
     </section>
 
@@ -119,7 +123,7 @@
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // =============================================================
-        // ✅ STATIC MODEL NAMES (Fixed 10 Models)
+        // ✅ STATIC 10 MODEL NAMES (LOGOS FROM SUPABASE)
         // =============================================================
         const staticModels = [
             { id: 1, name: 'Tata Intra' },
@@ -135,52 +139,11 @@
         ];
 
         // =============================================================
-        // ✅ LOAD CONTACTS FROM SUPABASE
-        // =============================================================
-        async function loadContacts() {
-            try {
-                const { data, error } = await sb
-                    .from('contacts')
-                    .select('*')
-                    .eq('id', 1)
-                    .single();
-
-                if (error && error.code !== 'PGRST116') {
-                    console.error('❌ Contact load error:', error);
-                    return null;
-                }
-
-                const c = data || {
-                    name1: 'Rameshbhai',
-                    phone1: '9925380849',
-                    name2: 'Jigneshbhai',
-                    phone2: '8469716611',
-                    name3: 'Girishbhai',
-                    phone3: '9879065758',
-                    location: '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'
-                };
-
-                document.getElementById('contactInfo').innerHTML = `
-                            <p>📞 <strong>${c.name1} - ${c.phone1}</strong></p>
-                            <p>📞 <strong>${c.name2} - ${c.phone2}</strong></p>
-                            <p>📞 <strong>${c.name3} - ${c.phone3}</strong></p>
-                            <p>📍 <a href="https://www.google.com/maps/place/Om+Auto+Consultant/@21.158824,72.797858,17z/data=!3m1!4b1!4m6!3m5!1s0x3be04e1bc48016f9:0x2bb73f1918d9f7c0!8m2!3d21.158824!4d72.797858!16s%2Fg%2F11t7nq8p5d" target="_blank">
-                                ${c.location || '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'}
-                            </a></p>
-                        `;
-            } catch (e) {
-                console.error('❌ Contacts Error:', e);
-            }
-        }
-
-        // =============================================================
-        // ✅ LOAD LOGO IMAGES FROM SUPABASE
+        // ✅ GET LOGOS FROM SUPABASE
         // =============================================================
         async function getLogos() {
             try {
-                const { data, error } = await sb
-                    .from('logo')
-                    .select('*');
+                const { data, error } = await sb.from('logo').select('*');
                 if (error) throw error;
                 const logoMap = {};
                 (data || []).forEach(item => {
@@ -194,7 +157,7 @@
         }
 
         // =============================================================
-        // ✅ RENDER CAROUSEL (With Logos from Supabase)
+        // ✅ RENDER CAROUSEL (Only 10 Static Models)
         // =============================================================
         async function renderCarousel() {
             const logos = await getLogos();
@@ -263,7 +226,6 @@
         // =============================================================
         // ✅ START
         // =============================================================
-        loadContacts();
         renderCarousel();
     </script>
 </body>

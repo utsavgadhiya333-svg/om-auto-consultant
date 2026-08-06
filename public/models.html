@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Variants - Om Auto Consultant</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0b0e1a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
 
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ff6b35; flex-wrap: wrap;
-        }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ff6b35; flex-wrap: wrap; }
         header .logo h1 { font-size: 28px; color: #ff6b35; }
         header .logo p { font-size: 14px; color: #aaa; }
         header nav a { color: #fff; text-decoration: none; margin-left: 30px; font-size: 16px; transition: 0.3s; }
@@ -25,10 +23,7 @@
 
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
 
-        .card { 
-            background: #1a1f3a; border-radius: 16px; overflow: hidden; 
-            border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; 
-        }
+        .card { background: #1a1f3a; border-radius: 16px; overflow: hidden; border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); border-color: #ff6b35; box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2); }
         .card .img-box { width: 100%; height: 200px; overflow: hidden; background: #0b0e1a; }
         .card .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
@@ -54,48 +49,56 @@
     <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
 
     <script>
-        // ==========================================================
-        // 📁 `models.json` માંથી ડેટા લાવો
-        // ==========================================================
-        async function loadData() {
+        // =============================================================
+        // ✅ SUPABASE CONFIGURATION
+        // =============================================================
+        const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // =============================================================
+        // ✅ GET MODELS FROM SUPABASE
+        // =============================================================
+        async function getModels() {
             try {
-                const res = await fetch('/models.json');
-                const data = await res.json();
-                return data.models || [];
-            } catch (e) {
-                return [];
-            }
+                const { data, error } = await sb.from('models').select('*').order('id', { ascending: true });
+                if (error) throw error;
+                return data || [];
+            } catch (e) { console.error('❌ Error fetching models:', e); return []; }
         }
 
+        // =============================================================
+        // ✅ RENDER VARIANTS
+        // =============================================================
         const urlParams = new URLSearchParams(window.location.search);
         const mainId = parseInt(urlParams.get('id'));
 
         async function renderVariants() {
-            const allModels = await loadData();
+            const allModels = await getModels();
+            
+            // ફક્ત તે મોડલના વેરિઅન્ટ્સ (ID મુજબ) બતાવો. 
+            // અહીં ધારીએ છીએ કે Admin પેનલમાં ઉમેરેલા મોડલ્સની ID આપોઆપ જનરેટ થાય છે.
             let filtered = allModels;
-
-            if(mainId) {
+            if (mainId) {
+                // ID મુજબ ફિલ્ટર કરો
                 filtered = allModels.filter(m => m.id === mainId);
             }
 
-            if(filtered.length === 0) {
-                filtered = [
-                    { id: 1, name: 'Tata Intra - Model 1', cover: 'https://picsum.photos/seed/intra1/400/300' },
-                    { id: 1, name: 'Tata Intra - Model 2', cover: 'https://picsum.photos/seed/intra2/400/300' },
-                    { id: 1, name: 'Tata Intra - Model 3', cover: 'https://picsum.photos/seed/intra3/400/300' },
-                    { id: 1, name: 'Tata Intra - Model 4', cover: 'https://picsum.photos/seed/intra4/400/300' }
-                ];
+            if (filtered.length === 0) {
+                document.getElementById('pageTitle').textContent = '🚚 No Variants Found';
+                document.getElementById('variantsGrid').innerHTML = `<p style="color:#888;text-align:center;">No variants available for this model.</p>`;
+                return;
             }
 
-            document.getElementById('pageTitle').textContent = `🚚 ${filtered[0]?.name || 'Models'}`;
+            document.getElementById('pageTitle').textContent = `🚚 ${filtered[0].name}`;
 
             const grid = document.getElementById('variantsGrid');
             grid.innerHTML = filtered.map(m => `
-                <div class="card" onclick="window.location.href='model-detail.html?id=${m.id}&variant=${encodeURIComponent(m.name)}'">
-                    <div class="img-box"><img src="${m.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${m.name}" /></div>
-                    <div class="title">${m.name}</div>
-                </div>
-            `).join('');
+                        <div class="card" onclick="window.location.href='model-detail.html?id=${m.id}&variant=${encodeURIComponent(m.name)}'">
+                            <div class="img-box"><img src="${m.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${m.name}" /></div>
+                            <div class="title">${m.name}</div>
+                        </div>
+                    `).join('');
         }
 
         renderVariants();
