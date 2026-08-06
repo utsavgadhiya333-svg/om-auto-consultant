@@ -124,9 +124,9 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function getModelById(id) {
+        async function getVariantById(id) {
             try {
-                const { data, error } = await sb.from('models').select('*').eq('id', id).single();
+                const { data, error } = await sb.from('variants').select('*').eq('id', id).single();
                 if (error && error.code !== 'PGRST116') console.error('Error:', error);
                 if (data) return data;
 
@@ -143,23 +143,23 @@
         const variantName = urlParams.get('variant');
 
         async function renderDetail() {
-            let model = await getModelById(id);
-            if (variantName) model.name = variantName;
+            let variant = await getVariantById(id);
+            if (variantName) variant.name = variantName;
 
-            document.getElementById('brandBadge').textContent = `🚛 ${model.company || 'Model'}`;
-            document.getElementById('modelName').textContent = model.name;
-            document.getElementById('modelType').textContent = model.type || 'Standard';
-            document.getElementById('modelPrice').textContent = model.price || '₹ 0.00';
-            document.getElementById('modelDesc').textContent = model.description || 'Description...';
-            document.getElementById('coverImage').src = model.cover || 'https://picsum.photos/seed/default/800/400';
-            document.getElementById('specCompany').textContent = model.company || 'N/A';
-            document.getElementById('specOwner').textContent = model.owner || 'N/A';
-            document.getElementById('specKm').textContent = model.km || 'N/A';
-            document.getElementById('specVimo').textContent = model.vimo || 'N/A';
+            document.getElementById('brandBadge').textContent = `🚛 ${variant.company || 'Model'}`;
+            document.getElementById('modelName').textContent = variant.name;
+            document.getElementById('modelType').textContent = variant.type || 'Standard';
+            document.getElementById('modelPrice').textContent = variant.price || '₹ 0.00';
+            document.getElementById('modelDesc').textContent = variant.description || 'Description...';
+            document.getElementById('coverImage').src = variant.cover || 'https://picsum.photos/seed/default/800/400';
+            document.getElementById('specCompany').textContent = variant.company || 'N/A';
+            document.getElementById('specOwner').textContent = variant.owner || 'N/A';
+            document.getElementById('specKm').textContent = variant.km || 'N/A';
+            document.getElementById('specVimo').textContent = variant.vimo || 'N/A';
 
             const grid = document.getElementById('galleryGrid');
-            if (model.gallery && model.gallery.length > 0) {
-                grid.innerHTML = model.gallery.slice(0, 4).map((img, i) => `
+            if (variant.gallery && variant.gallery.length > 0) {
+                grid.innerHTML = variant.gallery.slice(0, 4).map((img, i) => `
                             <div class="gallery-item" onclick="openLightbox(${i})">
                                 <img src="${img}" alt="Gallery ${i+1}" />
                             </div>
@@ -169,17 +169,17 @@
             }
 
             window.openFullGallery = function() {
-                if (!model.gallery || model.gallery.length === 0) return;
+                if (!variant.gallery || variant.gallery.length === 0) return;
                 const modal = document.getElementById('fullGalleryModal');
                 const grid = document.getElementById('fullGalleryGrid');
                 const count = document.getElementById('fullGalleryCount');
-                grid.innerHTML = model.gallery.map((img, i) => `
+                grid.innerHTML = variant.gallery.map((img, i) => `
                             <div class="full-item" onclick="closeFullGallery(); openLightbox(${i})">
                                 <img src="${img}" alt="Photo ${i+1}" />
                             </div>
                         `).join('');
-                count.textContent = `${model.gallery.length} Photos`;
-                document.getElementById('fullGalleryTitle').textContent = `📸 ${model.name} - All Photos`;
+                count.textContent = `${variant.gallery.length} Photos`;
+                document.getElementById('fullGalleryTitle').textContent = `📸 ${variant.name} - All Photos`;
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             };
@@ -191,9 +191,9 @@
 
             let currentImageIndex = 0;
             window.openLightbox = function(index) {
-                if (!model.gallery || model.gallery.length === 0) return;
+                if (!variant.gallery || variant.gallery.length === 0) return;
                 currentImageIndex = index;
-                document.getElementById('lightboxImage').src = model.gallery[index];
+                document.getElementById('lightboxImage').src = variant.gallery[index];
                 document.getElementById('lightbox').classList.add('active');
                 document.body.style.overflow = 'hidden';
             };
@@ -204,15 +204,15 @@
             };
 
             window.nextImage = function() {
-                if (!model.gallery || model.gallery.length === 0) return;
-                currentImageIndex = (currentImageIndex + 1) % model.gallery.length;
-                document.getElementById('lightboxImage').src = model.gallery[currentImageIndex];
+                if (!variant.gallery || variant.gallery.length === 0) return;
+                currentImageIndex = (currentImageIndex + 1) % variant.gallery.length;
+                document.getElementById('lightboxImage').src = variant.gallery[currentImageIndex];
             };
 
             window.prevImage = function() {
-                if (!model.gallery || model.gallery.length === 0) return;
-                currentImageIndex = (currentImageIndex - 1 + model.gallery.length) % model.gallery.length;
-                document.getElementById('lightboxImage').src = model.gallery[currentImageIndex];
+                if (!variant.gallery || variant.gallery.length === 0) return;
+                currentImageIndex = (currentImageIndex - 1 + variant.gallery.length) % variant.gallery.length;
+                document.getElementById('lightboxImage').src = variant.gallery[currentImageIndex];
             };
 
             document.addEventListener('keydown', (e) => {

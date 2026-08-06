@@ -49,18 +49,27 @@
     <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
 
     <script>
+        // =============================================================
+        // ✅ SUPABASE CONFIGURATION
+        // =============================================================
         const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function getModels() {
+        // =============================================================
+        // ✅ GET VARIANTS FROM SUPABASE
+        // =============================================================
+        async function getVariants() {
             try {
-                const { data, error } = await sb.from('models').select('*').order('id', { ascending: true });
+                const { data, error } = await sb.from('variants').select('*').order('id', { ascending: true });
                 if (error) throw error;
                 return data || [];
             } catch (e) { return []; }
         }
 
+        // =============================================================
+        // ✅ STATIC MAIN MODEL NAMES (FOR HEADER DISPLAY)
+        // =============================================================
         const STATIC_MODELS = [
             { id: 1, name: 'Tata Intra' }, { id: 2, name: 'Tata Yodha' }, { id: 3, name: 'Tata 407' },
             { id: 4, name: 'Mahindra Jito' }, { id: 5, name: 'Mahindra Supro' }, { id: 6, name: 'Mahindra Bolero' },
@@ -68,13 +77,17 @@
             { id: 10, name: 'Tata Ace' }
         ];
 
+        // =============================================================
+        // ✅ RENDER VARIANTS
+        // =============================================================
         const urlParams = new URLSearchParams(window.location.search);
         const mainId = parseInt(urlParams.get('id'));
 
         async function renderVariants() {
-            const allModels = await getModels();
+            const allVariants = await getVariants();
             
-            let filtered = allModels.filter(m => m.id === mainId);
+            // ફક્ત તે મોડલના વેરિઅન્ટ્સ (main_model_id મુજબ) બતાવો
+            let filtered = allVariants.filter(v => v.main_model_id === mainId);
 
             const mainModel = STATIC_MODELS.find(m => m.id === mainId);
             document.getElementById('pageTitle').textContent = mainModel ? `🚚 ${mainModel.name}` : '🚚 Variants';
@@ -85,10 +98,10 @@
             }
 
             const grid = document.getElementById('variantsGrid');
-            grid.innerHTML = filtered.map(m => `
-                        <div class="card" onclick="window.location.href='model-detail.html?id=${m.id}&variant=${encodeURIComponent(m.name)}'">
-                            <div class="img-box"><img src="${m.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${m.name}" /></div>
-                            <div class="title">${m.name}</div>
+            grid.innerHTML = filtered.map(v => `
+                        <div class="card" onclick="window.location.href='model-detail.html?id=${v.id}&variant=${encodeURIComponent(v.name)}'">
+                            <div class="img-box"><img src="${v.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${v.name}" /></div>
+                            <div class="title">${v.name}</div>
                         </div>
                     `).join('');
         }
