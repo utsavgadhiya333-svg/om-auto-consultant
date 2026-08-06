@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Om Auto Consultant</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0b0e1a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
@@ -80,7 +82,6 @@
             <a href="models.html">Models</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
-            <a href="logo.html">Logo</a>
         </nav>
     </header>
 
@@ -101,32 +102,25 @@
 
     <section class="contact-section" id="contact">
         <h2>Contact Us</h2>
-        <div class="contact-info">
-            <p>📞 <strong style="color:#fff;">Rameshbhai - 9925380849</strong></p>
-            <p>📞 <strong style="color:#fff;">Jigneshbhai - 8469716611</strong></p>
-            <p>📞 <strong style="color:#fff;">Girishbhai - 9879065758</strong></p>
-            <p>📍 <a href="https://www.google.com/maps/place/Om+Auto+Consultant/@21.158824,72.797858,17z/data=!3m1!4b1!4m6!3m5!1s0x3be04e1bc48016f9:0x2bb73f1918d9f7c0!8m2!3d21.158824!4d72.797858!16s%2Fg%2F11t7nq8p5d" target="_blank">
-                6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013
-            </a></p>
+        <div class="contact-info" id="contactInfo">
+            <!-- ✅ Contacts will be dynamically loaded from Supabase here -->
         </div>
     </section>
 
     <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
 
     <script>
-        // ==========================================================
-        // 📁 `models.json` માંથી ડેટા લાવો
-        // ==========================================================
-        async function loadData() {
-            try {
-                const res = await fetch('/models.json');
-                const data = await res.json();
-                return data.models || [];
-            } catch (e) {
-                return [];
-            }
-        }
+        // =============================================================
+        // ✅ SUPABASE CONFIGURATION (PUBLIC ANON KEY)
+        // =============================================================
+        const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
 
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // =============================================================
+        // ✅ STATIC MODEL NAMES (Fixed 10 Models)
+        // =============================================================
         const staticModels = [
             { id: 1, name: 'Tata Intra' },
             { id: 2, name: 'Tata Yodha' },
@@ -140,17 +134,76 @@
             { id: 10, name: 'Tata Ace' }
         ];
 
+        // =============================================================
+        // ✅ LOAD CONTACTS FROM SUPABASE
+        // =============================================================
+        async function loadContacts() {
+            try {
+                const { data, error } = await sb
+                    .from('contacts')
+                    .select('*')
+                    .eq('id', 1)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') {
+                    console.error('❌ Contact load error:', error);
+                    return null;
+                }
+
+                const c = data || {
+                    name1: 'Rameshbhai',
+                    phone1: '9925380849',
+                    name2: 'Jigneshbhai',
+                    phone2: '8469716611',
+                    name3: 'Girishbhai',
+                    phone3: '9879065758',
+                    location: '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'
+                };
+
+                document.getElementById('contactInfo').innerHTML = `
+                            <p>📞 <strong>${c.name1} - ${c.phone1}</strong></p>
+                            <p>📞 <strong>${c.name2} - ${c.phone2}</strong></p>
+                            <p>📞 <strong>${c.name3} - ${c.phone3}</strong></p>
+                            <p>📍 <a href="https://www.google.com/maps/place/Om+Auto+Consultant/@21.158824,72.797858,17z/data=!3m1!4b1!4m6!3m5!1s0x3be04e1bc48016f9:0x2bb73f1918d9f7c0!8m2!3d21.158824!4d72.797858!16s%2Fg%2F11t7nq8p5d" target="_blank">
+                                ${c.location || '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'}
+                            </a></p>
+                        `;
+            } catch (e) {
+                console.error('❌ Contacts Error:', e);
+            }
+        }
+
+        // =============================================================
+        // ✅ LOAD LOGO IMAGES FROM SUPABASE
+        // =============================================================
+        async function getLogos() {
+            try {
+                const { data, error } = await sb
+                    .from('logo')
+                    .select('*');
+                if (error) throw error;
+                const logoMap = {};
+                (data || []).forEach(item => {
+                    logoMap[String(item.model_id)] = item.image_url;
+                });
+                return logoMap;
+            } catch (e) {
+                console.error('❌ getLogos Error:', e.message);
+                return {};
+            }
+        }
+
+        // =============================================================
+        // ✅ RENDER CAROUSEL (With Logos from Supabase)
+        // =============================================================
         async function renderCarousel() {
-            const data = await loadData();
-            const cloudModels = data || [];
+            const logos = await getLogos();
             
             const finalModels = staticModels.map(sm => {
-                const cloudModel = cloudModels.find(cm => cm.id === sm.id);
                 return {
                     id: sm.id,
                     name: sm.name,
-                    homeImage: cloudModel ? cloudModel.cover : null,
-                    desc: cloudModel ? cloudModel.desc : 'Description...'
+                    homeImage: logos[String(sm.id)] || 'https://picsum.photos/seed/default_home/300/300'
                 };
             });
 
@@ -158,19 +211,18 @@
             const dotsContainer = document.getElementById('dots');
 
             slider.innerHTML = finalModels.map(b => `
-                <div class="slide">
-                    <div class="card">
-                        <img class="brand-image" src="${b.homeImage || 'https://picsum.photos/seed/default_home/300/300'}" alt="${b.name}" />
-                        <div class="brand-name">${b.name}</div>
-                        <div class="brand-desc">${b.desc || 'Description...'}</div>
-                        <a href="models.html?id=${b.id}" class="see-more-link">🔍 View Models →</a>
-                    </div>
-                </div>
-            `).join('');
+                        <div class="slide">
+                            <div class="card">
+                                <img class="brand-image" src="${b.homeImage}" alt="${b.name}" />
+                                <div class="brand-name">${b.name}</div>
+                                <a href="models.html?id=${b.id}" class="see-more-link">🔍 View Models →</a>
+                            </div>
+                        </div>
+                    `).join('');
 
             dotsContainer.innerHTML = finalModels.map((_, i) => `
-                <span class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></span>
-            `).join('');
+                        <span class="dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></span>
+                    `).join('');
 
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.dot');
@@ -208,7 +260,11 @@
             });
         }
 
+        // =============================================================
+        // ✅ START
+        // =============================================================
+        loadContacts();
         renderCarousel();
     </script>
 </body>
-</html>" " 
+</html>
