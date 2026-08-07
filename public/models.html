@@ -10,27 +10,34 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0b0e1a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
 
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ff6b35; flex-wrap: wrap; }
-        header .logo h1 { font-size: 28px; color: #ff6b35; }
+        /* ===== HEADER ===== */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ffffff; flex-wrap: wrap; }
+        header .logo h1 { font-size: 28px; color: #ffffff; }
         header .logo p { font-size: 14px; color: #aaa; }
         header nav a { color: #fff; text-decoration: none; margin-left: 30px; font-size: 16px; transition: 0.3s; }
-        header nav a:hover { color: #ff6b35; }
+        header nav a:hover { color: #cccccc; }
 
+        /* ===== SECTION ===== */
         .section-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
-        .section-container .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ff6b35; color: #fff; text-decoration: none; border-radius: 25px; transition: 0.3s; }
-        .section-container .back-btn:hover { background: #e55a2b; transform: scale(1.05); }
-        .section-container h2 { font-size: 32px; color: #ff6b35; text-align: center; margin-bottom: 20px; }
+        .section-container .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ffffff; color: #000; text-decoration: none; border-radius: 25px; transition: 0.3s; font-weight: 600; border: 2px solid #ffffff; }
+        .section-container .back-btn:hover { background: transparent; color: #ffffff; border-color: #ffffff; transform: scale(1.05); }
+        .section-container h2 { font-size: 32px; color: #ffffff; text-align: center; margin-bottom: 20px; }
 
+        /* ===== GRID ===== */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
 
-        .card { background: #1a1f3a; border-radius: 16px; overflow: hidden; border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: #ff6b35; box-shadow: 0 10px 40px rgba(255, 107, 53, 0.2); }
+        .card { background: #1a1f3a; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: #ffffff; box-shadow: 0 10px 40px rgba(255,255,255,0.1); }
         .card .img-box { width: 100%; height: 200px; overflow: hidden; background: #0b0e1a; }
         .card .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
         .card:hover .img-box img { transform: scale(1.05); }
-        .card .title { text-align: center; padding: 15px; color: #ff6b35; font-size: 20px; font-weight: bold; border-top: 1px solid #ff6b3544; }
+        .card .title { text-align: center; padding: 15px; color: #ffffff; font-size: 20px; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.1); }
 
         footer { text-align: center; padding: 20px; background: #0b0e1a; color: #666; border-top: 1px solid #1a1f3a; margin-top: auto; }
+
+        .loading-text { color: #888; text-align: center; padding: 40px; font-size: 18px; grid-column: 1 / -1; }
+        .error-text { color: #ff6b6b; text-align: center; padding: 40px; font-size: 18px; grid-column: 1 / -1; }
+
         @media (max-width: 768px) { header { flex-direction: column; } .grid-container { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } }
     </style>
 </head>
@@ -43,22 +50,26 @@
     <section class="section-container">
         <a href="index.html" class="back-btn">← Back to Home</a>
         <h2 id="pageTitle">🚚 Variants</h2>
-        <div class="grid-container" id="variantsGrid"></div>
+        <div class="grid-container" id="variantsGrid">
+            <p class="loading-text">Loading variants...</p>
+        </div>
     </section>
 
     <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
 
     <script>
-        // =============================================================
-        // ✅ SUPABASE CONFIGURATION
-        // =============================================================
         const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =============================================================
-        // ✅ GET VARIANTS FROM SUPABASE
-        // =============================================================
+        async function getMainModels() {
+            try {
+                const { data, error } = await sb.from('main_models').select('*').order('id', { ascending: true });
+                if (error) throw error;
+                return data || [];
+            } catch (e) { return []; }
+        }
+
         async function getVariants() {
             try {
                 const { data, error } = await sb.from('variants').select('*').order('id', { ascending: true });
@@ -67,43 +78,42 @@
             } catch (e) { return []; }
         }
 
-        // =============================================================
-        // ✅ STATIC MAIN MODEL NAMES (FOR HEADER DISPLAY)
-        // =============================================================
-        const STATIC_MODELS = [
-            { id: 1, name: 'Tata Intra' }, { id: 2, name: 'Tata Yodha' }, { id: 3, name: 'Tata 407' },
-            { id: 4, name: 'Mahindra Jito' }, { id: 5, name: 'Mahindra Supro' }, { id: 6, name: 'Mahindra Bolero' },
-            { id: 7, name: 'Mahindra Camper' }, { id: 8, name: 'Maruti Super Carry' }, { id: 9, name: 'Ashok Leyland Dost' },
-            { id: 10, name: 'Tata Ace' }
-        ];
-
-        // =============================================================
-        // ✅ RENDER VARIANTS
-        // =============================================================
         const urlParams = new URLSearchParams(window.location.search);
         const mainId = parseInt(urlParams.get('id'));
 
         async function renderVariants() {
-            const allVariants = await getVariants();
-            
-            // ફક્ત તે મોડલના વેરિઅન્ટ્સ (main_model_id મુજબ) બતાવો
-            let filtered = allVariants.filter(v => v.main_model_id === mainId);
-
-            const mainModel = STATIC_MODELS.find(m => m.id === mainId);
-            document.getElementById('pageTitle').textContent = mainModel ? `🚚 ${mainModel.name}` : '🚚 Variants';
-
-            if (filtered.length === 0) {
-                document.getElementById('variantsGrid').innerHTML = `<p style="color:#888;text-align:center;">No variants available for this model.</p>`;
-                return;
-            }
-
             const grid = document.getElementById('variantsGrid');
-            grid.innerHTML = filtered.map(v => `
-                        <div class="card" onclick="window.location.href='model-detail.html?id=${v.id}&variant=${encodeURIComponent(v.name)}'">
-                            <div class="img-box"><img src="${v.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${v.name}" /></div>
-                            <div class="title">${v.name}</div>
-                        </div>
-                    `).join('');
+            grid.innerHTML = `<p class="loading-text">Loading variants...</p>`;
+
+            try {
+                const mainModels = await getMainModels();
+                const allVariants = await getVariants();
+                const mainModel = mainModels.find(m => m.id === mainId);
+
+                document.getElementById('pageTitle').textContent = mainModel ? `🚚 ${mainModel.name}` : '🚚 Variants';
+
+                if (mainModels.length === 0) {
+                    grid.innerHTML = `<p class="error-text">❌ No models found.</p>`;
+                    return;
+                }
+
+                let filtered = allVariants.filter(v => v.main_model_id === mainId);
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = `<p class="error-text" style="color:#888;">No variants available for this model.</p>`;
+                    return;
+                }
+
+                grid.innerHTML = filtered.map(v => `
+                    <div class="card" onclick="window.location.href='model-detail.html?id=${v.id}&variant=${encodeURIComponent(v.name)}'">
+                        <div class="img-box"><img src="${v.cover || 'https://picsum.photos/seed/default/400/300'}" alt="${v.name}" onerror="this.src='https://picsum.photos/seed/default/400/300'" /></div>
+                        <div class="title">${v.name}</div>
+                    </div>
+                `).join('');
+
+            } catch (e) {
+                grid.innerHTML = `<p class="error-text">❌ Error loading variants.</p>`;
+            }
         }
 
         renderVariants();

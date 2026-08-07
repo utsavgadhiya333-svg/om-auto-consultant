@@ -8,51 +8,49 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .detail-section { padding: 40px 20px; max-width: 1000px; margin: 0 auto; }
-        .detail-section .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ff6b35; color: #fff; text-decoration: none; border-radius: 25px; transition: 0.3s; border: none; font-size: 14px; cursor: pointer; }
-        .detail-section .back-btn:hover { background: #e55a2b; transform: scale(1.05); }
+        .detail-section .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ffffff; color: #000; text-decoration: none; border-radius: 25px; transition: 0.3s; border: none; font-size: 14px; cursor: pointer; font-weight: 600; border: 2px solid #ffffff; }
+        .detail-section .back-btn:hover { background: transparent; color: #ffffff; border-color: #ffffff; transform: scale(1.05); }
 
-        .model-detail-info { background: #1a1f3a; padding: 40px; border-radius: 20px; border: 1px solid #ff6b3544; margin-bottom: 30px; }
-        .model-detail-info .brand-badge { display: inline-block; background: rgba(255, 107, 53, 0.15); color: #ff6b35; padding: 4px 16px; border-radius: 20px; font-size: 14px; margin-bottom: 10px; }
-        .model-detail-info h1 { color: #ff6b35; font-size: 36px; margin-bottom: 5px; }
+        .model-detail-info { background: #1a1f3a; padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 30px; }
+        .model-detail-info .brand-badge { display: inline-block; background: rgba(255,255,255,0.1); color: #ffffff; padding: 4px 16px; border-radius: 20px; font-size: 14px; margin-bottom: 10px; }
+        .model-detail-info h1 { color: #ffffff; font-size: 36px; margin-bottom: 5px; }
         .model-detail-info .model-type { color: #aaa; font-size: 18px; margin-bottom: 10px; }
         .model-detail-info .model-price { color: #4CAF50; font-size: 28px; font-weight: bold; margin-bottom: 15px; }
         .model-detail-info .model-desc { color: #ccc; font-size: 18px; line-height: 1.8; max-width: 700px; }
 
-        .model-detail-info .model-contact { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ff6b3544; }
+        .model-detail-info .model-contact { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
         .model-detail-info .model-contact p { color: #aaa; font-size: 16px; }
-        .model-detail-info .model-contact a { color: #ff6b35; text-decoration: none; border-bottom: 1px solid #ff6b35; }
+        .model-detail-info .model-contact a { color: #ffffff; text-decoration: none; border-bottom: 1px solid #ffffff; }
+        .model-detail-info .model-contact a:hover { color: #ccc; border-color: #ccc; }
 
-        .model-detail-info .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ff6b3544; }
+        .model-detail-info .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
         .model-detail-info .specs-grid .spec-item { background: #0b0e1a; padding: 15px; border-radius: 10px; text-align: center; }
         .model-detail-info .specs-grid .spec-item .label { color: #888; font-size: 12px; text-transform: uppercase; }
-        .model-detail-info .specs-grid .spec-item .value { color: #ff6b35; font-size: 18px; font-weight: bold; margin-top: 5px; }
+        .model-detail-info .specs-grid .spec-item .value { color: #ffffff; font-size: 18px; font-weight: bold; margin-top: 5px; }
 
-        .cover-image-section { margin: 30px 0; border-radius: 16px; overflow: hidden; border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; }
-        .cover-image-section:hover { border-color: #ff6b35; transform: scale(1.01); }
+        .cover-image-section { margin: 30px 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; }
+        .cover-image-section:hover { border-color: #ffffff; transform: scale(1.01); }
         .cover-image-section img { width: 100%; height: 400px; object-fit: cover; display: block; }
 
         .gallery-section { margin-top: 30px; }
         .gallery-section .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .gallery-section .gallery-header h3 { color: #ff6b35; font-size: 24px; }
-        .gallery-section .gallery-header .see-more-btn { padding: 10px 28px; background: #ff6b35; color: #fff; border: none; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.3s; }
-        .gallery-section .gallery-header .see-more-btn:hover { background: #e55a2b; transform: scale(1.05); }
+        .gallery-section .gallery-header h3 { color: #ffffff; font-size: 24px; }
+        .gallery-section .gallery-header .see-more-btn { padding: 10px 28px; background: #ffffff; color: #000; border: none; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.3s; border: 2px solid #ffffff; }
+        .gallery-section .gallery-header .see-more-btn:hover { background: transparent; color: #ffffff; border-color: #ffffff; }
 
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .gallery-grid .gallery-item { background: #1a1f3a; border-radius: 12px; overflow: hidden; border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; aspect-ratio: 1 / 1; }
-        .gallery-grid .gallery-item:hover { transform: scale(1.05); border-color: #ff6b35; }
+        .gallery-grid .gallery-item { background: #1a1f3a; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; aspect-ratio: 1 / 1; }
+        .gallery-grid .gallery-item:hover { transform: scale(1.05); border-color: #ffffff; }
         .gallery-grid .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-
-        .show-gallery-btn { display: block; margin: 20px auto 0; padding: 14px 40px; background: #ff6b35; color: #fff; border: none; border-radius: 30px; font-size: 18px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; max-width: 400px; }
-        .show-gallery-btn:hover { background: #e55a2b; transform: scale(1.02); }
 
         .full-gallery-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 999; padding: 40px 20px; overflow-y: auto; }
         .full-gallery-modal.active { display: block; }
         .full-gallery-modal .close-full { position: fixed; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; z-index: 1000; transition: 0.3s; }
-        .full-gallery-modal .close-full:hover { color: #ff6b35; transform: rotate(90deg); }
-        .full-gallery-modal .full-gallery-title { color: #ff6b35; font-size: 28px; text-align: center; margin-bottom: 30px; }
+        .full-gallery-modal .close-full:hover { color: #ffffff; transform: rotate(90deg); }
+        .full-gallery-modal .full-gallery-title { color: #ffffff; font-size: 28px; text-align: center; margin-bottom: 30px; }
         .full-gallery-modal .full-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .full-gallery-modal .full-gallery-grid .full-item { background: #1a1f3a; border-radius: 12px; overflow: hidden; border: 1px solid #ff6b3544; cursor: pointer; transition: 0.3s; aspect-ratio: 1 / 1; }
-        .full-gallery-modal .full-gallery-grid .full-item:hover { transform: scale(1.05); border-color: #ff6b35; }
+        .full-gallery-modal .full-gallery-grid .full-item { background: #1a1f3a; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; aspect-ratio: 1 / 1; }
+        .full-gallery-modal .full-gallery-grid .full-item:hover { transform: scale(1.05); border-color: #ffffff; }
         .full-gallery-modal .full-gallery-grid .full-item img { width: 100%; height: 100%; object-fit: cover; }
 
         @media (max-width: 768px) {
@@ -65,9 +63,12 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo"><h1>🚗 Om Auto Consultant</h1><p>Your Trusted Tempo Partner</p></div>
-        <nav><a href="index.html">Home</a><a href="#contact">Contact</a></nav>
+    <header style="display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: #11152a; border-bottom: 2px solid #ffffff; flex-wrap: wrap;">
+        <div class="logo" style="display: flex; flex-direction: column;">
+            <h1 style="font-size: 28px; color: #ffffff;">🚗 Om Auto Consultant</h1>
+            <p style="font-size: 14px; color: #aaa;">Your Trusted Tempo Partner</p>
+        </div>
+        <nav><a href="index.html" style="color: #fff; text-decoration: none; margin-left: 30px; font-size: 16px; transition: 0.3s;">Home</a><a href="#contact" style="color: #fff; text-decoration: none; margin-left: 30px; font-size: 16px; transition: 0.3s;">Contact</a></nav>
     </header>
 
     <section class="detail-section" id="detailContent">
@@ -84,7 +85,7 @@
                 <p>📞 <strong style="color:#fff;">Rameshbhai - 9925380849</strong></p>
                 <p>📞 <strong style="color:#fff;">Jigneshbhai - 8469716611</strong></p>
                 <p>📞 <strong style="color:#fff;">Girishbhai - 9879065758</strong></p>
-                <p>📍 <a href="https://www.google.com/maps/place/Om+Auto+Consultant/@21.158824,72.797858,17z/data=!3m1!4b1!4m6!3m5!1s0x3be04e1bc48016f9:0x2bb73f1918d9f7c0!8m2!3d21.158824!4d72.797858!16s%2Fg%2F11t7nq8p5d" target="_blank">
+                <p>📍 <a href="https://www.google.com/maps/place/Om+Auto+Consultant/@21.158824,72.797858,17z/data=!3m1!4b1!4m6!3m5!1s0x3be04e1bc48016f9:0x2bb73f1918d9f7c0!8m2!3d21.158824!4d72.797858!16s%2Fg%2F11t7nq8p5d" target="_blank" style="color:#ffffff; border-bottom:1px solid #ffffff; text-decoration:none;">
                     6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013
                 </a></p>
             </div>
@@ -110,13 +111,15 @@
         </div>
     </section>
 
-    <footer><p>&copy; 2026 Om Auto Consultant. All rights reserved.</p></footer>
+    <footer style="text-align: center; padding: 20px; background: #0b0e1a; color: #666; border-top: 1px solid #1a1f3a; margin-top: auto;">
+        <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
+    </footer>
 
     <div class="full-gallery-modal" id="fullGalleryModal">
         <span class="close-full" onclick="closeFullGallery()">✕</span>
         <div class="full-gallery-title" id="fullGalleryTitle">📸 All Photos</div>
         <div class="full-gallery-grid" id="fullGalleryGrid"></div>
-        <div class="full-gallery-count" id="fullGalleryCount">0 Photos</div>
+        <div class="full-gallery-count" id="fullGalleryCount" style="text-align:center;color:#888;margin-top:20px;">0 Photos</div>
     </div>
 
     <script>
@@ -129,7 +132,6 @@
                 const { data, error } = await sb.from('variants').select('*').eq('id', id).single();
                 if (error && error.code !== 'PGRST116') console.error('Error:', error);
                 if (data) return data;
-
                 return {
                     id: id, name: 'Unknown', type: 'Standard', price: '₹ 0.00', description: 'N/A',
                     cover: 'https://picsum.photos/seed/default/800/400', gallery: ['https://picsum.photos/seed/g1/300/300'],
@@ -193,13 +195,27 @@
             window.openLightbox = function(index) {
                 if (!variant.gallery || variant.gallery.length === 0) return;
                 currentImageIndex = index;
+                const lightbox = document.getElementById('lightbox');
+                if (!lightbox) {
+                    const lb = document.createElement('div');
+                    lb.id = 'lightbox';
+                    lb.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;';
+                    lb.innerHTML = `
+                                <span onclick="closeLightbox()" style="position:absolute;top:20px;right:30px;font-size:40px;color:#fff;cursor:pointer;">✕</span>
+                                <img id="lightboxImage" src="" style="max-width:90%;max-height:80vh;object-fit:contain;border-radius:8px;" />
+                                <button onclick="prevImage()" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);color:#fff;border:none;font-size:40px;padding:10px 20px;cursor:pointer;border-radius:50%;">‹</button>
+                                <button onclick="nextImage()" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);color:#fff;border:none;font-size:40px;padding:10px 20px;cursor:pointer;border-radius:50%;">›</button>
+                            `;
+                    document.body.appendChild(lb);
+                }
                 document.getElementById('lightboxImage').src = variant.gallery[index];
-                document.getElementById('lightbox').classList.add('active');
+                document.getElementById('lightbox').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             };
 
             window.closeLightbox = function() {
-                document.getElementById('lightbox').classList.remove('active');
+                const lb = document.getElementById('lightbox');
+                if (lb) lb.style.display = 'none';
                 document.body.style.overflow = 'auto';
             };
 
