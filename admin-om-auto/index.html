@@ -372,22 +372,45 @@
             background: #444;
         }
 
-        /* ===== ADD MODEL MODAL ===== */
-        .modal-content .add-model-row {
+        /* ===== ADD MODEL SECTION ===== */
+        .add-model-section {
+            background: #1a1f3a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ff6b3544;
+            margin-bottom: 20px;
+        }
+        .add-model-section .add-row {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            flex-wrap: wrap;
         }
-        .modal-content .add-model-row input {
+        .add-model-section .add-row input {
             flex: 1;
+            padding: 10px;
+            background: #11152a;
+            border: 1px solid #ff6b3544;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 200px;
         }
-        .modal-content .add-model-row button {
-            padding: 10px 20px;
+        .add-model-section .add-row button {
+            padding: 10px 25px;
             background: #ff6b35;
             color: #fff;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
+        }
+        .add-model-section .add-row button:hover {
+            background: #e55a2b;
+        }
+        .add-model-section .info-text {
+            color: #888;
+            font-size: 12px;
+            margin-top: 8px;
         }
 
         /* ===== RESPONSIVE ===== */
@@ -443,7 +466,7 @@
             <div class="stats">
                 <div class="stat-card"><h3 id="totalServices">0</h3><p>Total Variants</p></div>
                 <div class="stat-card"><h3 id="totalBrands">0</h3><p>Total Brands</p></div>
-                <div class="stat-card"><h3 id="totalModels">10</h3><p>Main Models</p></div>
+                <div class="stat-card"><h3 id="totalModels">0</h3><p>Main Models</p></div>
             </div>
             <div id="servicesList"></div>
         </section>
@@ -451,12 +474,12 @@
         <!-- ===== MODELS ===== -->
         <section id="models" style="display:none;">
             <h2>🚚 Manage Main Models</h2>
-            <div style="background:#1a1f3a;padding:20px;border-radius:12px;border:1px solid #ff6b3544;margin-bottom:20px;">
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <input id="newModelName" placeholder="Enter new model name..." style="flex:1;padding:10px;background:#11152a;border:1px solid #ff6b3544;color:#fff;border-radius:8px;font-size:14px;" />
-                    <button onclick="addMainModel()" style="padding:10px 25px;background:#ff6b35;color:#fff;border:none;border-radius:8px;cursor:pointer;">➕ Add Model</button>
+            <div class="add-model-section">
+                <div class="add-row">
+                    <input id="newModelName" placeholder="Enter new model name..." />
+                    <button onclick="addMainModel()">➕ Add Model</button>
                 </div>
-                <p style="color:#888;font-size:12px;margin-top:8px;">This will add a new main model to the list. It will appear on the homepage.</p>
+                <p class="info-text">This will add a new main model to Supabase. It will appear on the homepage automatically.</p>
             </div>
             <div id="modelsList"></div>
         </section>
@@ -554,39 +577,6 @@
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
         // =============================================================
-        // ✅ STATIC MODELS - INITIAL 10
-        // =============================================================
-        let STATIC_MODELS = [
-            { id: 1, name: 'Tata Intra' },
-            { id: 2, name: 'Tata Yodha' },
-            { id: 3, name: 'Tata 407' },
-            { id: 4, name: 'Mahindra Jito' },
-            { id: 5, name: 'Mahindra Supro' },
-            { id: 6, name: 'Mahindra Bolero' },
-            { id: 7, name: 'Mahindra Camper' },
-            { id: 8, name: 'Maruti Super Carry' },
-            { id: 9, name: 'Ashok Leyland Dost' },
-            { id: 10, name: 'Tata Ace' }
-        ];
-
-        // =============================================================
-        // ✅ GET MODELS FROM LOCAL STORAGE OR SUPABASE
-        // =============================================================
-        function getModels() {
-            const saved = localStorage.getItem('main_models');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                if (parsed.length > 0) return parsed;
-            }
-            return STATIC_MODELS;
-        }
-
-        function saveModels(models) {
-            localStorage.setItem('main_models', JSON.stringify(models));
-            STATIC_MODELS = models;
-        }
-
-        // =============================================================
         // ✅ IMAGE UPLOAD
         // =============================================================
         async function uploadToImgBB(file) {
@@ -601,6 +591,36 @@
                 if (json.success) { return json.data.url; } else { alert('ImgBB Error: ' + (json.error || 'Unknown error'));
                     return null; }
             } catch (e) { alert('Upload Error: ' + e.message); return null; }
+        }
+
+        // =============================================================
+        // ✅ SUPABASE CRUD - MAIN MODELS
+        // =============================================================
+        async function getMainModels() {
+            try {
+                const { data, error } = await sb.from('main_models').select('*').order('id', { ascending: true });
+                if (error) throw error;
+                return data || [];
+            } catch (e) { console.error('❌ getMainModels Error:', e.message); return []; }
+        }
+
+        async function addMainModelToSupabase(name) {
+            try {
+                const models = await getMainModels();
+                const maxId = models.reduce((max, m) => Math.max(max, m.id), 0);
+                const newId = maxId + 1;
+                const { data, error } = await sb.from('main_models').insert([{ id: newId, name: name }]).select();
+                if (error) throw error;
+                return data;
+            } catch (e) { alert('❌ Error adding model: ' + e.message); return null; }
+        }
+
+        async function deleteMainModelFromSupabase(id) {
+            try {
+                const { error } = await sb.from('main_models').delete().eq('id', id);
+                if (error) throw error;
+                return true;
+            } catch (e) { alert('❌ Error deleting model: ' + e.message); return false; }
         }
 
         // =============================================================
@@ -698,7 +718,7 @@
             showSection('dashboard');
             try {
                 const variants = await getVariants();
-                const models = getModels();
+                const models = await getMainModels();
                 document.getElementById('totalServices').textContent = variants.length;
                 const brands = new Set(variants.map(m => m.company).filter(Boolean));
                 document.getElementById('totalBrands').textContent = brands.size;
@@ -757,16 +777,21 @@
         // =============================================================
         async function loadModelsPage() {
             showSection('models');
-            renderModelsList();
+            await renderModelsList();
         }
 
-        function renderModelsList() {
-            const models = getModels();
+        async function renderModelsList() {
+            const models = await getMainModels();
             const list = document.getElementById('modelsList');
             list.innerHTML = `
                         <div id="modelsGrid"></div>
                     `;
             const grid = document.getElementById('modelsGrid');
+            if (models.length === 0) {
+                grid.innerHTML =
+                    `<p style="color:#888;text-align:center;grid-column:1/-1;padding:20px;">No models found. Add your first model above!</p>`;
+                return;
+            }
             grid.innerHTML = models.map(m => `
                         <div class="model-item">
                             <div>
@@ -781,35 +806,36 @@
         // =============================================================
         // ✅ ADD MAIN MODEL
         // =============================================================
-        function addMainModel() {
+        async function addMainModel() {
             const input = document.getElementById('newModelName');
             const name = input.value.trim();
             if (!name) { alert('Please enter a model name!'); return; }
 
-            const models = getModels();
-            const maxId = models.reduce((max, m) => Math.max(max, m.id), 0);
-            const newModel = { id: maxId + 1, name: name };
-            models.push(newModel);
-            saveModels(models);
-            input.value = '';
-            renderModelsList();
-            document.getElementById('totalModels').textContent = models.length;
-            alert(`✅ "${name}" added successfully!`);
+            const result = await addMainModelToSupabase(name);
+            if (result) {
+                input.value = '';
+                await renderModelsList();
+                const models = await getMainModels();
+                document.getElementById('totalModels').textContent = models.length;
+                alert(`✅ "${name}" added successfully to Supabase!`);
+            }
         }
 
         // =============================================================
         // ✅ DELETE MAIN MODEL
         // =============================================================
-        function deleteMainModel(id) {
-            const models = getModels();
+        async function deleteMainModel(id) {
+            const models = await getMainModels();
             const model = models.find(m => m.id === id);
             if (!model) return;
             if (confirm(`Are you sure you want to delete "${model.name}"?`)) {
-                const updated = models.filter(m => m.id !== id);
-                saveModels(updated);
-                renderModelsList();
-                document.getElementById('totalModels').textContent = updated.length;
-                alert(`✅ "${model.name}" deleted successfully!`);
+                const success = await deleteMainModelFromSupabase(id);
+                if (success) {
+                    await renderModelsList();
+                    const updated = await getMainModels();
+                    document.getElementById('totalModels').textContent = updated.length;
+                    alert(`✅ "${model.name}" deleted successfully!`);
+                }
             }
         }
 
@@ -860,7 +886,7 @@
                 location: document.getElementById('editLocation').value
             };
             const result = await updateContacts(data);
-            if (result) { alert('✅ Contacts saved successfully!'); loadDashboard(); }
+            if (result) { alert('✅ Contacts saved successfully to Supabase!'); loadDashboard(); }
         }
 
         // =============================================================
@@ -869,7 +895,7 @@
         async function loadLogoPage() {
             showSection('logo');
             const logos = await getLogos();
-            const models = getModels();
+            const models = await getMainModels();
 
             let logoHtml = `
                         <div style="background:#1a1f3a;padding:30px;border-radius:16px;max-width:800px;margin:0 auto;">
@@ -877,26 +903,30 @@
                             <p style="color:#aaa;text-align:center;margin-bottom:25px;">Upload logo for each model.</p>
                     `;
 
-            models.forEach(model => {
-                const currentLogo = logos[String(model.id)] || 'https://picsum.photos/seed/default_home/300/300';
-                logoHtml += `
-                            <div style="background:#11152a;padding:15px;border-radius:10px;margin-bottom:15px;border:1px solid #ff6b3544;display:flex;flex-wrap:wrap;align-items:center;gap:15px;">
-                                <div style="flex:1;min-width:120px;">
-                                    <strong style="color:#ff6b35;">${model.name}</strong>
-                                    <p style="color:#888;font-size:12px;">ID: ${model.id}</p>
+            if (models.length === 0) {
+                logoHtml += `<p style="color:#888;text-align:center;">No models found. Please add models first.</p>`;
+            } else {
+                models.forEach(model => {
+                    const currentLogo = logos[String(model.id)] || 'https://picsum.photos/seed/default_home/300/300';
+                    logoHtml += `
+                                <div style="background:#11152a;padding:15px;border-radius:10px;margin-bottom:15px;border:1px solid #ff6b3544;display:flex;flex-wrap:wrap;align-items:center;gap:15px;">
+                                    <div style="flex:1;min-width:120px;">
+                                        <strong style="color:#ff6b35;">${model.name}</strong>
+                                        <p style="color:#888;font-size:12px;">ID: ${model.id}</p>
+                                    </div>
+                                    <div style="flex:0 0 80px;">
+                                        <img id="logoPreview_${model.id}" src="${currentLogo}" style="width:80px;height:80px;object-fit:contain;border-radius:8px;background:#0b0e1a;border:1px solid #ff6b3544;padding:5px;" />
+                                    </div>
+                                    <div style="flex:2;min-width:150px;">
+                                        <input type="file" id="logoInput_${model.id}" accept="image/*" style="width:100%;padding:8px;background:#0b0e1a;border:1px solid #ff6b3544;color:#fff;border-radius:6px;font-size:12px;" />
+                                    </div>
+                                    <div>
+                                        <button onclick="saveSingleLogo(${model.id})" style="padding:8px 20px;background:#ff6b35;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">💾 Save</button>
+                                    </div>
                                 </div>
-                                <div style="flex:0 0 80px;">
-                                    <img id="logoPreview_${model.id}" src="${currentLogo}" style="width:80px;height:80px;object-fit:contain;border-radius:8px;background:#0b0e1a;border:1px solid #ff6b3544;padding:5px;" />
-                                </div>
-                                <div style="flex:2;min-width:150px;">
-                                    <input type="file" id="logoInput_${model.id}" accept="image/*" style="width:100%;padding:8px;background:#0b0e1a;border:1px solid #ff6b3544;color:#fff;border-radius:6px;font-size:12px;" />
-                                </div>
-                                <div>
-                                    <button onclick="saveSingleLogo(${model.id})" style="padding:8px 20px;background:#ff6b35;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;">💾 Save</button>
-                                </div>
-                            </div>
-                        `;
-            });
+                            `;
+                });
+            }
 
             logoHtml += `
                             <div style="text-align:center;margin-top:15px;">
@@ -945,18 +975,18 @@
         let tempCover = null;
         let tempGallery = [];
 
-        function populateModelSelect() {
+        async function populateModelSelect() {
             const select = document.getElementById('modalMainModelSelect');
-            const models = getModels();
+            const models = await getMainModels();
             select.innerHTML = models.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
         }
 
-        function openAddModal() {
+        async function openAddModal() {
             editingId = null;
             tempCover = null;
             tempGallery = [];
             document.getElementById('modalTitle').textContent = '➕ Add New Variant';
-            populateModelSelect();
+            await populateModelSelect();
             document.getElementById('modalVariantName').value = '';
             ['modalType', 'modalCompany', 'modalOwner', 'modalKm', 'modalVimo', 'modalPrice', 'modalDesc'].forEach(id =>
                 document.getElementById(id).value = '');
@@ -972,10 +1002,10 @@
 
             editingId = id;
             document.getElementById('modalTitle').textContent = '✏️ Edit Variant';
-            populateModelSelect();
+            await populateModelSelect();
 
+            const models = await getMainModels();
             let mainModelId = '1';
-            const models = getModels();
             models.forEach(sm => {
                 if (v.name.includes(sm.name)) mainModelId = String(sm.id);
             });
@@ -1019,7 +1049,7 @@
                 const price = document.getElementById('modalPrice').value.trim() || '₹ 0.00';
                 const description = document.getElementById('modalDesc').value.trim() || 'Description...';
 
-                const models = getModels();
+                const models = await getMainModels();
                 const mainModel = models.find(sm => String(sm.id) === mainModelId);
                 const fullName = variantName ? `${mainModel.name} ${variantName}` : mainModel.name;
 
