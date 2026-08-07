@@ -30,28 +30,43 @@
             align-items: center;
             padding: 20px 50px;
             background: rgba(17, 21, 42, 0.95);
-            border-bottom: 2px solid #2a7de1;
+            border-bottom: 2px solid #ffffff;
             flex-wrap: wrap;
             position: relative;
             z-index: 10;
         }
         header .logo h1 {
             font-size: 28px;
-            color: #2a7de1;
+            color: #ffffff;
         }
         header .logo p {
             font-size: 14px;
             color: #aaa;
         }
+
+        /* ===== NAV BUTTONS (FIXED) ===== */
+        header nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
         header nav a {
             color: #fff;
             text-decoration: none;
-            margin-left: 30px;
+            padding: 10px 28px;
             font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
             transition: 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            display: inline-block;
         }
         header nav a:hover {
-            color: #2a7de1;
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+            transform: scale(1.05);
         }
 
         /* ===== HERO SLIDER ===== */
@@ -108,14 +123,14 @@
             background: rgba(11, 14, 26, 0.7);
             border-radius: 20px;
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(42, 125, 225, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             animation: fadeUp 1.5s ease-out;
         }
         .slide-content h2 {
             font-size: 48px;
-            color: #2a7de1;
+            color: #ffffff;
             margin-bottom: 15px;
-            text-shadow: 0 4px 30px rgba(42, 125, 225, 0.3);
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
         .slide-content p {
             font-size: 20px;
@@ -126,20 +141,20 @@
         .slide-content .btn {
             display: inline-block;
             padding: 14px 45px;
-            background: #2a7de1;
-            color: #fff;
+            background: #ffffff;
+            color: #000;
             text-decoration: none;
             border-radius: 30px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 18px;
             transition: 0.3s;
-            border: none;
+            border: 2px solid #ffffff;
             cursor: pointer;
         }
         .slide-content .btn:hover {
-            background: #1a5fb0;
+            background: transparent;
+            color: #ffffff;
             transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(42, 125, 225, 0.4);
         }
 
         @keyframes fadeUp {
@@ -166,12 +181,12 @@
             border: 2px solid transparent;
         }
         .slider-dots .dot.active {
-            background: #2a7de1;
+            background: #ffffff;
             border-color: #fff;
             transform: scale(1.25);
         }
         .slider-dots .dot:hover {
-            background: #2a7de1;
+            background: #ffffff;
         }
 
         /* ===== MODELS SLIDER ===== */
@@ -184,7 +199,7 @@
         }
         .models-slider-section h2 {
             font-size: 38px;
-            color: #2a7de1;
+            color: #ffffff;
             text-align: center;
             margin-bottom: 10px;
         }
@@ -213,7 +228,7 @@
             background: #1a1f3a;
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(42, 125, 225, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             cursor: pointer;
             transition: 0.4s;
             text-decoration: none;
@@ -221,8 +236,8 @@
             display: block;
         }
         .model-card:hover {
-            border-color: #2a7de1;
-            box-shadow: 0 15px 50px rgba(42, 125, 225, 0.2);
+            border-color: #ffffff;
+            box-shadow: 0 15px 50px rgba(255, 255, 255, 0.08);
             transform: scale(1.01);
         }
         .model-card .img-box {
@@ -246,14 +261,14 @@
         .model-card .title {
             text-align: center;
             padding: 22px;
-            color: #2a7de1;
+            color: #ffffff;
             font-size: 24px;
             font-weight: bold;
-            border-top: 1px solid rgba(42, 125, 225, 0.2);
-            background: rgba(42, 125, 225, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
         }
 
-        /* ===== SLIDER BUTTONS - BIG + BLACK ===== */
+        /* ===== SLIDER BUTTONS ===== */
         .slider-btn {
             position: absolute;
             top: 50%;
@@ -277,9 +292,8 @@
         }
         .slider-btn:hover {
             background: rgba(0, 0, 0, 0.95);
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-50%) scale(1.08);
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
         }
         .slider-btn.prev {
             left: 12px;
@@ -305,18 +319,18 @@
             padding: 0;
         }
         .slider-dots-models .dot-m.active {
-            background: #2a7de1;
+            background: #ffffff;
             transform: scale(1.3);
         }
         .slider-dots-models .dot-m:hover {
-            background: #2a7de1;
+            background: #ffffff;
         }
 
-        /* ===== CONTACT ===== */
+        /* ===== CONTACT SECTION - SEPARATED ===== */
         #contact {
             background: linear-gradient(135deg, #11152a, #0b0e1a);
-            padding: 50px 20px;
-            border-top: 2px solid #2a7de1;
+            padding: 60px 20px;
+            border-top: 2px solid #ffffff;
             position: relative;
         }
         #contact::before {
@@ -326,34 +340,90 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(42, 125, 225, 0.05), transparent 70%);
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.03), transparent 70%);
             pointer-events: none;
         }
         #contact .contact-container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             text-align: center;
             position: relative;
             z-index: 1;
         }
         #contact h2 {
-            color: #2a7de1;
+            color: #ffffff;
             font-size: 36px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
-        #contact .contact-details {
+
+        /* ===== INDIVIDUAL CONTACT CARDS ===== */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 18px 25px;
+            margin-bottom: 15px;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            color: #ccc;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .contact-card:hover {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+        .contact-card .name {
+            color: #ffffff;
             font-size: 18px;
+            font-weight: 600;
         }
-        #contact .contact-details a {
-            color: #2a7de1;
+        .contact-card .phone {
+            color: #aaa;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .contact-card .phone a {
+            color: #ffffff;
             text-decoration: none;
+            padding: 6px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            transition: 0.3s;
+            display: inline-block;
         }
-        #contact .contact-details a:hover {
-            text-decoration: underline;
+        .contact-card .phone a:hover {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+        }
+
+        /* ===== LOCATION CARD ===== */
+        .location-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-top: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .location-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .location-card a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 2px;
+            transition: 0.3s;
+        }
+        .location-card a:hover {
+            border-bottom-color: #ffffff;
         }
 
         .loading-text {
@@ -364,7 +434,7 @@
             width: 100%;
         }
         .error-text {
-            color: #2a7de1;
+            color: #ff6b6b;
             text-align: center;
             padding: 40px;
             font-size: 18px;
@@ -385,9 +455,15 @@
             header {
                 flex-direction: column;
                 padding: 15px 20px;
+                gap: 15px;
+            }
+            header nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
             }
             header nav a {
-                margin: 5px 12px;
+                padding: 8px 20px;
                 font-size: 14px;
             }
             .hero-slider {
@@ -432,6 +508,15 @@
             #contact h2 {
                 font-size: 28px;
             }
+            .contact-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .contact-card .phone a {
+                display: block;
+                margin-top: 5px;
+            }
         }
         @media (max-width: 480px) {
             .slide-content h2 {
@@ -452,6 +537,12 @@
                 height: 36px;
                 font-size: 18px;
             }
+            .contact-card .name {
+                font-size: 16px;
+            }
+            .contact-card .phone {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -464,8 +555,8 @@
             <p>Your Trusted Tempo Partner</p>
         </div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="#contact">Contact</a>
+            <a href="index.html">🏠 Home</a>
+            <a href="#contact">📞 Contact</a>
         </nav>
     </header>
 
@@ -523,12 +614,12 @@
         <div class="slider-dots-models" id="modelDots"></div>
     </section>
 
-    <!-- ===== CONTACT ===== -->
+    <!-- ===== CONTACT SECTION - SEPARATED ===== -->
     <section id="contact">
         <div class="contact-container">
             <h2>📞 Contact Us</h2>
-            <div class="contact-details" id="contactDetails">
-                <p>Loading contact details...</p>
+            <div id="contactDetails">
+                <p class="loading-text">Loading contact details...</p>
             </div>
         </div>
     </section>
@@ -700,7 +791,7 @@
         document.getElementById('nextBtn').addEventListener('click', () => goToModelSlide(modelIndex + 1));
 
         // =============================================================
-        // ✅ RENDER CONTACTS
+        // ✅ RENDER CONTACTS - SEPARATE CARDS
         // =============================================================
         async function renderContacts() {
             const container = document.getElementById('contactDetails');
@@ -708,26 +799,69 @@
             try {
                 const contacts = await getContacts();
 
-                if (!contacts) {
-                    container.innerHTML = `
-                                <p>📞 <strong>Rameshbhai</strong> - 9925380849</p>
-                                <p>📞 <strong>Jigneshbhai</strong> - 8469716611</p>
-                                <p>📞 <strong>Girishbhai</strong> - 9879065758</p>
-                                <p>📍 6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013</p>
+                // Default contacts if none in Supabase
+                const defaultContacts = {
+                    name1: 'Rameshbhai',
+                    phone1: '9925380849',
+                    name2: 'Jigneshbhai',
+                    phone2: '8469716611',
+                    name3: 'Girishbhai',
+                    phone3: '9879065758',
+                    location: '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'
+                };
+
+                const data = contacts || defaultContacts;
+
+                // Render each contact as separate card
+                let html = '';
+
+                // Contact 1
+                if (data.name1 && data.phone1) {
+                    html += `
+                                <div class="contact-card">
+                                    <span class="name">👤 ${data.name1}</span>
+                                    <span class="phone"><a href="tel:${data.phone1}">📞 ${data.phone1}</a></span>
+                                </div>
                             `;
-                    return;
                 }
 
-                container.innerHTML = `
-                            <p>📞 <strong>${contacts.name1 || 'Rameshbhai'}</strong> - ${contacts.phone1 || '9925380849'}</p>
-                            <p>📞 <strong>${contacts.name2 || 'Jigneshbhai'}</strong> - ${contacts.phone2 || '8469716611'}</p>
-                            <p>📞 <strong>${contacts.name3 || 'Girishbhai'}</strong> - ${contacts.phone3 || '9879065758'}</p>
-                            <p>📍 ${contacts.location || '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'}</p>
-                        `;
+                // Contact 2
+                if (data.name2 && data.phone2) {
+                    html += `
+                                <div class="contact-card">
+                                    <span class="name">👤 ${data.name2}</span>
+                                    <span class="phone"><a href="tel:${data.phone2}">📞 ${data.phone2}</a></span>
+                                </div>
+                            `;
+                }
+
+                // Contact 3
+                if (data.name3 && data.phone3) {
+                    html += `
+                                <div class="contact-card">
+                                    <span class="name">👤 ${data.name3}</span>
+                                    <span class="phone"><a href="tel:${data.phone3}">📞 ${data.phone3}</a></span>
+                                </div>
+                            `;
+                }
+
+                // Location
+                if (data.location) {
+                    html += `
+                                <div class="location-card">
+                                    <span style="color:#888;font-size:14px;">📍</span>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}" target="_blank">
+                                        ${data.location}
+                                    </a>
+                                </div>
+                            `;
+                }
+
+                container.innerHTML = html;
 
             } catch (e) {
                 console.error('❌ Error rendering contacts:', e);
-                container.innerHTML = `<p style="color:#2a7de1;">❌ Error loading contacts.</p>`;
+                container.innerHTML = `<p class="error-text">❌ Error loading contacts.</p>`;
             }
         }
 
