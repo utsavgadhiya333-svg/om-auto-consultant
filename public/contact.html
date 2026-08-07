@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact - Om Auto Consultant</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        body {
+            background: #0b0e1a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(17, 21, 42, 0.95);
+            border-bottom: 2px solid #ffffff;
+            flex-wrap: wrap;
+        }
+        header .logo h1 {
+            font-size: 28px;
+            color: #ffffff;
+        }
+        header .logo p {
+            font-size: 14px;
+            color: #aaa;
+        }
+        header nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
+            transition: 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            display: inline-block;
+        }
+        header nav a:hover {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+            transform: scale(1.05);
+        }
+        header nav a.active {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+        }
+
+        /* ===== CONTACT PAGE ===== */
+        .contact-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .contact-container {
+            max-width: 600px;
+            width: 100%;
+            background: #1a1f3a;
+            padding: 50px 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .contact-container h2 {
+            color: #ffffff;
+            font-size: 34px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .contact-container h2 span {
+            display: block;
+            font-size: 14px;
+            color: #888;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        /* ===== CONTACT CARDS ===== */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 18px 25px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .contact-card:hover {
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+        .contact-card .name {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .contact-card .phone a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 6px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            transition: 0.3s;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .contact-card .phone a:hover {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 25px;
+            margin-top: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .location-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .location-card a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 2px;
+            transition: 0.3s;
+            word-break: break-word;
+        }
+        .location-card a:hover {
+            border-bottom-color: #ffffff;
+        }
+
+        .loading-text {
+            color: #888;
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+        .error-text {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+
+        /* ===== BACK BUTTON ===== */
+        .back-home {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+        .back-home:hover {
+            background: #ffffff;
+            color: #000;
+            border-color: #ffffff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #0b0e1a;
+            color: #666;
+            border-top: 1px solid #1a1f3a;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+            header nav {
+                justify-content: center;
+            }
+            header nav a {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+            .contact-container {
+                padding: 30px 20px;
+            }
+            .contact-container h2 {
+                font-size: 28px;
+            }
+            .contact-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .contact-card .phone a {
+                display: block;
+            }
+        }
+        @media (max-width: 480px) {
+            .contact-container {
+                padding: 20px 15px;
+            }
+            .contact-container h2 {
+                font-size: 24px;
+            }
+            .contact-card .name {
+                font-size: 16px;
+            }
+            .contact-card .phone a {
+                font-size: 14px;
+                padding: 5px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <h1>🚗 Om Auto Consultant</h1>
+            <p>Your Trusted Tempo Partner</p>
+        </div>
+        <nav>
+            <a href="index.html">🏠 Home</a>
+            <a href="contact.html" class="active">📞 Contact</a>
+        </nav>
+    </header>
+
+    <section class="contact-page">
+        <div class="contact-container">
+            <h2>📞 Contact Us <span>Get in touch with our team</span></h2>
+            <div id="contactDetails">
+                <p class="loading-text">Loading contact details...</p>
+            </div>
+            <a href="index.html" class="back-home">← Back to Home</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function getContacts() {
+            try {
+                const { data, error } = await sb.from('contacts').select('*').eq('id', 1).single();
+                if (error && error.code !== 'PGRST116') throw error;
+                return data;
+            } catch (e) {
+                console.error('❌ Error fetching contacts:', e);
+                return null;
+            }
+        }
+
+        async function renderContacts() {
+            const container = document.getElementById('contactDetails');
+
+            try {
+                const contacts = await getContacts();
+
+                const defaultContacts = {
+                    name1: 'Rameshbhai',
+                    phone1: '9925380849',
+                    name2: 'Jigneshbhai',
+                    phone2: '8469716611',
+                    name3: 'Girishbhai',
+                    phone3: '9879065758',
+                    location: '6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013'
+                };
+
+                const data = contacts || defaultContacts;
+
+                let html = '';
+
+                if (data.name1 && data.phone1) {
+                    html += `
+                                <div class="contact-card">
+                                    <span class="name">👤 ${data.name1}</span>
+                                    <span class="phone"><a href="tel:${data.phone1}">📞 ${data.phone1}</a></span>
+                                </div>
+                            `;
+                }
+
+                if (data.name2 && data.phone2) {
+                    html += `
+                                <div class="contact-card">
+                                    <span class="name">👤 ${data.name2}</span>
+                                    <span class="phone"><a href="tel:${data.phone2}">📞 ${data.phone2}</a></span>
+                                </div>
+                            `;
+                }
+
+                if (data.name3 && data.phone3) {
+                    html += `
+                                <div class="contact-card">
+                                    <span class="name">👤 ${data.name3}</span>
+                                    <span class="phone"><a href="tel:${data.phone3}">📞 ${data.phone3}</a></span>
+                                </div>
+                            `;
+                }
+
+                if (data.location) {
+                    html += `
+                                <div class="location-card">
+                                    <span style="color:#888;font-size:14px;">📍</span>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}" target="_blank">
+                                        ${data.location}
+                                    </a>
+                                </div>
+                            `;
+                }
+
+                container.innerHTML = html || `<p class="error-text">No contact details available.</p>`;
+
+            } catch (e) {
+                console.error('❌ Error rendering contacts:', e);
+                container.innerHTML = `<p class="error-text">❌ Error loading contacts.</p>`;
+            }
+        }
+
+        renderContacts();
+    </script>
+</body>
+</html>
