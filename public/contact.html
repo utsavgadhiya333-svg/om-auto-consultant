@@ -21,24 +21,41 @@
             flex-direction: column;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER WITH LOGO ===== */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
+            padding: 15px 50px;
             background: rgba(17, 21, 42, 0.95);
             border-bottom: 2px solid #ffffff;
             flex-wrap: wrap;
         }
-        header .logo h1 {
-            font-size: 28px;
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        header .logo img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+        header .logo .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        header .logo .logo-text h1 {
+            font-size: 24px;
             color: #ffffff;
+            line-height: 1.1;
         }
-        header .logo p {
-            font-size: 14px;
+        header .logo .logo-text p {
+            font-size: 12px;
             color: #aaa;
+            letter-spacing: 1px;
         }
+
         header nav {
             display: flex;
             gap: 20px;
@@ -100,7 +117,6 @@
             margin-top: 5px;
         }
 
-        /* ===== CONTACT CARDS ===== */
         .contact-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -178,7 +194,6 @@
             font-size: 18px;
         }
 
-        /* ===== BACK BUTTON ===== */
         .back-home {
             display: inline-block;
             margin-top: 25px;
@@ -209,56 +224,37 @@
         }
 
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                padding: 15px 20px;
-                gap: 15px;
-            }
-            header nav {
-                justify-content: center;
-            }
-            header nav a {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-            .contact-container {
-                padding: 30px 20px;
-            }
-            .contact-container h2 {
-                font-size: 28px;
-            }
-            .contact-card {
-                flex-direction: column;
-                text-align: center;
-                padding: 15px;
-            }
-            .contact-card .phone a {
-                display: block;
-            }
+            header { flex-direction: column; padding: 15px 20px; gap: 15px; }
+            header .logo img { height: 40px; }
+            header .logo .logo-text h1 { font-size: 20px; }
+            header nav { justify-content: center; gap: 12px; }
+            header nav a { padding: 8px 20px; font-size: 14px; }
+            .contact-container { padding: 30px 20px; }
+            .contact-container h2 { font-size: 28px; }
+            .contact-card { flex-direction: column; text-align: center; padding: 15px; }
+            .contact-card .phone a { display: block; }
         }
         @media (max-width: 480px) {
-            .contact-container {
-                padding: 20px 15px;
-            }
-            .contact-container h2 {
-                font-size: 24px;
-            }
-            .contact-card .name {
-                font-size: 16px;
-            }
-            .contact-card .phone a {
-                font-size: 14px;
-                padding: 5px 14px;
-            }
+            header .logo img { height: 35px; }
+            header .logo .logo-text h1 { font-size: 17px; }
+            header .logo .logo-text p { font-size: 10px; }
+            .contact-container { padding: 20px 15px; }
+            .contact-container h2 { font-size: 24px; }
+            .contact-card .name { font-size: 16px; }
+            .contact-card .phone a { font-size: 14px; padding: 5px 14px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ===== HEADER WITH LOGO ===== -->
     <header>
         <div class="logo">
-            <h1>🚗 Om Auto Consultant</h1>
-            <p>Your Trusted Tempo Partner</p>
+            <img src="logo.png" alt="Om Auto Consultant Logo" />
+            <div class="logo-text">
+                <h1>Om Auto Consultant</h1>
+                <p>Your Trusted Tempo Partner</p>
+            </div>
         </div>
         <nav>
             <a href="index.html">🏠 Home</a>

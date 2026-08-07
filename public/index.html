@@ -28,20 +28,36 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
+            padding: 15px 50px;
             background: rgba(17, 21, 42, 0.95);
             border-bottom: 2px solid #ffffff;
             flex-wrap: wrap;
             position: relative;
             z-index: 10;
         }
-        header .logo h1 {
-            font-size: 28px;
-            color: #ffffff;
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        header .logo p {
-            font-size: 14px;
+        header .logo img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+        header .logo .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        header .logo .logo-text h1 {
+            font-size: 24px;
+            color: #ffffff;
+            line-height: 1.1;
+        }
+        header .logo .logo-text p {
+            font-size: 12px;
             color: #aaa;
+            letter-spacing: 1px;
         }
 
         /* ===== NAV BUTTONS ===== */
@@ -358,6 +374,12 @@
                 padding: 15px 20px;
                 gap: 15px;
             }
+            header .logo img {
+                height: 40px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 20px;
+            }
             header nav {
                 justify-content: center;
                 gap: 12px;
@@ -407,6 +429,15 @@
             }
         }
         @media (max-width: 480px) {
+            header .logo img {
+                height: 35px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 17px;
+            }
+            header .logo .logo-text p {
+                font-size: 10px;
+            }
             .slide-content h2 {
                 font-size: 22px;
             }
@@ -433,8 +464,12 @@
     <!-- ===== HEADER ===== -->
     <header>
         <div class="logo">
-            <h1>🚗 Om Auto Consultant</h1>
-            <p>Your Trusted Tempo Partner</p>
+            <!-- ===== LOGO IMAGE ===== -->
+            <img src="logo.png" alt="Om Auto Consultant Logo" />
+            <div class="logo-text">
+                <h1>Om Auto Consultant</h1>
+                <p>Your Trusted Tempo Partner</p>
+            </div>
         </div>
         <nav>
             <a href="index.html">🏠 Home</a>
