@@ -209,7 +209,7 @@
             background: #ffffff;
         }
 
-        /* ===== MODELS SLIDER - FIXED ===== */
+        /* ===== MODELS SLIDER ===== */
         .models-slider-section {
             padding: 60px 20px 80px;
             max-width: 700px;
@@ -278,7 +278,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* ✅ FIX: No border, proper image */
         .model-card .img-box img {
             width: 100%;
             height: 100%;
@@ -641,7 +640,7 @@
         }
 
         // =============================================================
-        // ✅ MODEL SLIDER - FIXED (1 slide at a time)
+        // ✅ MODEL SLIDER - FIXED
         // =============================================================
         let modelIndex = 0;
         let modelsData = [];
@@ -656,7 +655,6 @@
             modelIndex = index;
 
             const slideWidth = wrapper.offsetWidth || 600;
-            // ✅ Smooth transition - 1 slide at a time
             track.style.transition = 'transform 0.5s ease-in-out';
             track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
 
@@ -666,12 +664,14 @@
             });
         }
 
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            goToModelSlide(modelIndex - 1);
-        });
-
+        // ✅ Next button - 1 slide
         document.getElementById('nextBtn').addEventListener('click', () => {
             goToModelSlide(modelIndex + 1);
+        });
+
+        // ✅ Prev button - 1 slide (FIXED)
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            goToModelSlide(modelIndex - 1);
         });
 
         async function renderModelSlider() {
@@ -684,17 +684,21 @@
                     return;
                 }
 
-                // ✅ Create cards with correct data-id
-                track.innerHTML = modelsData.map((m) => `
+                // ✅ Create cards with correct image
+                track.innerHTML = modelsData.map((m) => {
+                    // ✅ Get correct logo for this model
+                    const logoUrl = logos[String(m.id)] || `https://picsum.photos/seed/${m.id}/800/500`;
+                    return `
                             <div class="model-card" data-id="${m.id}">
                                 <div class="img-box">
-                                    <img src="${logos[String(m.id)] || 'https://picsum.photos/seed/${m.id}/800/500'}" 
+                                    <img src="${logoUrl}" 
                                          alt="${m.name}" 
                                          onerror="this.src='https://picsum.photos/seed/${m.id}/800/500'" />
                                 </div>
                                 <div class="title">${m.name}</div>
                             </div>
-                        `).join('');
+                        `;
+                }).join('');
 
                 // ✅ Click event - correct ID
                 document.querySelectorAll('.model-card').forEach((card) => {
@@ -735,7 +739,7 @@
         }
 
         // =============================================================
-        // ✅ TOUCH DRAG - FIXED
+        // ✅ TOUCH DRAG - FIXED (1 slide both directions)
         // =============================================================
         let startX = 0,
             currentX = 0,
@@ -783,6 +787,7 @@
             const threshold = slideWidth * 0.15;
             const diff = currentX - startX;
 
+            // ✅ Both directions - 1 slide
             if (Math.abs(diff) > threshold) {
                 if (diff < 0) {
                     goToModelSlide(modelIndex + 1);
