@@ -130,22 +130,31 @@
             font-size: 14px;
             margin-bottom: 10px;
         }
-        /* ✅ VARIANT NAME - CENTER + 1 TIME */
+
+        /* ✅ FIX 1: VARIANT NAME - CENTER + 1 LINE */
         .model-detail-info h1 {
             color: #ffffff;
-            font-size: 40px;
+            font-size: 36px;
             margin-bottom: 10px;
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 700;
+            word-break: keep-all;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
+        /* ✅ FIX 2: MODEL TYPE - CENTER */
         .model-detail-info .model-type {
             color: #aaa;
             font-size: 18px;
             margin-bottom: 10px;
             text-align: center;
         }
+
+        /* ✅ FIX 3: PRICE - CENTER */
         .model-detail-info .model-price {
             color: #4CAF50;
             font-size: 28px;
@@ -153,6 +162,8 @@
             margin-bottom: 15px;
             text-align: center;
         }
+
+        /* ✅ FIX 4: DESCRIPTION - CENTER */
         .model-detail-info .model-desc {
             color: #ccc;
             font-size: 18px;
@@ -217,7 +228,7 @@
             margin-top: 5px;
         }
 
-        /* ===== COVER IMAGE ===== */
+        /* ===== COVER IMAGE - BIGGER ===== */
         .cover-image-section {
             margin: 30px 0;
             border-radius: 16px;
@@ -225,18 +236,20 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             cursor: pointer;
             transition: 0.3s;
+            background: #0b0e1a;
         }
         .cover-image-section:hover {
             border-color: #ffffff;
             transform: scale(1.01);
         }
+        /* ✅ FIX 5: IMAGE BIGGER + FULL */
         .cover-image-section img {
             width: 100%;
-            height: 400px;
+            height: 500px;
             object-fit: contain;
             display: block;
             background: #0b0e1a;
-            padding: 10px;
+            padding: 20px;
         }
 
         /* ===== GALLERY ===== */
@@ -372,6 +385,7 @@
             margin-top: auto;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -396,9 +410,12 @@
             }
             .model-detail-info h1 {
                 font-size: 28px;
+                white-space: normal;
+                word-break: break-word;
             }
             .cover-image-section img {
-                height: 250px;
+                height: 300px;
+                padding: 10px;
             }
             .gallery-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -420,9 +437,18 @@
             }
             .model-detail-info h1 {
                 font-size: 22px;
+                white-space: normal;
+                word-break: break-word;
             }
             .cover-image-section img {
-                height: 200px;
+                height: 220px;
+                padding: 8px;
+            }
+            .model-detail-info .model-price {
+                font-size: 22px;
+            }
+            .model-detail-info .model-desc {
+                font-size: 15px;
             }
         }
     </style>
@@ -450,7 +476,6 @@
 
         <div class="model-detail-info" id="modelInfo">
             <div class="brand-badge" id="brandBadge">🚛 Model</div>
-            <!-- ✅ VARIANT NAME - CENTER + 1 TIME -->
             <h1 id="modelName">Model Name</h1>
             <div class="model-type" id="modelType">Type</div>
             <div class="model-price" id="modelPrice">₹ 0.00</div>
@@ -477,6 +502,7 @@
             </div>
         </div>
 
+        <!-- ===== COVER IMAGE - BIGGER ===== -->
         <div class="cover-image-section">
             <img id="coverImage" src="" alt="Cover" />
         </div>
@@ -548,7 +574,7 @@
             let variant = await getVariantById(id);
             if (variantName) variant.name = variantName;
 
-            // ✅ Set values - Center aligned
+            // Set values - Center aligned
             document.getElementById('brandBadge').textContent = `🚛 ${variant.company || 'Model'}`;
             document.getElementById('modelName').textContent = variant.name;
             document.getElementById('modelType').textContent = variant.type || 'Standard';
