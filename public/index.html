@@ -278,7 +278,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* ✅ FIX: No border, clean image */
         .model-card .img-box img {
             width: 100%;
             height: 100%;
@@ -648,12 +647,17 @@
         let modelsData = [];
         const track = document.getElementById('modelTrack');
         const wrapper = document.getElementById('sliderWrapper');
+        let isAnimating = false;
 
         function goToModelSlide(index) {
+            if (isAnimating) return;
             const total = modelsData.length;
             if (total === 0) return;
             if (index < 0) index = 0;
             if (index >= total) index = total - 1;
+            if (index === modelIndex) return;
+            
+            isAnimating = true;
             modelIndex = index;
 
             const slideWidth = wrapper.offsetWidth || 600;
@@ -664,16 +668,24 @@
             dots.forEach((d, i) => {
                 d.classList.toggle('active', i === modelIndex);
             });
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 550);
         }
 
         // ✅ Next button - 1 slide
         document.getElementById('nextBtn').addEventListener('click', () => {
-            goToModelSlide(modelIndex + 1);
+            if (!isAnimating) {
+                goToModelSlide(modelIndex + 1);
+            }
         });
 
-        // ✅ Prev button - 1 slide (FIXED)
+        // ✅ Prev button - 1 slide
         document.getElementById('prevBtn').addEventListener('click', () => {
-            goToModelSlide(modelIndex - 1);
+            if (!isAnimating) {
+                goToModelSlide(modelIndex - 1);
+            }
         });
 
         async function renderModelSlider() {
@@ -686,7 +698,7 @@
                     return;
                 }
 
-                // ✅ Create cards with correct image
+                // ✅ Create cards with correct image and data-id
                 track.innerHTML = modelsData.map((m) => {
                     const logoUrl = logos[String(m.id)] || `https://picsum.photos/seed/${m.id}/800/500`;
                     return `
@@ -694,6 +706,7 @@
                                 <div class="img-box">
                                     <img src="${logoUrl}" 
                                          alt="${m.name}" 
+                                         loading="lazy"
                                          onerror="this.src='https://picsum.photos/seed/${m.id}/800/500'" />
                                 </div>
                                 <div class="title">${m.name}</div>
@@ -704,9 +717,8 @@
                 // ✅ Click event - ONLY on card click (not on buttons)
                 document.querySelectorAll('.model-card').forEach((card) => {
                     card.addEventListener('click', function(e) {
-                        // Stop click from bubbling to slider buttons
                         e.stopPropagation();
-                        const id = this.dataset.id;
+                        const id = this.getAttribute('data-id');
                         if (id) {
                             window.location.href = `models.html?id=${id}`;
                         }
@@ -720,7 +732,11 @@
                     const dot = document.createElement('button');
                     dot.className = `dot-m ${i === 0 ? 'active' : ''}`;
                     dot.dataset.index = i;
-                    dot.addEventListener('click', () => goToModelSlide(i));
+                    dot.addEventListener('click', () => {
+                        if (!isAnimating) {
+                            goToModelSlide(i);
+                        }
+                    });
                     dotsContainer.appendChild(dot);
                 }
 
@@ -758,7 +774,7 @@
         wrapper.addEventListener('mouseleave', dragEnd);
 
         function dragStart(e) {
-            if (modelsData.length === 0) return;
+            if (modelsData.length === 0 || isAnimating) return;
             isDragging = true;
             startX = getX(e);
             const slideWidth = wrapper.offsetWidth || 600;
