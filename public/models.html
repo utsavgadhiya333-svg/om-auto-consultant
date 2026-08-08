@@ -46,7 +46,6 @@
             letter-spacing: 1px;
         }
 
-        /* ===== NAV BUTTONS ===== */
         header nav {
             display: flex;
             gap: 20px;
@@ -72,7 +71,6 @@
             transform: scale(1.05);
         }
 
-        /* ===== SECTION ===== */
         .section-container {
             padding: 40px 20px;
             max-width: 1200px;
@@ -104,14 +102,12 @@
             margin-bottom: 20px;
         }
 
-        /* ===== GRID ===== */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 25px;
         }
 
-        /* ✅ CAPITAL LETTERS for variant names */
         .card {
             background: #1a1f3a;
             border-radius: 16px;
@@ -130,12 +126,18 @@
             height: 200px;
             overflow: hidden;
             background: #0b0e1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+        /* ✅ IMAGE FIX - Full and Clear */
         .card .img-box img {
             width: 100%;
             height: 100%;
-            object-fit: fill;
+            object-fit: contain;
             transition: 0.3s;
+            background: #0b0e1a;
+            padding: 10px;
         }
         .card:hover .img-box img {
             transform: scale(1.05);
@@ -147,7 +149,6 @@
             font-size: 20px;
             font-weight: bold;
             border-top: 1px solid rgba(255,255,255,0.1);
-            /* ✅ CAPITAL LETTERS */
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -229,7 +230,6 @@
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Om Auto Consultant Logo" />
@@ -244,7 +244,6 @@
         </nav>
     </header>
 
-    <!-- ===== MAIN CONTENT ===== -->
     <section class="section-container">
         <a href="index.html" class="back-btn">← Back to Home</a>
         <h2 id="pageTitle">🚚 Variants</h2>
@@ -253,50 +252,31 @@
         </div>
     </section>
 
-    <!-- ===== FOOTER ===== -->
     <footer>
         <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
     </footer>
 
     <script>
-        // =============================================================
-        // ✅ SUPABASE CONFIGURATION
-        // =============================================================
         const SUPABASE_URL = "https://rifpaagfkxhrplokguqp.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =============================================================
-        // ✅ GET MAIN MODELS FROM SUPABASE
-        // =============================================================
         async function getMainModels() {
             try {
                 const { data, error } = await sb.from('main_models').select('*').order('id', { ascending: true });
                 if (error) throw error;
                 return data || [];
-            } catch (e) {
-                console.error('❌ Error fetching main models:', e);
-                return [];
-            }
+            } catch (e) { return []; }
         }
 
-        // =============================================================
-        // ✅ GET VARIANTS FROM SUPABASE
-        // =============================================================
         async function getVariants() {
             try {
                 const { data, error } = await sb.from('variants').select('*').order('id', { ascending: true });
                 if (error) throw error;
                 return data || [];
-            } catch (e) {
-                console.error('❌ Error fetching variants:', e);
-                return [];
-            }
+            } catch (e) { return []; }
         }
 
-        // =============================================================
-        // ✅ RENDER VARIANTS
-        // =============================================================
         const urlParams = new URLSearchParams(window.location.search);
         const mainId = parseInt(urlParams.get('id'));
 
@@ -307,29 +287,22 @@
             try {
                 const mainModels = await getMainModels();
                 const allVariants = await getVariants();
-
-                // Find main model name
                 const mainModel = mainModels.find(m => m.id === mainId);
 
-                // Update page title
                 document.getElementById('pageTitle').textContent = mainModel ? `🚚 ${mainModel.name}` : '🚚 Variants';
 
-                // If no main models found
                 if (mainModels.length === 0) {
-                    grid.innerHTML = `<p class="error-text">❌ No models found. Please add models from Admin Panel.</p>`;
+                    grid.innerHTML = `<p class="error-text">❌ No models found.</p>`;
                     return;
                 }
 
-                // Filter variants for this main model
                 let filtered = allVariants.filter(v => v.main_model_id === mainId);
 
-                // If no variants found
                 if (filtered.length === 0) {
                     grid.innerHTML = `<p class="error-text" style="color:#888;">No variants available for this model.</p>`;
                     return;
                 }
 
-                // Render variants (names will be uppercase via CSS)
                 grid.innerHTML = filtered.map(v => `
                     <div class="card" onclick="window.location.href='model-detail.html?id=${v.id}&variant=${encodeURIComponent(v.name)}'">
                         <div class="img-box">
@@ -342,14 +315,10 @@
                 `).join('');
 
             } catch (e) {
-                console.error('❌ Render error:', e);
-                grid.innerHTML = `<p class="error-text">❌ Error loading variants. Please try again.</p>`;
+                grid.innerHTML = `<p class="error-text">❌ Error loading variants.</p>`;
             }
         }
 
-        // =============================================================
-        // ✅ INIT
-        // =============================================================
         renderVariants();
     </script>
 </body>

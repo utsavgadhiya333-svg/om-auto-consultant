@@ -39,12 +39,12 @@
             background: #1a1f3a;
             padding: 40px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
             margin-bottom: 30px;
         }
         .model-detail-info .brand-badge {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             color: #ffffff;
             padding: 4px 16px;
             border-radius: 20px;
@@ -77,14 +77,12 @@
         .model-detail-info .model-contact {
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         .model-detail-info .model-contact p {
             color: #aaa;
             font-size: 16px;
         }
-
-        /* ===== LOCATION LINK - GOOGLE MAPS ===== */
         .model-detail-info .model-contact .location-link {
             display: inline-flex;
             align-items: center;
@@ -92,14 +90,14 @@
             color: #ffffff;
             text-decoration: none;
             padding: 8px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
             border-radius: 30px;
             transition: 0.3s;
             font-size: 15px;
             margin-top: 5px;
         }
         .model-detail-info .model-contact .location-link:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.1);
             border-color: #ffffff;
         }
 
@@ -109,7 +107,7 @@
             gap: 15px;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         .model-detail-info .specs-grid .spec-item {
             background: #0b0e1a;
@@ -129,11 +127,12 @@
             margin-top: 5px;
         }
 
+        /* ✅ IMAGE FIX - Cover Image */
         .cover-image-section {
             margin: 30px 0;
             border-radius: 16px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
             cursor: pointer;
             transition: 0.3s;
         }
@@ -144,8 +143,9 @@
         .cover-image-section img {
             width: 100%;
             height: 400px;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
+            background: #0b0e1a;
         }
 
         .gallery-section {
@@ -189,7 +189,7 @@
             background: #1a1f3a;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
             cursor: pointer;
             transition: 0.3s;
             aspect-ratio: 1 / 1;
@@ -198,10 +198,13 @@
             transform: scale(1.05);
             border-color: #ffffff;
         }
+        /* ✅ IMAGE FIX - Gallery Images */
         .gallery-grid .gallery-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            background: #0b0e1a;
+            padding: 10px;
         }
 
         .full-gallery-modal {
@@ -250,7 +253,7 @@
             background: #1a1f3a;
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255,255,255,0.15);
             cursor: pointer;
             transition: 0.3s;
             aspect-ratio: 1 / 1;
@@ -262,10 +265,12 @@
         .full-gallery-modal .full-gallery-grid .full-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            background: #0b0e1a;
+            padding: 10px;
         }
 
-        /* ===== HEADER WITH LOGO ===== */
+        /* ===== HEADER ===== */
         header {
             display: flex;
             justify-content: space-between;
@@ -327,22 +332,22 @@
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
-                padding: 15px 20px;
-                gap: 15px;
+                padding: 12px 20px;
+                gap: 12px;
             }
             header .logo img {
-                height: 40px;
+                height: 35px;
             }
             header .logo .logo-text h1 {
-                font-size: 20px;
+                font-size: 18px;
             }
             header nav {
                 justify-content: center;
                 gap: 12px;
             }
             header nav a {
-                padding: 8px 20px;
-                font-size: 14px;
+                padding: 6px 16px;
+                font-size: 13px;
             }
             .model-detail-info {
                 padding: 25px;
@@ -366,13 +371,10 @@
         }
         @media (max-width: 480px) {
             header .logo img {
-                height: 35px;
+                height: 30px;
             }
             header .logo .logo-text h1 {
-                font-size: 17px;
-            }
-            header .logo .logo-text p {
-                font-size: 10px;
+                font-size: 15px;
             }
             .model-detail-info .model-contact .location-link {
                 font-size: 12px;
@@ -382,12 +384,12 @@
     </style>
 </head>
 <body>
-    <!-- ===== HEADER WITH LOGO ===== -->
+    <!-- ===== HEADER ===== -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Om Auto Consultant Logo" />
             <div class="logo-text">
-                <h1>Om Auto Consultant</h1>
+                <h1>🚛 Om Auto Consultant</h1>
                 <p>Your Trusted Tempo Partner</p>
             </div>
         </div>
@@ -412,7 +414,6 @@
                 <p>📞 <strong style="color:#fff;">Jigneshbhai - 8469716611</strong></p>
                 <p>📞 <strong style="color:#fff;">Girishbhai - 9879065758</strong></p>
                 <p>
-                    <!-- ✅ LOCATION - Google Maps Link -->
                     <a href="https://maps.app.goo.gl/zyDy54otTvwjaQEL7" 
                        target="_blank" 
                        class="location-link">

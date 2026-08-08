@@ -209,7 +209,7 @@
             background: #ffffff;
         }
 
-        /* ===== MODELS SLIDER - BIGGER CARDS ===== */
+        /* ===== MODELS SLIDER ===== */
         .models-slider-section {
             padding: 60px 20px 80px;
             max-width: 700px;
@@ -251,7 +251,6 @@
             will-change: transform;
         }
 
-        /* ✅ BIGGER CARDS */
         .model-card {
             flex: 0 0 100%;
             min-width: 100%;
@@ -279,17 +278,19 @@
             align-items: center;
             justify-content: center;
         }
+        /* ✅ IMAGE FIX - Full and Clear */
         .model-card .img-box img {
             width: 100%;
             height: 100%;
-            object-fit: fill;
+            object-fit: contain;
             transition: 0.6s;
             pointer-events: none;
+            background: #0b0e1a;
+            padding: 15px;
         }
         .model-card:hover .img-box img {
-            transform: scale(1.06);
+            transform: scale(1.04);
         }
-        /* ✅ BIGGER TEXT */
         .model-card .title {
             text-align: center;
             padding: 28px;
@@ -608,9 +609,6 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =============================================================
-        // ✅ GET DATA
-        // =============================================================
         async function getMainModels() {
             try {
                 const { data, error } = await sb.from('main_models').select('*').order('id', { ascending: true });
