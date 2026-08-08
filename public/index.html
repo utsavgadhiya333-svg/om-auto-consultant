@@ -60,7 +60,6 @@
             letter-spacing: 1px;
         }
 
-        /* ===== NAV BUTTONS ===== */
         header nav {
             display: flex;
             gap: 20px;
@@ -89,8 +88,8 @@
         /* ===== HERO SLIDER ===== */
         .hero-slider {
             position: relative;
-            height: 80vh;
-            min-height: 450px;
+            height: 70vh;
+            min-height: 400px;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -136,7 +135,7 @@
             position: relative;
             z-index: 5;
             max-width: 750px;
-            padding: 45px 55px;
+            padding: 40px 50px;
             background: rgba(11, 14, 26, 0.7);
             border-radius: 20px;
             backdrop-filter: blur(12px);
@@ -144,26 +143,26 @@
             animation: fadeUp 1.5s ease-out;
         }
         .slide-content h2 {
-            font-size: 48px;
+            font-size: 42px;
             color: #ffffff;
             margin-bottom: 15px;
             text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
         .slide-content p {
-            font-size: 20px;
+            font-size: 18px;
             color: #ddd;
             margin-bottom: 25px;
             line-height: 1.7;
         }
         .slide-content .btn {
             display: inline-block;
-            padding: 14px 45px;
+            padding: 12px 40px;
             background: #ffffff;
             color: #000;
             text-decoration: none;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 17px;
             transition: 0.3s;
             border: 2px solid #ffffff;
             cursor: pointer;
@@ -181,16 +180,16 @@
 
         .slider-dots {
             position: absolute;
-            bottom: 30px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
             display: flex;
-            gap: 14px;
+            gap: 12px;
         }
         .slider-dots .dot {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.3);
             cursor: pointer;
@@ -206,27 +205,25 @@
             background: #ffffff;
         }
 
-        /* ===== MODELS SLIDER ===== */
+        /* ===== MODELS SLIDER - BIG CARDS + TOUCH DRAG ===== */
         .models-slider-section {
-            padding: 60px 20px 80px;
-            max-width: 500px;
+            padding: 50px 20px 70px;
+            max-width: 600px;
             margin: 0 auto;
             width: 100%;
             position: relative;
-            user-select: none;
-            -webkit-user-select: none;
         }
         .models-slider-section h2 {
-            font-size: 38px;
+            font-size: 34px;
             color: #ffffff;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .models-slider-section .subtitle {
             text-align: center;
             color: #aaa;
-            font-size: 17px;
-            margin-bottom: 35px;
+            font-size: 16px;
+            margin-bottom: 30px;
         }
 
         .model-slider-wrapper {
@@ -234,8 +231,10 @@
             overflow: hidden;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            cursor: grab;
             touch-action: none;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .model-slider-wrapper:active {
             cursor: grabbing;
@@ -243,7 +242,7 @@
 
         .model-slider-track {
             display: flex;
-            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
         }
 
@@ -255,20 +254,18 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.15);
             cursor: pointer;
-            transition: 0.4s;
+            transition: 0.3s;
             text-decoration: none;
             color: #fff;
             display: block;
-            pointer-events: none;
         }
         .model-card:hover {
             border-color: #ffffff;
             box-shadow: 0 15px 50px rgba(255, 255, 255, 0.08);
-            transform: scale(1.01);
         }
         .model-card .img-box {
             width: 100%;
-            height: 320px;
+            height: 380px;
             overflow: hidden;
             background: #0b0e1a;
             display: flex;
@@ -284,9 +281,9 @@
         }
         .model-card .title {
             text-align: center;
-            padding: 22px;
+            padding: 25px;
             color: #ffffff;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.02);
@@ -299,13 +296,13 @@
             top: 50%;
             transform: translateY(-50%);
             z-index: 20;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.8);
             color: #fff;
             border: 2px solid rgba(255, 255, 255, 0.15);
-            width: 56px;
-            height: 56px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
             transition: 0.3s;
             display: flex;
@@ -321,17 +318,17 @@
             transform: translateY(-50%) scale(1.08);
         }
         .slider-btn.prev {
-            left: 12px;
+            left: 10px;
         }
         .slider-btn.next {
-            right: 12px;
+            right: 10px;
         }
 
         .slider-dots-models {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-top: 25px;
+            margin-top: 22px;
         }
         .slider-dots-models .dot-m {
             width: 12px;
@@ -379,90 +376,93 @@
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
-                padding: 15px 20px;
-                gap: 15px;
-            }
-            header .logo img {
-                height: 40px;
-            }
-            header .logo .logo-text h1 {
-                font-size: 20px;
-            }
-            header nav {
-                justify-content: center;
+                padding: 12px 20px;
                 gap: 12px;
             }
-            header nav a {
-                padding: 8px 20px;
-                font-size: 14px;
-            }
-            .hero-slider {
-                height: 65vh;
-                min-height: 350px;
-            }
-            .slide-content h2 {
-                font-size: 28px;
-            }
-            .slide-content p {
-                font-size: 16px;
-            }
-            .slide-content {
-                padding: 25px;
-                margin: 0 15px;
-            }
-            .models-slider-section {
-                padding: 40px 15px 60px;
-                max-width: 100%;
-            }
-            .models-slider-section h2 {
-                font-size: 28px;
-            }
-            .model-card .img-box {
-                height: 220px;
-            }
-            .model-card .title {
-                font-size: 20px;
-                padding: 16px;
-            }
-            .slider-btn {
-                width: 44px;
-                height: 44px;
-                font-size: 22px;
-            }
-            .slider-btn.prev {
-                left: 6px;
-            }
-            .slider-btn.next {
-                right: 6px;
-            }
-        }
-        @media (max-width: 480px) {
             header .logo img {
                 height: 35px;
             }
             header .logo .logo-text h1 {
-                font-size: 17px;
+                font-size: 18px;
             }
             header .logo .logo-text p {
                 font-size: 10px;
             }
+            header nav a {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+            .hero-slider {
+                height: 55vh;
+                min-height: 300px;
+            }
             .slide-content h2 {
-                font-size: 22px;
+                font-size: 26px;
             }
             .slide-content p {
-                font-size: 14px;
+                font-size: 15px;
+            }
+            .slide-content {
+                padding: 20px 25px;
+                margin: 0 12px;
+            }
+            .models-slider-section {
+                padding: 30px 12px 50px;
+                max-width: 100%;
+            }
+            .models-slider-section h2 {
+                font-size: 26px;
             }
             .model-card .img-box {
-                height: 180px;
+                height: 250px;
             }
             .model-card .title {
-                font-size: 17px;
+                font-size: 22px;
+                padding: 18px;
+            }
+            .slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .slider-btn.prev {
+                left: 5px;
+            }
+            .slider-btn.next {
+                right: 5px;
+            }
+        }
+        @media (max-width: 480px) {
+            header .logo img {
+                height: 30px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 15px;
+            }
+            .hero-slider {
+                height: 45vh;
+                min-height: 250px;
+            }
+            .slide-content h2 {
+                font-size: 20px;
+            }
+            .slide-content p {
+                font-size: 13px;
+            }
+            .slide-content {
+                padding: 15px 18px;
+            }
+            .model-card .img-box {
+                height: 200px;
+            }
+            .model-card .title {
+                font-size: 18px;
                 padding: 14px;
             }
             .slider-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
             }
         }
     </style>
@@ -526,7 +526,7 @@
         <h2>🏢 Our Models</h2>
         <p class="subtitle">Choose from our wide range of commercial vehicles</p>
 
-        <div class="model-slider-wrapper">
+        <div class="model-slider-wrapper" id="sliderWrapper">
             <div class="model-slider-track" id="modelTrack">
                 <!-- Models loaded dynamically -->
             </div>
@@ -582,9 +582,9 @@
             startInterval();
         }
 
-        const slider = document.getElementById('heroSlider');
-        slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
-        slider.addEventListener('mouseleave', startInterval);
+        const sliderEl = document.getElementById('heroSlider');
+        sliderEl.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        sliderEl.addEventListener('mouseleave', startInterval);
         startInterval();
 
         // =============================================================
@@ -622,12 +622,36 @@
         }
 
         // =============================================================
-        // ✅ MODEL SLIDER WITH TOUCH/DRAG
+        // ✅ MODEL SLIDER - BIG CARDS + TOUCH DRAG
         // =============================================================
         let modelIndex = 0;
         let modelsData = [];
         const track = document.getElementById('modelTrack');
+        const wrapper = document.getElementById('sliderWrapper');
 
+        // ✅ Go to slide
+        function goToModelSlide(index) {
+            const total = modelsData.length;
+            if (index < 0) index = 0;
+            if (index >= total) index = total - 1;
+            modelIndex = index;
+
+            const slideWidth = wrapper.offsetWidth;
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
+
+            // Update dots
+            const dots = document.querySelectorAll('.dot-m');
+            dots.forEach((d, i) => {
+                d.classList.toggle('active', i === modelIndex);
+            });
+        }
+
+        // ✅ Navigation buttons
+        document.getElementById('prevBtn').addEventListener('click', () => goToModelSlide(modelIndex - 1));
+        document.getElementById('nextBtn').addEventListener('click', () => goToModelSlide(modelIndex + 1));
+
+        // ✅ Render models
         async function renderModelSlider() {
             const track = document.getElementById('modelTrack');
             const dotsContainer = document.getElementById('modelDots');
@@ -641,8 +665,9 @@
                     return;
                 }
 
-                track.innerHTML = modelsData.map((m, index) => `
-                            <div class="model-card" onclick="window.location.href='models.html?id=${m.id}'" data-index="${index}">
+                // Create model cards
+                track.innerHTML = modelsData.map((m) => `
+                            <div class="model-card" data-id="${m.id}">
                                 <div class="img-box">
                                     <img src="${logos[String(m.id)] || 'https://picsum.photos/seed/${m.id}/600/400'}" 
                                          alt="${m.name}" 
@@ -652,6 +677,15 @@
                             </div>
                         `).join('');
 
+                // ✅ Click event on cards
+                document.querySelectorAll('.model-card').forEach((card) => {
+                    card.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        window.location.href = `models.html?id=${id}`;
+                    });
+                });
+
+                // Create dots
                 dotsContainer.innerHTML = '';
                 for (let i = 0; i < modelsData.length; i++) {
                     const dot = document.createElement('button');
@@ -661,7 +695,15 @@
                     dotsContainer.appendChild(dot);
                 }
 
-                updateModelSlide();
+                // Set initial position
+                setTimeout(() => {
+                    const slideWidth = wrapper.offsetWidth;
+                    track.style.transition = 'none';
+                    track.style.transform = `translateX(0px)`;
+                    setTimeout(() => {
+                        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    }, 50);
+                }, 100);
 
             } catch (e) {
                 console.error('❌ Render error:', e);
@@ -669,101 +711,93 @@
             }
         }
 
-        function updateModelSlide() {
-            const dots = document.querySelectorAll('.dot-m');
-            const total = modelsData.length;
-
-            if (modelIndex >= total) modelIndex = total - 1;
-            if (modelIndex < 0) modelIndex = 0;
-
-            const totalWidth = track.scrollWidth;
-            const slideWidth = totalWidth / modelsData.length;
-            const translateX = -modelIndex * slideWidth;
-
-            track.style.transform = `translateX(${translateX}px)`;
-            prevTranslate = translateX;
-
-            dots.forEach((d, i) => {
-                d.classList.toggle('active', i === modelIndex);
-            });
-        }
-
-        function goToModelSlide(index) {
-            const total = modelsData.length;
-            if (index < 0) index = 0;
-            if (index >= total) index = total - 1;
-            modelIndex = index;
-
-            const totalWidth = track.scrollWidth;
-            const slideWidth = totalWidth / modelsData.length;
-            const translateX = -modelIndex * slideWidth;
-
-            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            track.style.transform = `translateX(${translateX}px)`;
-            prevTranslate = translateX;
-
-            const dots = document.querySelectorAll('.dot-m');
-            dots.forEach((d, i) => {
-                d.classList.toggle('active', i === modelIndex);
-            });
-        }
-
-        // ===== NAVIGATION BUTTONS =====
-        document.getElementById('prevBtn').addEventListener('click', () => goToModelSlide(modelIndex - 1));
-        document.getElementById('nextBtn').addEventListener('click', () => goToModelSlide(modelIndex + 1));
-
-        // ===== TOUCH / DRAG FUNCTIONALITY =====
+        // =============================================================
+        // ✅ TOUCH / DRAG FUNCTIONALITY
+        // =============================================================
+        let startX = 0;
+        let currentX = 0;
         let isDragging = false;
-        let startPos = 0;
-        let currentTranslate = 0;
-        let prevTranslate = 0;
+        let startTranslate = 0;
 
-        track.addEventListener('mousedown', dragStart);
-        track.addEventListener('touchstart', dragStart, { passive: true });
-        track.addEventListener('mouseup', dragEnd);
-        track.addEventListener('touchend', dragEnd, { passive: true });
-        track.addEventListener('mousemove', dragMove);
-        track.addEventListener('touchmove', dragMove, { passive: true });
-        track.addEventListener('mouseleave', dragEnd);
+        function getSlideWidth() {
+            return wrapper.offsetWidth;
+        }
 
-        function getPositionX(e) {
+        function getMaxTranslate() {
+            return -(modelsData.length - 1) * getSlideWidth();
+        }
+
+        wrapper.addEventListener('mousedown', dragStart);
+        wrapper.addEventListener('touchstart', dragStart, { passive: true });
+        wrapper.addEventListener('mousemove', dragMove);
+        wrapper.addEventListener('touchmove', dragMove, { passive: true });
+        wrapper.addEventListener('mouseup', dragEnd);
+        wrapper.addEventListener('touchend', dragEnd, { passive: true });
+        wrapper.addEventListener('mouseleave', dragEnd);
+
+        function dragStart(e) {
+            if (modelsData.length === 0) return;
+            isDragging = true;
+            startX = getX(e);
+            startTranslate = -modelIndex * getSlideWidth();
+            track.style.transition = 'none';
+            wrapper.style.cursor = 'grabbing';
+        }
+
+        function dragMove(e) {
+            if (!isDragging || modelsData.length === 0) return;
+            currentX = getX(e);
+            const diff = currentX - startX;
+            let newTranslate = startTranslate + diff;
+            const maxTranslate = getMaxTranslate();
+
+            if (newTranslate > 0) newTranslate = 0;
+            if (newTranslate < maxTranslate) newTranslate = maxTranslate;
+
+            track.style.transform = `translateX(${newTranslate}px)`;
+        }
+
+        function dragEnd(e) {
+            if (!isDragging || modelsData.length === 0) return;
+            isDragging = false;
+            wrapper.style.cursor = 'grab';
+
+            const slideWidth = getSlideWidth();
+            const currentTranslate = -modelIndex * slideWidth;
+            const diff = currentX - startX;
+            const threshold = slideWidth * 0.3;
+
+            if (Math.abs(diff) > threshold) {
+                if (diff < 0) {
+                    goToModelSlide(modelIndex + 1);
+                } else {
+                    goToModelSlide(modelIndex - 1);
+                }
+            } else {
+                goToModelSlide(modelIndex);
+            }
+        }
+
+        function getX(e) {
             if (e.type.includes('mouse')) return e.pageX;
             return e.touches[0].clientX;
         }
 
-        function dragStart(e) {
-            isDragging = true;
-            startPos = getPositionX(e);
-            track.style.transition = 'none';
-            track.style.cursor = 'grabbing';
-        }
-
-        function dragMove(e) {
-            if (!isDragging) return;
-            const currentPos = getPositionX(e);
-            const diff = currentPos - startPos;
-            const totalWidth = track.scrollWidth;
-            const slideWidth = totalWidth / modelsData.length;
-            const maxTranslate = -(modelsData.length - 1) * slideWidth;
-
-            currentTranslate = prevTranslate + diff;
-            if (currentTranslate > 0) currentTranslate = 0;
-            if (currentTranslate < maxTranslate) currentTranslate = maxTranslate;
-
-            track.style.transform = `translateX(${currentTranslate}px)`;
-        }
-
-        function dragEnd(e) {
-            if (!isDragging) return;
-            isDragging = false;
-            track.style.cursor = 'grab';
-            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-
-            const totalWidth = track.scrollWidth;
-            const slideWidth = totalWidth / modelsData.length;
-            const currentIndex = Math.round(Math.abs(currentTranslate) / slideWidth);
-            goToModelSlide(currentIndex);
-        }
+        // ✅ Window resize handler
+        let resizeTimeout2;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout2);
+            resizeTimeout2 = setTimeout(() => {
+                if (modelsData.length > 0) {
+                    const slideWidth = wrapper.offsetWidth;
+                    track.style.transition = 'none';
+                    track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
+                    setTimeout(() => {
+                        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    }, 50);
+                }
+            }, 200);
+        });
 
         // =============================================================
         // ✅ INIT
