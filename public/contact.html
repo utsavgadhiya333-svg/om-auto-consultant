@@ -21,7 +21,6 @@
             flex-direction: column;
         }
 
-        /* ===== HEADER WITH LOGO ===== */
         header {
             display: flex;
             justify-content: space-between;
@@ -86,7 +85,6 @@
             border-color: #ffffff;
         }
 
-        /* ===== CONTACT PAGE ===== */
         .contact-page {
             flex: 1;
             display: flex;
@@ -156,7 +154,7 @@
             border-color: #ffffff;
         }
 
-        /* ===== LOCATION CARD - GOOGLE MAPS LINK ===== */
+        /* ===== LOCATION CARD - "Om Auto" TEXT WITH MAP LINK ===== */
         .location-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -172,22 +170,24 @@
         .location-card a {
             color: #ffffff;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
+            gap: 12px;
+            padding: 12px 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 30px;
             transition: 0.3s;
+            letter-spacing: 1px;
         }
         .location-card a:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: #ffffff;
+            transform: scale(1.03);
         }
         .location-card a .icon {
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .loading-text {
@@ -235,22 +235,21 @@
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
-                padding: 15px 20px;
-                gap: 15px;
-            }
-            header .logo img {
-                height: 40px;
-            }
-            header .logo .logo-text h1 {
-                font-size: 20px;
-            }
-            header nav {
-                justify-content: center;
+                padding: 12px 20px;
                 gap: 12px;
             }
+            header .logo img {
+                height: 35px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 18px;
+            }
+            header .logo .logo-text p {
+                font-size: 10px;
+            }
             header nav a {
-                padding: 8px 20px;
-                font-size: 14px;
+                padding: 6px 16px;
+                font-size: 13px;
             }
             .contact-container {
                 padding: 30px 20px;
@@ -267,19 +266,19 @@
                 display: block;
             }
             .location-card a {
-                font-size: 14px;
-                padding: 8px 15px;
+                font-size: 17px;
+                padding: 10px 20px;
+            }
+            .location-card a .icon {
+                font-size: 22px;
             }
         }
         @media (max-width: 480px) {
             header .logo img {
-                height: 35px;
+                height: 30px;
             }
             header .logo .logo-text h1 {
-                font-size: 17px;
-            }
-            header .logo .logo-text p {
-                font-size: 10px;
+                font-size: 15px;
             }
             .contact-container {
                 padding: 20px 15px;
@@ -295,8 +294,8 @@
                 padding: 5px 14px;
             }
             .location-card a {
-                font-size: 13px;
-                padding: 6px 12px;
+                font-size: 15px;
+                padding: 8px 16px;
             }
             .location-card a .icon {
                 font-size: 18px;
@@ -306,7 +305,6 @@
 </head>
 <body>
 
-    <!-- ===== HEADER WITH LOGO ===== -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Om Auto Consultant Logo" />
@@ -398,13 +396,13 @@
                             `;
                 }
 
-                // ✅ LOCATION - Google Maps Link
+                // ✅ LOCATION - "Om Auto" text with Google Maps link
                 if (data.location) {
                     html += `
                                 <div class="location-card">
                                     <a href="https://maps.app.goo.gl/zyDy54otTvwjaQEL7" target="_blank">
                                         <span class="icon">📍</span>
-                                        <span>${data.location}</span>
+                                        Om Auto
                                     </a>
                                 </div>
                             `;

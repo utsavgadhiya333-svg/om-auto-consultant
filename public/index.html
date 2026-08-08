@@ -205,7 +205,7 @@
             background: #ffffff;
         }
 
-        /* ===== MODELS SLIDER - BIG CARDS + TOUCH DRAG ===== */
+        /* ===== MODELS SLIDER - FIXED ===== */
         .models-slider-section {
             padding: 50px 20px 70px;
             max-width: 600px;
@@ -290,7 +290,6 @@
             pointer-events: none;
         }
 
-        /* ===== SLIDER BUTTONS ===== */
         .slider-btn {
             position: absolute;
             top: 50%;
@@ -372,7 +371,6 @@
             margin-top: auto;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -469,7 +467,6 @@
 </head>
 <body>
 
-    <!-- ===== HEADER ===== -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Om Auto Consultant Logo" />
@@ -527,10 +524,7 @@
         <p class="subtitle">Choose from our wide range of commercial vehicles</p>
 
         <div class="model-slider-wrapper" id="sliderWrapper">
-            <div class="model-slider-track" id="modelTrack">
-                <!-- Models loaded dynamically -->
-            </div>
-
+            <div class="model-slider-track" id="modelTrack"></div>
             <button class="slider-btn prev" id="prevBtn">‹</button>
             <button class="slider-btn next" id="nextBtn">›</button>
         </div>
@@ -538,7 +532,6 @@
         <div class="slider-dots-models" id="modelDots"></div>
     </section>
 
-    <!-- ===== FOOTER ===== -->
     <footer>
         <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
     </footer>
@@ -594,9 +587,6 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // =============================================================
-        // ✅ GET DATA
-        // =============================================================
         async function getMainModels() {
             try {
                 const { data, error } = await sb.from('main_models').select('*').order('id', { ascending: true });
@@ -622,50 +612,43 @@
         }
 
         // =============================================================
-        // ✅ MODEL SLIDER - BIG CARDS + TOUCH DRAG
+        // ✅ MODEL SLIDER - FIXED
         // =============================================================
         let modelIndex = 0;
         let modelsData = [];
         const track = document.getElementById('modelTrack');
         const wrapper = document.getElementById('sliderWrapper');
 
-        // ✅ Go to slide
         function goToModelSlide(index) {
             const total = modelsData.length;
+            if (total === 0) return;
             if (index < 0) index = 0;
             if (index >= total) index = total - 1;
             modelIndex = index;
 
-            const slideWidth = wrapper.offsetWidth;
+            const slideWidth = wrapper.offsetWidth || 500;
             track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
 
-            // Update dots
             const dots = document.querySelectorAll('.dot-m');
             dots.forEach((d, i) => {
                 d.classList.toggle('active', i === modelIndex);
             });
         }
 
-        // ✅ Navigation buttons
         document.getElementById('prevBtn').addEventListener('click', () => goToModelSlide(modelIndex - 1));
         document.getElementById('nextBtn').addEventListener('click', () => goToModelSlide(modelIndex + 1));
 
-        // ✅ Render models
         async function renderModelSlider() {
-            const track = document.getElementById('modelTrack');
-            const dotsContainer = document.getElementById('modelDots');
-
             try {
                 modelsData = await getMainModels();
                 const logos = await getLogos();
 
                 if (modelsData.length === 0) {
-                    track.innerHTML = `<p class="error-text">❌ No models found. Please add models from Admin Panel.</p>`;
+                    track.innerHTML = `<p class="error-text">❌ No models found.</p>`;
                     return;
                 }
 
-                // Create model cards
                 track.innerHTML = modelsData.map((m) => `
                             <div class="model-card" data-id="${m.id}">
                                 <div class="img-box">
@@ -677,15 +660,13 @@
                             </div>
                         `).join('');
 
-                // ✅ Click event on cards
                 document.querySelectorAll('.model-card').forEach((card) => {
                     card.addEventListener('click', function() {
-                        const id = this.dataset.id;
-                        window.location.href = `models.html?id=${id}`;
+                        window.location.href = `models.html?id=${this.dataset.id}`;
                     });
                 });
 
-                // Create dots
+                const dotsContainer = document.getElementById('modelDots');
                 dotsContainer.innerHTML = '';
                 for (let i = 0; i < modelsData.length; i++) {
                     const dot = document.createElement('button');
@@ -695,11 +676,12 @@
                     dotsContainer.appendChild(dot);
                 }
 
-                // Set initial position
+                // Reset position
                 setTimeout(() => {
-                    const slideWidth = wrapper.offsetWidth;
+                    const slideWidth = wrapper.offsetWidth || 500;
                     track.style.transition = 'none';
-                    track.style.transform = `translateX(0px)`;
+                    track.style.transform = 'translateX(0px)';
+                    modelIndex = 0;
                     setTimeout(() => {
                         track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                     }, 50);
@@ -707,25 +689,15 @@
 
             } catch (e) {
                 console.error('❌ Render error:', e);
-                track.innerHTML = `<p class="error-text">❌ Error loading models. Please try again.</p>`;
+                track.innerHTML = `<p class="error-text">❌ Error loading models.</p>`;
             }
         }
 
-        // =============================================================
-        // ✅ TOUCH / DRAG FUNCTIONALITY
-        // =============================================================
-        let startX = 0;
-        let currentX = 0;
-        let isDragging = false;
-        let startTranslate = 0;
-
-        function getSlideWidth() {
-            return wrapper.offsetWidth;
-        }
-
-        function getMaxTranslate() {
-            return -(modelsData.length - 1) * getSlideWidth();
-        }
+        // ✅ TOUCH DRAG
+        let startX = 0,
+            currentX = 0,
+            isDragging = false,
+            startTranslate = 0;
 
         wrapper.addEventListener('mousedown', dragStart);
         wrapper.addEventListener('touchstart', dragStart, { passive: true });
@@ -739,7 +711,8 @@
             if (modelsData.length === 0) return;
             isDragging = true;
             startX = getX(e);
-            startTranslate = -modelIndex * getSlideWidth();
+            const slideWidth = wrapper.offsetWidth || 500;
+            startTranslate = -modelIndex * slideWidth;
             track.style.transition = 'none';
             wrapper.style.cursor = 'grabbing';
         }
@@ -749,7 +722,8 @@
             currentX = getX(e);
             const diff = currentX - startX;
             let newTranslate = startTranslate + diff;
-            const maxTranslate = getMaxTranslate();
+            const slideWidth = wrapper.offsetWidth || 500;
+            const maxTranslate = -(modelsData.length - 1) * slideWidth;
 
             if (newTranslate > 0) newTranslate = 0;
             if (newTranslate < maxTranslate) newTranslate = maxTranslate;
@@ -762,10 +736,9 @@
             isDragging = false;
             wrapper.style.cursor = 'grab';
 
-            const slideWidth = getSlideWidth();
-            const currentTranslate = -modelIndex * slideWidth;
+            const slideWidth = wrapper.offsetWidth || 500;
+            const threshold = slideWidth * 0.25;
             const diff = currentX - startX;
-            const threshold = slideWidth * 0.3;
 
             if (Math.abs(diff) > threshold) {
                 if (diff < 0) {
@@ -783,13 +756,13 @@
             return e.touches[0].clientX;
         }
 
-        // ✅ Window resize handler
-        let resizeTimeout2;
+        // ✅ Window resize
+        let resizeTimer;
         window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout2);
-            resizeTimeout2 = setTimeout(() => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
                 if (modelsData.length > 0) {
-                    const slideWidth = wrapper.offsetWidth;
+                    const slideWidth = wrapper.offsetWidth || 500;
                     track.style.transition = 'none';
                     track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
                     setTimeout(() => {
@@ -799,9 +772,6 @@
             }, 200);
         });
 
-        // =============================================================
-        // ✅ INIT
-        // =============================================================
         renderModelSlider();
     </script>
 </body>
