@@ -278,6 +278,7 @@
             align-items: center;
             justify-content: center;
         }
+        /* ✅ FIX: No border, clean image */
         .model-card .img-box img {
             width: 100%;
             height: 100%;
@@ -286,8 +287,9 @@
             pointer-events: none;
             background: #0b0e1a;
             padding: 20px;
-            border: none;
-            outline: none;
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
         }
         .model-card:hover .img-box img {
             transform: scale(1.04);
@@ -686,7 +688,6 @@
 
                 // ✅ Create cards with correct image
                 track.innerHTML = modelsData.map((m) => {
-                    // ✅ Get correct logo for this model
                     const logoUrl = logos[String(m.id)] || `https://picsum.photos/seed/${m.id}/800/500`;
                     return `
                             <div class="model-card" data-id="${m.id}">
@@ -700,9 +701,11 @@
                         `;
                 }).join('');
 
-                // ✅ Click event - correct ID
+                // ✅ Click event - ONLY on card click (not on buttons)
                 document.querySelectorAll('.model-card').forEach((card) => {
-                    card.addEventListener('click', function() {
+                    card.addEventListener('click', function(e) {
+                        // Stop click from bubbling to slider buttons
+                        e.stopPropagation();
                         const id = this.dataset.id;
                         if (id) {
                             window.location.href = `models.html?id=${id}`;
@@ -787,7 +790,6 @@
             const threshold = slideWidth * 0.15;
             const diff = currentX - startX;
 
-            // ✅ Both directions - 1 slide
             if (Math.abs(diff) > threshold) {
                 if (diff < 0) {
                     goToModelSlide(modelIndex + 1);
