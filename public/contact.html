@@ -156,7 +156,7 @@
             border-color: #ffffff;
         }
 
-        /* ===== LOCATION CARD - GOOGLE MAPS APP LINK ===== */
+        /* ===== LOCATION CARD - GOOGLE MAPS LINK ===== */
         .location-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -398,12 +398,11 @@
                             `;
                 }
 
+                // ✅ LOCATION - Google Maps Link
                 if (data.location) {
-                    // ✅ Google Maps App Link (geo: scheme) - Opens directly in Google Maps App
-                    const locationQuery = encodeURIComponent(data.location);
                     html += `
                                 <div class="location-card">
-                                    <a href="geo:0,0?q=${locationQuery}" target="_blank">
+                                    <a href="https://maps.app.goo.gl/zyDy54otTvwjaQEL7" target="_blank">
                                         <span class="icon">📍</span>
                                         <span>${data.location}</span>
                                     </a>
