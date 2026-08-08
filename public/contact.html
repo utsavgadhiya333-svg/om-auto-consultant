@@ -156,6 +156,7 @@
             border-color: #ffffff;
         }
 
+        /* ===== LOCATION CARD - GOOGLE MAPS APP LINK ===== */
         .location-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -171,14 +172,22 @@
         .location-card a {
             color: #ffffff;
             text-decoration: none;
-            font-size: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 2px;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
             transition: 0.3s;
-            word-break: break-word;
         }
         .location-card a:hover {
-            border-bottom-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
+        .location-card a .icon {
+            font-size: 24px;
         }
 
         .loading-text {
@@ -224,24 +233,74 @@
         }
 
         @media (max-width: 768px) {
-            header { flex-direction: column; padding: 15px 20px; gap: 15px; }
-            header .logo img { height: 40px; }
-            header .logo .logo-text h1 { font-size: 20px; }
-            header nav { justify-content: center; gap: 12px; }
-            header nav a { padding: 8px 20px; font-size: 14px; }
-            .contact-container { padding: 30px 20px; }
-            .contact-container h2 { font-size: 28px; }
-            .contact-card { flex-direction: column; text-align: center; padding: 15px; }
-            .contact-card .phone a { display: block; }
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+            header .logo img {
+                height: 40px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 20px;
+            }
+            header nav {
+                justify-content: center;
+                gap: 12px;
+            }
+            header nav a {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+            .contact-container {
+                padding: 30px 20px;
+            }
+            .contact-container h2 {
+                font-size: 28px;
+            }
+            .contact-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .contact-card .phone a {
+                display: block;
+            }
+            .location-card a {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
         }
         @media (max-width: 480px) {
-            header .logo img { height: 35px; }
-            header .logo .logo-text h1 { font-size: 17px; }
-            header .logo .logo-text p { font-size: 10px; }
-            .contact-container { padding: 20px 15px; }
-            .contact-container h2 { font-size: 24px; }
-            .contact-card .name { font-size: 16px; }
-            .contact-card .phone a { font-size: 14px; padding: 5px 14px; }
+            header .logo img {
+                height: 35px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 17px;
+            }
+            header .logo .logo-text p {
+                font-size: 10px;
+            }
+            .contact-container {
+                padding: 20px 15px;
+            }
+            .contact-container h2 {
+                font-size: 24px;
+            }
+            .contact-card .name {
+                font-size: 16px;
+            }
+            .contact-card .phone a {
+                font-size: 14px;
+                padding: 5px 14px;
+            }
+            .location-card a {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+            .location-card a .icon {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -340,11 +399,13 @@
                 }
 
                 if (data.location) {
+                    // ✅ Google Maps App Link (geo: scheme) - Opens directly in Google Maps App
+                    const locationQuery = encodeURIComponent(data.location);
                     html += `
                                 <div class="location-card">
-                                    <span style="color:#888;font-size:14px;">📍</span>
-                                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.location)}" target="_blank">
-                                        ${data.location}
+                                    <a href="geo:0,0?q=${locationQuery}" target="_blank">
+                                        <span class="icon">📍</span>
+                                        <span>${data.location}</span>
                                     </a>
                                 </div>
                             `;

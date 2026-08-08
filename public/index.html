@@ -213,6 +213,8 @@
             margin: 0 auto;
             width: 100%;
             position: relative;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .models-slider-section h2 {
             font-size: 38px;
@@ -232,11 +234,17 @@
             overflow: hidden;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            cursor: grab;
+            touch-action: none;
+        }
+        .model-slider-wrapper:active {
+            cursor: grabbing;
         }
 
         .model-slider-track {
             display: flex;
             transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
         }
 
         .model-card {
@@ -251,6 +259,7 @@
             text-decoration: none;
             color: #fff;
             display: block;
+            pointer-events: none;
         }
         .model-card:hover {
             border-color: #ffffff;
@@ -271,9 +280,7 @@
             height: 100%;
             object-fit: cover;
             transition: 0.5s;
-        }
-        .model-card:hover .img-box img {
-            transform: scale(1.05);
+            pointer-events: none;
         }
         .model-card .title {
             text-align: center;
@@ -283,6 +290,7 @@
             font-weight: bold;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
         }
 
         /* ===== SLIDER BUTTONS ===== */
@@ -464,7 +472,6 @@
     <!-- ===== HEADER ===== -->
     <header>
         <div class="logo">
-            <!-- ===== LOGO IMAGE ===== -->
             <img src="logo.png" alt="Om Auto Consultant Logo" />
             <div class="logo-text">
                 <h1>Om Auto Consultant</h1>
@@ -567,7 +574,6 @@
         });
 
         function startInterval() {
-            // ✅ SLIDER SPEED: 3 SECONDS
             slideInterval = setInterval(nextSlide, 3000);
         }
 
@@ -616,10 +622,11 @@
         }
 
         // =============================================================
-        // ✅ MODEL SLIDER
+        // ✅ MODEL SLIDER WITH TOUCH/DRAG
         // =============================================================
         let modelIndex = 0;
         let modelsData = [];
+        const track = document.getElementById('modelTrack');
 
         async function renderModelSlider() {
             const track = document.getElementById('modelTrack');
@@ -634,8 +641,8 @@
                     return;
                 }
 
-                track.innerHTML = modelsData.map(m => `
-                            <div class="model-card" onclick="window.location.href='models.html?id=${m.id}'">
+                track.innerHTML = modelsData.map((m, index) => `
+                            <div class="model-card" onclick="window.location.href='models.html?id=${m.id}'" data-index="${index}">
                                 <div class="img-box">
                                     <img src="${logos[String(m.id)] || 'https://picsum.photos/seed/${m.id}/600/400'}" 
                                          alt="${m.name}" 
@@ -663,14 +670,18 @@
         }
 
         function updateModelSlide() {
-            const track = document.getElementById('modelTrack');
             const dots = document.querySelectorAll('.dot-m');
             const total = modelsData.length;
 
             if (modelIndex >= total) modelIndex = total - 1;
             if (modelIndex < 0) modelIndex = 0;
 
-            track.style.transform = `translateX(-${modelIndex * 100}%)`;
+            const totalWidth = track.scrollWidth;
+            const slideWidth = totalWidth / modelsData.length;
+            const translateX = -modelIndex * slideWidth;
+
+            track.style.transform = `translateX(${translateX}px)`;
+            prevTranslate = translateX;
 
             dots.forEach((d, i) => {
                 d.classList.toggle('active', i === modelIndex);
@@ -682,11 +693,77 @@
             if (index < 0) index = 0;
             if (index >= total) index = total - 1;
             modelIndex = index;
-            updateModelSlide();
+
+            const totalWidth = track.scrollWidth;
+            const slideWidth = totalWidth / modelsData.length;
+            const translateX = -modelIndex * slideWidth;
+
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            track.style.transform = `translateX(${translateX}px)`;
+            prevTranslate = translateX;
+
+            const dots = document.querySelectorAll('.dot-m');
+            dots.forEach((d, i) => {
+                d.classList.toggle('active', i === modelIndex);
+            });
         }
 
+        // ===== NAVIGATION BUTTONS =====
         document.getElementById('prevBtn').addEventListener('click', () => goToModelSlide(modelIndex - 1));
         document.getElementById('nextBtn').addEventListener('click', () => goToModelSlide(modelIndex + 1));
+
+        // ===== TOUCH / DRAG FUNCTIONALITY =====
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+
+        track.addEventListener('mousedown', dragStart);
+        track.addEventListener('touchstart', dragStart, { passive: true });
+        track.addEventListener('mouseup', dragEnd);
+        track.addEventListener('touchend', dragEnd, { passive: true });
+        track.addEventListener('mousemove', dragMove);
+        track.addEventListener('touchmove', dragMove, { passive: true });
+        track.addEventListener('mouseleave', dragEnd);
+
+        function getPositionX(e) {
+            if (e.type.includes('mouse')) return e.pageX;
+            return e.touches[0].clientX;
+        }
+
+        function dragStart(e) {
+            isDragging = true;
+            startPos = getPositionX(e);
+            track.style.transition = 'none';
+            track.style.cursor = 'grabbing';
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            const currentPos = getPositionX(e);
+            const diff = currentPos - startPos;
+            const totalWidth = track.scrollWidth;
+            const slideWidth = totalWidth / modelsData.length;
+            const maxTranslate = -(modelsData.length - 1) * slideWidth;
+
+            currentTranslate = prevTranslate + diff;
+            if (currentTranslate > 0) currentTranslate = 0;
+            if (currentTranslate < maxTranslate) currentTranslate = maxTranslate;
+
+            track.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        function dragEnd(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            track.style.cursor = 'grab';
+            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+            const totalWidth = track.scrollWidth;
+            const slideWidth = totalWidth / modelsData.length;
+            const currentIndex = Math.round(Math.abs(currentTranslate) / slideWidth);
+            goToModelSlide(currentIndex);
+        }
 
         // =============================================================
         // ✅ INIT

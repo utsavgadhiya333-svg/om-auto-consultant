@@ -8,51 +8,262 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <style>
-        .detail-section { padding: 40px 20px; max-width: 1000px; margin: 0 auto; }
-        .detail-section .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 24px; background: #ffffff; color: #000; text-decoration: none; border-radius: 25px; transition: 0.3s; border: none; font-size: 14px; cursor: pointer; font-weight: 600; border: 2px solid #ffffff; }
-        .detail-section .back-btn:hover { background: transparent; color: #ffffff; border-color: #ffffff; transform: scale(1.05); }
+        .detail-section {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .detail-section .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 24px;
+            background: #ffffff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: 0.3s;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 2px solid #ffffff;
+        }
+        .detail-section .back-btn:hover {
+            background: transparent;
+            color: #ffffff;
+            border-color: #ffffff;
+            transform: scale(1.05);
+        }
 
-        .model-detail-info { background: #1a1f3a; padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 30px; }
-        .model-detail-info .brand-badge { display: inline-block; background: rgba(255,255,255,0.1); color: #ffffff; padding: 4px 16px; border-radius: 20px; font-size: 14px; margin-bottom: 10px; }
-        .model-detail-info h1 { color: #ffffff; font-size: 36px; margin-bottom: 5px; }
-        .model-detail-info .model-type { color: #aaa; font-size: 18px; margin-bottom: 10px; }
-        .model-detail-info .model-price { color: #4CAF50; font-size: 28px; font-weight: bold; margin-bottom: 15px; }
-        .model-detail-info .model-desc { color: #ccc; font-size: 18px; line-height: 1.8; max-width: 700px; }
+        .model-detail-info {
+            background: #1a1f3a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-bottom: 30px;
+        }
+        .model-detail-info .brand-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .model-detail-info h1 {
+            color: #ffffff;
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+        .model-detail-info .model-type {
+            color: #aaa;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .model-detail-info .model-price {
+            color: #4CAF50;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .model-detail-info .model-desc {
+            color: #ccc;
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 700px;
+        }
 
-        .model-detail-info .model-contact { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .model-detail-info .model-contact p { color: #aaa; font-size: 16px; }
-        .model-detail-info .model-contact a { color: #ffffff; text-decoration: none; border-bottom: 1px solid #ffffff; }
-        .model-detail-info .model-contact a:hover { color: #ccc; border-color: #ccc; }
+        .model-detail-info .model-contact {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .model-detail-info .model-contact p {
+            color: #aaa;
+            font-size: 16px;
+        }
 
-        .model-detail-info .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .model-detail-info .specs-grid .spec-item { background: #0b0e1a; padding: 15px; border-radius: 10px; text-align: center; }
-        .model-detail-info .specs-grid .spec-item .label { color: #888; font-size: 12px; text-transform: uppercase; }
-        .model-detail-info .specs-grid .spec-item .value { color: #ffffff; font-size: 18px; font-weight: bold; margin-top: 5px; }
+        /* ===== LOCATION LINK - GOOGLE MAPS APP ===== */
+        .model-detail-info .model-contact .location-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            transition: 0.3s;
+            font-size: 15px;
+            margin-top: 5px;
+        }
+        .model-detail-info .model-contact .location-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
 
-        .cover-image-section { margin: 30px 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; }
-        .cover-image-section:hover { border-color: #ffffff; transform: scale(1.01); }
-        .cover-image-section img { width: 100%; height: 400px; object-fit: cover; display: block; }
+        .model-detail-info .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .model-detail-info .specs-grid .spec-item {
+            background: #0b0e1a;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .model-detail-info .specs-grid .spec-item .label {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .model-detail-info .specs-grid .spec-item .value {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
 
-        .gallery-section { margin-top: 30px; }
-        .gallery-section .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .gallery-section .gallery-header h3 { color: #ffffff; font-size: 24px; }
-        .gallery-section .gallery-header .see-more-btn { padding: 10px 28px; background: #ffffff; color: #000; border: none; border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.3s; border: 2px solid #ffffff; }
-        .gallery-section .gallery-header .see-more-btn:hover { background: transparent; color: #ffffff; border-color: #ffffff; }
+        .cover-image-section {
+            margin: 30px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .cover-image-section:hover {
+            border-color: #ffffff;
+            transform: scale(1.01);
+        }
+        .cover-image-section img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
 
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .gallery-grid .gallery-item { background: #1a1f3a; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; aspect-ratio: 1 / 1; }
-        .gallery-grid .gallery-item:hover { transform: scale(1.05); border-color: #ffffff; }
-        .gallery-grid .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-section {
+            margin-top: 30px;
+        }
+        .gallery-section .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .gallery-section .gallery-header h3 {
+            color: #ffffff;
+            font-size: 24px;
+        }
+        .gallery-section .gallery-header .see-more-btn {
+            padding: 10px 28px;
+            background: #ffffff;
+            color: #000;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: 2px solid #ffffff;
+        }
+        .gallery-section .gallery-header .see-more-btn:hover {
+            background: transparent;
+            color: #ffffff;
+            border-color: #ffffff;
+        }
 
-        .full-gallery-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 999; padding: 40px 20px; overflow-y: auto; }
-        .full-gallery-modal.active { display: block; }
-        .full-gallery-modal .close-full { position: fixed; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; z-index: 1000; transition: 0.3s; }
-        .full-gallery-modal .close-full:hover { color: #ffffff; transform: rotate(90deg); }
-        .full-gallery-modal .full-gallery-title { color: #ffffff; font-size: 28px; text-align: center; margin-bottom: 30px; }
-        .full-gallery-modal .full-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .full-gallery-modal .full-gallery-grid .full-item { background: #1a1f3a; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; transition: 0.3s; aspect-ratio: 1 / 1; }
-        .full-gallery-modal .full-gallery-grid .full-item:hover { transform: scale(1.05); border-color: #ffffff; }
-        .full-gallery-modal .full-gallery-grid .full-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .gallery-grid .gallery-item {
+            background: #1a1f3a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: 0.3s;
+            aspect-ratio: 1 / 1;
+        }
+        .gallery-grid .gallery-item:hover {
+            transform: scale(1.05);
+            border-color: #ffffff;
+        }
+        .gallery-grid .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .full-gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+        .full-gallery-modal.active {
+            display: block;
+        }
+        .full-gallery-modal .close-full {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+        .full-gallery-modal .close-full:hover {
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
+        .full-gallery-modal .full-gallery-title {
+            color: #ffffff;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .full-gallery-modal .full-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .full-gallery-modal .full-gallery-grid .full-item {
+            background: #1a1f3a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: 0.3s;
+            aspect-ratio: 1 / 1;
+        }
+        .full-gallery-modal .full-gallery-grid .full-item:hover {
+            transform: scale(1.05);
+            border-color: #ffffff;
+        }
+        .full-gallery-modal .full-gallery-grid .full-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
         /* ===== HEADER WITH LOGO ===== */
         header {
@@ -114,21 +325,59 @@
         }
 
         @media (max-width: 768px) {
-            header { flex-direction: column; padding: 15px 20px; gap: 15px; }
-            header .logo img { height: 40px; }
-            header .logo .logo-text h1 { font-size: 20px; }
-            header nav { justify-content: center; gap: 12px; }
-            header nav a { padding: 8px 20px; font-size: 14px; }
-            .model-detail-info { padding: 25px; }
-            .model-detail-info h1 { font-size: 26px; }
-            .cover-image-section img { height: 220px; }
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-            .full-gallery-modal .full-gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                gap: 15px;
+            }
+            header .logo img {
+                height: 40px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 20px;
+            }
+            header nav {
+                justify-content: center;
+                gap: 12px;
+            }
+            header nav a {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+            .model-detail-info {
+                padding: 25px;
+            }
+            .model-detail-info h1 {
+                font-size: 26px;
+            }
+            .cover-image-section img {
+                height: 220px;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .full-gallery-modal .full-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .model-detail-info .model-contact .location-link {
+                font-size: 13px;
+                padding: 6px 14px;
+            }
         }
         @media (max-width: 480px) {
-            header .logo img { height: 35px; }
-            header .logo .logo-text h1 { font-size: 17px; }
-            header .logo .logo-text p { font-size: 10px; }
+            header .logo img {
+                height: 35px;
+            }
+            header .logo .logo-text h1 {
+                font-size: 17px;
+            }
+            header .logo .logo-text p {
+                font-size: 10px;
+            }
+            .model-detail-info .model-contact .location-link {
+                font-size: 12px;
+                padding: 5px 12px;
+            }
         }
     </style>
 </head>
@@ -162,9 +411,14 @@
                 <p>📞 <strong style="color:#fff;">Rameshbhai - 9925380849</strong></p>
                 <p>📞 <strong style="color:#fff;">Jigneshbhai - 8469716611</strong></p>
                 <p>📞 <strong style="color:#fff;">Girishbhai - 9879065758</strong></p>
-                <p>📍 <a href="https://www.google.com/maps/search/?api=1&query=6V6X%2B98W%2C+Shiv+Darshan+Society%2C+Yoginagar+Society%2C+Podar%2C+Surat%2C+Gujarat+395013" target="_blank" style="color:#ffffff; border-bottom:1px solid #ffffff; text-decoration:none;">
-                    6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013
-                </a></p>
+                <p>
+                    <!-- ✅ Google Maps App Link (geo: scheme) - Opens directly in Google Maps App -->
+                    <a href="geo:0,0?q=6V6X%2B98W%2C%20Shiv%20Darshan%20Society%2C%20Yoginagar%20Society%2C%20Podar%2C%20Surat%2C%20Gujarat%20395013" 
+                       target="_blank" 
+                       class="location-link">
+                        📍 6V6X+98W, Shiv Darshan Society, Yoginagar Society, Podar, Surat, Gujarat 395013
+                    </a>
+                </p>
             </div>
 
             <div class="specs-grid">
@@ -210,9 +464,17 @@
                 if (error && error.code !== 'PGRST116') console.error('Error:', error);
                 if (data) return data;
                 return {
-                    id: id, name: 'Unknown', type: 'Standard', price: '₹ 0.00', description: 'N/A',
-                    cover: 'https://picsum.photos/seed/default/800/400', gallery: ['https://picsum.photos/seed/g1/300/300'],
-                    company: 'N/A', owner: 'N/A', km: 'N/A', vimo: 'N/A'
+                    id: id,
+                    name: 'Unknown',
+                    type: 'Standard',
+                    price: '₹ 0.00',
+                    description: 'N/A',
+                    cover: 'https://picsum.photos/seed/default/800/400',
+                    gallery: ['https://picsum.photos/seed/g1/300/300'],
+                    company: 'N/A',
+                    owner: 'N/A',
+                    km: 'N/A',
+                    vimo: 'N/A'
                 };
             } catch (e) { return { id: id, name: 'Error', type: 'Standard', price: '₹ 0.00' }; }
         }
@@ -309,7 +571,8 @@
             };
 
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') { closeLightbox(); closeFullGallery(); }
+                if (e.key === 'Escape') { closeLightbox();
+                    closeFullGallery(); }
                 if (e.key === 'ArrowRight') nextImage();
                 if (e.key === 'ArrowLeft') prevImage();
             });
