@@ -23,6 +23,7 @@
             overflow-x: hidden;
         }
 
+        /* ===== HEADER ===== */
         header {
             display: flex;
             justify-content: space-between;
@@ -84,10 +85,11 @@
             transform: scale(1.05);
         }
 
+        /* ===== HERO SLIDER ===== */
         .hero-slider {
             position: relative;
-            height: 70vh;
-            min-height: 400px;
+            height: 75vh;
+            min-height: 450px;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -121,7 +123,7 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            filter: brightness(0.4) blur(3px);
+            filter: brightness(0.35) blur(4px);
             transform: scale(1.1);
             transition: transform 10s ease-in-out;
         }
@@ -132,44 +134,47 @@
         .slide-content {
             position: relative;
             z-index: 5;
-            max-width: 750px;
-            padding: 40px 50px;
-            background: rgba(11, 14, 26, 0.7);
-            border-radius: 20px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 800px;
+            padding: 50px 60px;
+            background: rgba(11, 14, 26, 0.75);
+            border-radius: 24px;
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             animation: fadeUp 1.5s ease-out;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
         }
-        /* ✅ EMOJI CHANGED: Added truck emoji before text */
         .slide-content h2 {
-            font-size: 42px;
+            font-size: 48px;
             color: #ffffff;
             margin-bottom: 15px;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
         }
         .slide-content p {
-            font-size: 18px;
+            font-size: 20px;
             color: #ddd;
-            margin-bottom: 25px;
-            line-height: 1.7;
+            margin-bottom: 28px;
+            line-height: 1.8;
         }
         .slide-content .btn {
             display: inline-block;
-            padding: 12px 40px;
+            padding: 14px 48px;
             background: #ffffff;
             color: #000;
             text-decoration: none;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 17px;
+            font-size: 18px;
             transition: 0.3s;
             border: 2px solid #ffffff;
             cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.15);
         }
         .slide-content .btn:hover {
             background: transparent;
             color: #ffffff;
             transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(255, 255, 255, 0.25);
         }
 
         @keyframes fadeUp {
@@ -179,18 +184,18 @@
 
         .slider-dots {
             position: absolute;
-            bottom: 25px;
+            bottom: 28px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
             display: flex;
-            gap: 12px;
+            gap: 14px;
         }
         .slider-dots .dot {
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             cursor: pointer;
             transition: 0.3s;
             border: 2px solid transparent;
@@ -198,37 +203,39 @@
         .slider-dots .dot.active {
             background: #ffffff;
             border-color: #fff;
-            transform: scale(1.25);
+            transform: scale(1.3);
         }
         .slider-dots .dot:hover {
             background: #ffffff;
         }
 
+        /* ===== MODELS SLIDER - BIGGER CARDS ===== */
         .models-slider-section {
-            padding: 50px 20px 70px;
-            max-width: 600px;
+            padding: 60px 20px 80px;
+            max-width: 700px;
             margin: 0 auto;
             width: 100%;
             position: relative;
         }
         .models-slider-section h2 {
-            font-size: 34px;
+            font-size: 38px;
             color: #ffffff;
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
         .models-slider-section .subtitle {
             text-align: center;
             color: #aaa;
-            font-size: 16px;
-            margin-bottom: 30px;
+            font-size: 18px;
+            margin-bottom: 35px;
         }
 
         .model-slider-wrapper {
             position: relative;
             overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
             touch-action: none;
             cursor: grab;
             user-select: none;
@@ -240,30 +247,32 @@
 
         .model-slider-track {
             display: flex;
-            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
         }
 
+        /* ✅ BIGGER CARDS */
         .model-card {
             flex: 0 0 100%;
             min-width: 100%;
             background: #1a1f3a;
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.4s;
             text-decoration: none;
             color: #fff;
             display: block;
         }
         .model-card:hover {
             border-color: #ffffff;
-            box-shadow: 0 15px 50px rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.08);
+            transform: scale(1.02);
         }
         .model-card .img-box {
             width: 100%;
-            height: 380px;
+            height: 420px;
             overflow: hidden;
             background: #0b0e1a;
             display: flex;
@@ -274,23 +283,27 @@
             width: 100%;
             height: 100%;
             object-fit: fill;
-            transition: 0.5s;
+            transition: 0.6s;
             pointer-events: none;
         }
-        /* ✅ CAPITAL LETTERS for model names */
+        .model-card:hover .img-box img {
+            transform: scale(1.06);
+        }
+        /* ✅ BIGGER TEXT */
         .model-card .title {
             text-align: center;
-            padding: 25px;
+            padding: 28px;
             color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 32px;
+            font-weight: 700;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             background: rgba(255, 255, 255, 0.02);
             pointer-events: none;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
+        /* ===== SLIDER BUTTONS ===== */
         .slider-btn {
             position: absolute;
             top: 50%;
@@ -299,10 +312,10 @@
             background: rgba(0, 0, 0, 0.8);
             color: #fff;
             border: 2px solid rgba(255, 255, 255, 0.15);
-            width: 50px;
-            height: 50px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
             transition: 0.3s;
             display: flex;
@@ -310,29 +323,30 @@
             justify-content: center;
             backdrop-filter: blur(5px);
             font-weight: 300;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
         }
         .slider-btn:hover {
             background: rgba(0, 0, 0, 0.95);
             border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-50%) scale(1.08);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 35px rgba(0, 0, 0, 0.7);
         }
         .slider-btn.prev {
-            left: 10px;
+            left: 12px;
         }
         .slider-btn.next {
-            right: 10px;
+            right: 12px;
         }
 
         .slider-dots-models {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-top: 22px;
+            gap: 14px;
+            margin-top: 25px;
         }
         .slider-dots-models .dot-m {
-            width: 12px;
-            height: 12px;
+            width: 13px;
+            height: 13px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.2);
             cursor: pointer;
@@ -342,7 +356,7 @@
         }
         .slider-dots-models .dot-m.active {
             background: #ffffff;
-            transform: scale(1.3);
+            transform: scale(1.35);
         }
         .slider-dots-models .dot-m:hover {
             background: #ffffff;
@@ -365,13 +379,14 @@
 
         footer {
             text-align: center;
-            padding: 25px;
+            padding: 28px;
             background: #0b0e1a;
             color: #666;
             border-top: 1px solid #1a1f3a;
             margin-top: auto;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -392,82 +407,83 @@
                 font-size: 13px;
             }
             .hero-slider {
-                height: 55vh;
-                min-height: 300px;
+                height: 60vh;
+                min-height: 350px;
             }
             .slide-content h2 {
-                font-size: 26px;
+                font-size: 28px;
             }
             .slide-content p {
-                font-size: 15px;
+                font-size: 16px;
             }
             .slide-content {
-                padding: 20px 25px;
+                padding: 25px 28px;
                 margin: 0 12px;
             }
             .models-slider-section {
-                padding: 30px 12px 50px;
+                padding: 35px 12px 55px;
                 max-width: 100%;
             }
             .models-slider-section h2 {
-                font-size: 26px;
+                font-size: 28px;
             }
             .model-card .img-box {
-                height: 250px;
+                height: 280px;
             }
             .model-card .title {
-                font-size: 22px;
-                padding: 18px;
+                font-size: 24px;
+                padding: 20px;
             }
             .slider-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
             }
             .slider-btn.prev {
-                left: 5px;
+                left: 6px;
             }
             .slider-btn.next {
-                right: 5px;
+                right: 6px;
             }
         }
         @media (max-width: 480px) {
             header .logo img {
-                height: 30px;
+                height: 28px;
             }
             header .logo .logo-text h1 {
-                font-size: 15px;
+                font-size: 14px;
             }
             .hero-slider {
-                height: 45vh;
-                min-height: 250px;
+                height: 50vh;
+                min-height: 280px;
             }
             .slide-content h2 {
-                font-size: 20px;
+                font-size: 22px;
             }
             .slide-content p {
-                font-size: 13px;
+                font-size: 14px;
             }
             .slide-content {
-                padding: 15px 18px;
+                padding: 18px 20px;
             }
             .model-card .img-box {
-                height: 200px;
+                height: 220px;
             }
             .model-card .title {
-                font-size: 18px;
-                padding: 14px;
+                font-size: 20px;
+                padding: 16px;
             }
             .slider-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- ===== HEADER ===== -->
     <header>
         <div class="logo">
             <img src="logo.png" alt="Om Auto Consultant Logo" />
@@ -488,7 +504,6 @@
         <div class="slide active" data-index="0">
             <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&q=80');"></div>
             <div class="slide-content">
-                <!-- ✅ EMOJI ADDED: 🚛 before text -->
                 <h2>🚛 Find Your Perfect Tempo</h2>
                 <p>Explore our wide range of commercial vehicles from top brands like Tata, Mahindra, Ashok Leyland and more.</p>
                 <a href="#models" class="btn">Explore Models →</a>
@@ -526,7 +541,10 @@
         <p class="subtitle">Choose from our wide range of commercial vehicles</p>
 
         <div class="model-slider-wrapper" id="sliderWrapper">
-            <div class="model-slider-track" id="modelTrack"></div>
+            <div class="model-slider-track" id="modelTrack">
+                <!-- Models loaded dynamically -->
+            </div>
+
             <button class="slider-btn prev" id="prevBtn">‹</button>
             <button class="slider-btn next" id="nextBtn">›</button>
         </div>
@@ -534,6 +552,7 @@
         <div class="slider-dots-models" id="modelDots"></div>
     </section>
 
+    <!-- ===== FOOTER ===== -->
     <footer>
         <p>&copy; 2026 Om Auto Consultant. All rights reserved.</p>
     </footer>
@@ -589,6 +608,9 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZnBhYWdma3hocnBsb2tndXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5Mjk0MzMsImV4cCI6MjEwMTUwNTQzM30.YvsCH6GPeA1kFWn7eenz-Y-Yc8c_kg3QTJbSGzAqg2w";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // =============================================================
+        // ✅ GET DATA
+        // =============================================================
         async function getMainModels() {
             try {
                 const { data, error } = await sb.from('main_models').select('*').order('id', { ascending: true });
@@ -628,8 +650,8 @@
             if (index >= total) index = total - 1;
             modelIndex = index;
 
-            const slideWidth = wrapper.offsetWidth || 500;
-            track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            const slideWidth = wrapper.offsetWidth || 600;
+            track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
             track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
 
             const dots = document.querySelectorAll('.dot-m');
@@ -654,11 +676,10 @@
                 track.innerHTML = modelsData.map((m) => `
                             <div class="model-card" data-id="${m.id}">
                                 <div class="img-box">
-                                    <img src="${logos[String(m.id)] || 'https://picsum.photos/seed/${m.id}/600/400'}" 
+                                    <img src="${logos[String(m.id)] || 'https://picsum.photos/seed/${m.id}/800/500'}" 
                                          alt="${m.name}" 
-                                         onerror="this.src='https://picsum.photos/seed/${m.id}/600/400'" />
+                                         onerror="this.src='https://picsum.photos/seed/${m.id}/800/500'" />
                                 </div>
-                                <!-- ✅ CAPITAL LETTERS: name will be shown uppercase via CSS text-transform -->
                                 <div class="title">${m.name}</div>
                             </div>
                         `).join('');
@@ -680,12 +701,12 @@
                 }
 
                 setTimeout(() => {
-                    const slideWidth = wrapper.offsetWidth || 500;
+                    const slideWidth = wrapper.offsetWidth || 600;
                     track.style.transition = 'none';
                     track.style.transform = 'translateX(0px)';
                     modelIndex = 0;
                     setTimeout(() => {
-                        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                        track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                     }, 50);
                 }, 100);
 
@@ -695,7 +716,9 @@
             }
         }
 
+        // =============================================================
         // ✅ TOUCH DRAG
+        // =============================================================
         let startX = 0,
             currentX = 0,
             isDragging = false,
@@ -713,7 +736,7 @@
             if (modelsData.length === 0) return;
             isDragging = true;
             startX = getX(e);
-            const slideWidth = wrapper.offsetWidth || 500;
+            const slideWidth = wrapper.offsetWidth || 600;
             startTranslate = -modelIndex * slideWidth;
             track.style.transition = 'none';
             wrapper.style.cursor = 'grabbing';
@@ -724,7 +747,7 @@
             currentX = getX(e);
             const diff = currentX - startX;
             let newTranslate = startTranslate + diff;
-            const slideWidth = wrapper.offsetWidth || 500;
+            const slideWidth = wrapper.offsetWidth || 600;
             const maxTranslate = -(modelsData.length - 1) * slideWidth;
 
             if (newTranslate > 0) newTranslate = 0;
@@ -738,8 +761,8 @@
             isDragging = false;
             wrapper.style.cursor = 'grab';
 
-            const slideWidth = wrapper.offsetWidth || 500;
-            const threshold = slideWidth * 0.25;
+            const slideWidth = wrapper.offsetWidth || 600;
+            const threshold = slideWidth * 0.2;
             const diff = currentX - startX;
 
             if (Math.abs(diff) > threshold) {
@@ -758,21 +781,27 @@
             return e.touches[0].clientX;
         }
 
+        // =============================================================
+        // ✅ WINDOW RESIZE
+        // =============================================================
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 if (modelsData.length > 0) {
-                    const slideWidth = wrapper.offsetWidth || 500;
+                    const slideWidth = wrapper.offsetWidth || 600;
                     track.style.transition = 'none';
                     track.style.transform = `translateX(-${modelIndex * slideWidth}px)`;
                     setTimeout(() => {
-                        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                        track.style.transition = 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
                     }, 50);
                 }
             }, 200);
         });
 
+        // =============================================================
+        // ✅ INIT
+        // =============================================================
         renderModelSlider();
     </script>
 </body>
